@@ -60,7 +60,7 @@ export default function Footer() {
                     {/* Địa chỉ */}
                     <div>
                         <h4 className="font-semibold text-gray-900 mb-2">Thông tin liên hệ</h4>
-                        <p className="text-gray-600 text-sm">Địa chỉ: 12 Nguyễn Văn Bảo, Gò Vấp</p>
+                        <p className="text-gray-600 text-sm">Địa chỉ: 12 Nguyễn Văn Bảo, Gò Vấp, TP Hồ Chí Minh</p>
                         <p className="text-gray-600 text-sm">SĐT: 0999 999 999</p>
                     </div>
                 </div>
