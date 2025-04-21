@@ -10,10 +10,8 @@ export default function HomePage() {
 
     return (
         <div>
-            <Header />
             <Hero />
             <HomeContent />
-            <Footer />
         </div>
     );
 }
