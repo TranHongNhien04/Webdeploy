@@ -5,8 +5,6 @@ import Footer from "../components/Footer";
 const Contact = () => {
     return (
         <div className="w-full min-h-screen flex flex-col relative">
-            <Header />
-
             <main className="flex-grow pt-24" style={{ backgroundColor: '#E2F3FC' }}>
                 <div className="py-20 px-4 md:px-20 min-h-screen">
                     <div className="max-w-5xl mx-auto bg-white grid md:grid-cols-2 gap-4 overflow-hidden shadow-lg rounded-xl">
@@ -61,8 +59,6 @@ const Contact = () => {
                     </div>
                 </div>
             </main>
-
-            <Footer />
         </div>
     );
 };
