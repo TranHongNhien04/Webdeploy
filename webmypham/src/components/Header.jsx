@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
 import SearchIcon from '../assets/img/icons/loupe.png';
 import BasketIcon from '../assets/img/icons/basket.png';
+import { useState } from 'react';
+
 
 export default function Header() {
+    const [count, setCount] = useState(0)
     return (
         <header className="absolute top-0 left-0 w-full z-20 backdrop-blur-md bg-white/30 shadow-sm">
             <div className=" px-6 py-4 flex justify-between items-center rounded-b-lg bg-white/20  space-x-5">
@@ -15,7 +18,7 @@ export default function Header() {
                     </span>
                 </div>
 
-                <nav className="hidden md:flex space-x-10 text-sm text-gray-800 font-medium">
+                <nav className="hidden md:flex space-x-10 text-base text-gray-800 font-semibold">
                     <Link to="/" className="hover:text-black">
                         Trang chủ
                     </Link>
@@ -49,20 +52,20 @@ export default function Header() {
                 <div className="flex items-center space-x-4">
                     <Link
                         to="/gio-hang"
-                        className="text-gray-800 text-sm font-medium hover:text-black flex items-center space-x-1">
+                        className="hidden md:flex text-base text-gray-800 font-semibold gap-1">
                         <img
                             src={BasketIcon}
                             alt="Giỏ hàng"
-                            className="w-4 h-4"
+                            className="h-6"
                         />
-                        <span>Giỏ hàng (0)</span>
+                        <span>Giỏ hàng ({count})</span>
                     </Link>
 
                     <button className="bg-black text-white text-sm font-medium px-4 py-1.5 rounded-full hover:bg-gray-900 transition">
                         Đăng nhập
                     </button>
                 </div>
-            </div>
-        </header>
+            </div >
+        </header >
     );
 }

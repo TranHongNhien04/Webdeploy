@@ -1,4 +1,3 @@
-
 const HeroSection = () => (
     <section className="relative h-[600px] mb-16 -mx-4 overflow-hidden">
         <img
@@ -25,7 +24,6 @@ const HeroSection = () => (
     </section>
 );
 
-// Component BenefitsSection
 const BenefitsSection = () => {
     const benefits = [
         {
@@ -68,7 +66,6 @@ const BenefitsSection = () => {
     );
 };
 
-// Component ServicesTabsSection
 const ServicesTabsSection = () => {
     const services = [
         {
@@ -161,7 +158,6 @@ const ServicesTabsSection = () => {
     );
 };
 
-// Component SkinTypeSection
 const SkinTypeSection = () => {
     const skinTypes = [
         {
@@ -244,51 +240,6 @@ const SkinTypeSection = () => {
     );
 };
 
-// Component ConsultationProcessSection
-const ConsultationProcessSection = () => {
-    const processes = [
-        {
-            title: "Đặt Lịch",
-            description: "Đặt lịch tư vấn trực tuyến hoặc tại cửa hàng theo thời gian phù hợp với bạn",
-        },
-        {
-            title: "Phân Tích",
-            description: "Chuyên gia sẽ phân tích loại da, tình trạng và nhu cầu cụ thể của bạn",
-        },
-        {
-            title: "Tư Vấn",
-            description: "Đề xuất các sản phẩm và quy trình chăm sóc phù hợp nhất với bạn",
-        },
-        {
-            title: "Theo Dõi",
-            description: "Hỗ trợ liên tục và điều chỉnh phù hợp trong quá trình sử dụng sản phẩm",
-        },
-    ];
-
-    return (
-        <section className="mb-16">
-            <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold mb-4">Quy Trình Tư Vấn</h2>
-                <p className="text-gray-500 max-w-2xl mx-auto">
-                    Quy trình tư vấn chuyên nghiệp, chi tiết và cá nhân hóa để mang đến giải pháp tốt nhất cho bạn
-                </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                {processes.map((process, index) => (
-                    <div key={index} className="text-center">
-                        <div className="mx-auto bg-gray-100 p-4 rounded-full w-20 h-20 flex items-center justify-center mb-4">
-                            <span className="text-xl font-bold">{index + 1}</span>
-                        </div>
-                        <h3 className="text-xl font-semibold mb-2">{process.title}</h3>
-                        <p className="text-gray-600">{process.description}</p>
-                    </div>
-                ))}
-            </div>
-        </section>
-    );
-};
-
-// Component BookingFormSection
 const BookingFormSection = () => (
     <section className="mb-16">
         <div className="max-w-3xl mx-auto border rounded-lg p-8 bg-gray-50">
@@ -389,59 +340,9 @@ const BookingFormSection = () => (
     </section>
 );
 
-// Component FAQSection
-const FAQSection = () => {
-    const faqs = [
-        {
-            question: "Dịch vụ tư vấn có mất phí không?",
-            answer:
-                "Dịch vụ tư vấn cơ bản của chúng tôi hoàn toàn miễn phí. Tuy nhiên, đối với các gói tư vấn chuyên sâu và cá nhân hóa, sẽ có mức phí tùy theo nhu cầu cụ thể của bạn.",
-        },
-        {
-            question: "Tôi có thể đặt lịch tư vấn online không?",
-            answer:
-                "Có, bạn có thể đặt lịch tư vấn online thông qua form đặt lịch trên website hoặc liên hệ trực tiếp với chúng tôi qua số điện thoại hoặc email.",
-        },
-        {
-            question: "Tôi cần chuẩn bị gì trước buổi tư vấn?",
-            answer:
-                "Bạn nên chuẩn bị thông tin về loại da, các vấn đề da đang gặp phải, các sản phẩm đang sử dụng và mục tiêu bạn muốn đạt được. Điều này sẽ giúp chuyên gia tư vấn hiểu rõ hơn về nhu cầu của bạn.",
-        },
-        {
-            question: "Tôi có bắt buộc phải mua sản phẩm sau khi tư vấn không?",
-            answer:
-                "Không, bạn hoàn toàn không bắt buộc phải mua sản phẩm sau khi tư vấn. Chúng tôi chỉ đưa ra những đề xuất phù hợp nhất với bạn, quyết định mua hay không là hoàn toàn tùy thuộc vào bạn.",
-        },
-        {
-            question: "Tôi có thể được hỗ trợ sau khi mua sản phẩm không?",
-            answer:
-                "Có, chúng tôi luôn hỗ trợ khách hàng trong suốt quá trình sử dụng sản phẩm. Bạn có thể liên hệ với chúng tôi bất cứ khi nào có thắc mắc hoặc cần điều chỉnh quy trình chăm sóc da.",
-        },
-    ];
 
-    return (
-        <section className="mb-16">
-            <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold mb-4">Câu Hỏi Thường Gặp</h2>
-                <p className="text-gray-500 max-w-2xl mx-auto">
-                    Những câu hỏi thường gặp về dịch vụ tư vấn chọn sản phẩm mỹ phẩm của chúng tôi
-                </p>
-            </div>
-            <div className="max-w-3xl mx-auto space-y-4">
-                {faqs.map((faq, index) => (
-                    <div key={index} className="border rounded-lg p-4">
-                        <h3 className="font-semibold text-lg mb-2">{faq.question}</h3>
-                        <p className="text-gray-600">{faq.answer}</p>
-                    </div>
-                ))}
-            </div>
-        </section>
-    );
-};
-
-// Component CTASection
 const CTASection = () => (
-    <section className="bg-gradient-to-r from-gray-800 to-black rounded-lg p-8 text-white text-center">
+    <section className="bg-gradient-to-r from-gray-800 to-black rounded-lg p-8 text-white text-center mb-5">
         <h2 className="text-3xl font-bold mb-4">Bắt Đầu Hành Trình Làm Đẹp Của Bạn Ngay Hôm Nay</h2>
         <p className="max-w-2xl mx-auto mb-8 text-gray-200">
             Đừng để làn da của bạn phải "thử và sai" với hàng loạt sản phẩm không phù hợp. Hãy để chuyên gia của chúng tôi giúp bạn tìm ra giải pháp tốt nhất!
@@ -452,7 +353,6 @@ const CTASection = () => (
     </section>
 );
 
-// Component chính
 export default function Service() {
     return (
         <div className="container mx-auto px-4 py-0">
@@ -460,8 +360,6 @@ export default function Service() {
             <BenefitsSection />
             <ServicesTabsSection />
             <SkinTypeSection />
-            <ConsultationProcessSection />
-            <FAQSection />
             <CTASection />
             <BookingFormSection />
         </div>

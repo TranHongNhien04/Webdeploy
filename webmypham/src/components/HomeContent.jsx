@@ -8,7 +8,7 @@ import BrandsSection from "./BrandsSection";
 
 export default function HomeContent() {
     return (
-        <div className="space-y-32"> {/* tăng khoảng cách lên 8rem (128px) */}
+        <div className="space-y-32">
             <AboutSection />
             <CategorySection />
             <BrandsSection />

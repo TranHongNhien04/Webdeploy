@@ -4,7 +4,6 @@ import BackgroundImage from "../assets/img/backgrounds.png";
 function Introduce() {
   return (
     <div className=" min-h-screen py-12 px-6 mt-10" style={{ backgroundColor: '#E2F3FC' }}>
-      {/* Banner hình ảnh thương hiệu */}
       <div className="max-w-5xl mx-auto mb-10">
         <img
           src={BackgroundImage}
@@ -12,8 +11,6 @@ function Introduce() {
           className="rounded-xl shadow-lg w-full object-cover h-64 md:h-96"
         />
       </div>
-
-      {/* Nội dung chính */}
       <div className="max-w-5xl mx-auto text-center">
         <h1 className="text-4xl font-bold text-[#a67c52] mb-4">Chào mừng đến với FRUVIA BEAUTY</h1>
         <p className="text-lg text-gray-700 mb-2 italic">"Vẻ đẹp luôn hướng về tương lai"</p>
@@ -27,7 +24,6 @@ function Introduce() {
             Sản phẩm của chúng tôi được chọn lọc từ những thành phần thiên nhiên an toàn, kết hợp với công nghệ làm đẹp tiên tiến – mang lại hiệu quả cao mà vẫn giữ trọn sự dịu nhẹ cho làn da.
           </p>
 
-          {/* Giá trị cốt lõi */}
           <div className="grid md:grid-cols-3 gap-6 my-8">
             <div className="bg-[#fffaf0] p-6 rounded-lg shadow-sm hover:shadow-md transition">
               <h3 className="text-xl font-semibold text-[#d8924b] mb-2"> Tự nhiên</h3>
@@ -49,7 +45,6 @@ function Introduce() {
             </div>
           </div>
 
-          {/* CTA */}
           <div className="text-center mt-6">
             <Link
               to="/san-pham"
@@ -60,7 +55,6 @@ function Introduce() {
           </div>
         </div>
 
-        {/* Footer nhỏ xinh */}
         <div className="mt-10 text-sm text-gray-500 italic">
           Được phát triển bởi <span className="text-[#a67c52] font-semibold">Innovative Fruits</span> — vì một thế giới đẹp hơn từng ngày.
         </div>
