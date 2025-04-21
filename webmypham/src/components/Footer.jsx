@@ -5,7 +5,6 @@ export default function Footer() {
     return (
         <footer className="bg-white text-black py-8">
             <div className="container px-6 flex flex-col md:flex-row gap-x-48">
-                {/* Khối 1: Logo + Đăng ký nhận bản tin */}
                 <div className="w-full md:w-1/3">
                     <h3 className="text-xl font-bold mb-2">
                         <span className="text-gray-900">FRUVIA</span>
@@ -28,10 +27,7 @@ export default function Footer() {
                         </button>
                     </div>
                 </div>
-
-                {/* Khối 2: 4 cột thông tin */}
                 <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-4 gap-8">
-                    {/* Trang chính */}
                     <div>
                         <h4 className="font-semibold text-gray-900 mb-2">Trang chính</h4>
                         <Link to="/" className="block text-gray-600 text-sm hover:text-blue-500">Trang chủ</Link>
@@ -40,24 +36,18 @@ export default function Footer() {
                         <Link to="/gioi-thieu" className="block text-gray-600 text-sm hover:text-blue-500">Giới thiệu</Link>
                         <Link to="/lien-he" className="block text-gray-600 text-sm hover:text-blue-500">Liên hệ</Link>
                     </div>
-
-                    {/* Liên kết */}
                     <div>
                         <h4 className="font-semibold text-gray-900 mb-2">Liên kết</h4>
                         <a href="#" className="block text-gray-600 text-sm hover:text-blue-500">Điều khoản sử dụng</a>
                         <a href="#" className="block text-gray-600 text-sm hover:text-blue-500">Chính sách bảo mật</a>
                         <a href="#" className="block text-gray-600 text-sm hover:text-blue-500">Tuyển dụng</a>
                     </div>
-
-                    {/* Kết nối với chúng tôi */}
                     <div>
                         <h4 className="font-semibold text-gray-900 mb-2">Kết nối với chúng tôi</h4>
                         <a href="#" className="block text-gray-600 text-sm hover:text-blue-500">Facebook</a>
                         <a href="#" className="block text-gray-600 text-sm hover:text-blue-500">Instagram</a>
                         <a href="#" className="block text-gray-600 text-sm hover:text-blue-500">Twitter</a>
                     </div>
-
-                    {/* Địa chỉ */}
                     <div>
                         <h4 className="font-semibold text-gray-900 mb-2">Thông tin liên hệ</h4>
                         <p className="text-gray-600 text-sm">Địa chỉ: 12 Nguyễn Văn Bảo, Gò Vấp, TP Hồ Chí Minh</p>
@@ -65,8 +55,6 @@ export default function Footer() {
                     </div>
                 </div>
             </div>
-
-            {/* Bottom Section */}
             <div className="container mx-auto px-6 mt-8 border-t pt-4 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
                 <p className="text-center md:text-left">
                     © 2025 Fruvia Beauty, Inc. ·{' '}

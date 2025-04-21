@@ -1,12 +1,9 @@
-"use client"
-
 import { useState } from "react"
 
 const ProductGrid = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [showFilters, setShowFilters] = useState(false)
 
-  // Danh mục chính và danh mục phụ
   const categories = [
     {
       id: "face-care",
@@ -57,7 +54,6 @@ const ProductGrid = () => {
     },
   ]
 
-  // Loại da
   const skinTypes = [
     { id: "oily", name: "Da dầu" },
     { id: "dry", name: "Da khô" },
@@ -67,14 +63,12 @@ const ProductGrid = () => {
     { id: "aging", name: "Da lão hóa" },
   ]
 
-  // Công dụng
   const benefits = [
     { id: "brightening", name: "Làm trắng sáng da" },
     { id: "hydrating", name: "Cấp ẩm" },
     { id: "anti-aging", name: "Chống lão hóa" },
   ]
 
-  // Sample product data - replace with your actual data
   const products = [
     {
       id: 1,
@@ -234,7 +228,6 @@ const ProductGrid = () => {
     },
   ]
 
-  // Filter states
   const [activeCategory, setActiveCategory] = useState("all")
   const [activeSubcategories, setActiveSubcategories] = useState([])
   const [activeSkinTypes, setActiveSkinTypes] = useState([])
@@ -242,91 +235,68 @@ const ProductGrid = () => {
   const [sortBy, setSortBy] = useState("default")
   const [priceRange, setPriceRange] = useState({ min: 0, max: 100 })
 
-  // Toggle subcategory filter
   const toggleSubcategory = (subcategoryId) => {
     if (activeSubcategories.includes(subcategoryId)) {
       setActiveSubcategories(activeSubcategories.filter((id) => id !== subcategoryId))
     } else {
       setActiveSubcategories([...activeSubcategories, subcategoryId])
     }
-    setCurrentPage(1) // Reset to first page when changing filters
+    setCurrentPage(1)
   }
 
-  // Toggle skin type filter
   const toggleSkinType = (skinTypeId) => {
     if (activeSkinTypes.includes(skinTypeId)) {
       setActiveSkinTypes(activeSkinTypes.filter((id) => id !== skinTypeId))
     } else {
       setActiveSkinTypes([...activeSkinTypes, skinTypeId])
     }
-    setCurrentPage(1) // Reset to first page when changing filters
+    setCurrentPage(1)
   }
 
-  // Toggle benefit filter
   const toggleBenefit = (benefitId) => {
     if (activeBenefits.includes(benefitId)) {
       setActiveBenefits(activeBenefits.filter((id) => id !== benefitId))
     } else {
       setActiveBenefits([...activeBenefits, benefitId])
     }
-    setCurrentPage(1) // Reset to first page when changing filters
+    setCurrentPage(1)
   }
 
-  // Filter products
   const filteredProducts = products.filter((product) => {
-    // Filter by main category
     if (activeCategory !== "all" && product.category !== activeCategory) return false
-
-    // Filter by subcategories (if any are selected)
     if (activeSubcategories.length > 0 && !activeSubcategories.includes(product.subcategory)) return false
-
-    // Filter by skin type
     if (activeSkinTypes.length > 0) {
       if (!product.skinType.some((type) => activeSkinTypes.includes(type)) && !product.skinType.includes("all"))
         return false
     }
-
-    // Filter by benefit
     if (activeBenefits.length > 0) {
       if (!product.benefit.some((benefit) => activeBenefits.includes(benefit))) return false
     }
-
-    // Filter by price range
     if (product.price < priceRange.min || product.price > priceRange.max) return false
 
     return true
   })
-
-  // Sort products
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     if (sortBy === "price-asc") return a.price - b.price
     if (sortBy === "price-desc") return b.price - a.price
     if (sortBy === "name-asc") return a.title.localeCompare(b.title)
     if (sortBy === "name-desc") return b.title.localeCompare(a.title)
-    return 0 // default sorting
+    return 0
   })
-
-  // Handle category change
   const handleCategoryChange = (category) => {
     setActiveCategory(category)
-    setActiveSubcategories([]) // Reset subcategories when changing main category
-    setCurrentPage(1) // Reset to first page
+    setActiveSubcategories([])
+    setCurrentPage(1)
   }
-
-  // Handle sort change
   const handleSortChange = (e) => {
     setSortBy(e.target.value)
   }
-
-  // Handle price range change
   const handlePriceChange = (type, value) => {
     setPriceRange({
       ...priceRange,
       [type]: Number.parseInt(value),
     })
   }
-
-  // Reset all filters
   const resetFilters = () => {
     setActiveCategory("all")
     setActiveSubcategories([])
@@ -335,35 +305,29 @@ const ProductGrid = () => {
     setPriceRange({ min: 0, max: 100 })
     setSortBy("default")
   }
-
-  // Pagination
   const productsPerPage = 12
   const totalPages = Math.ceil(sortedProducts.length / productsPerPage)
   const indexOfLastProduct = currentPage * productsPerPage
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage
   const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct)
 
-  // Get current subcategories based on selected category
   const currentSubcategories =
     activeCategory === "all" ? [] : categories.find((cat) => cat.id === activeCategory)?.subcategories || []
 
-  // Check if all subcategories of the current category are selected
   const allSubcategoriesSelected =
     currentSubcategories.length > 0 && currentSubcategories.every((sub) => activeSubcategories.includes(sub.id))
 
-  // Toggle all subcategories
   const toggleAllSubcategories = () => {
     if (allSubcategoriesSelected) {
       setActiveSubcategories([])
     } else {
       setActiveSubcategories(currentSubcategories.map((sub) => sub.id))
     }
-    setCurrentPage(1) // Reset to first page
+    setCurrentPage(1)
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Mobile filter toggle */}
       <div className="md:hidden mb-4">
         <button
           className="w-full py-2 px-4 bg-gray-100 rounded-md flex items-center justify-between"
@@ -383,12 +347,10 @@ const ProductGrid = () => {
       </div>
 
       <div className="flex flex-col md:flex-row gap-6">
-        {/* Sidebar Filters */}
         <div
           className={`md:w-1/4 lg:w-1/5 space-y-6 ${showFilters ? "block" : "hidden md:block"
             } bg-white p-4 rounded-lg shadow-sm`}
         >
-          {/* Main Categories */}
           <div>
             <h3 className="font-semibold text-lg mb-3">Danh mục</h3>
             <div className="space-y-2">
@@ -412,7 +374,6 @@ const ProductGrid = () => {
             </div>
           </div>
 
-          {/* Subcategories - only show if a main category is selected */}
           {activeCategory !== "all" && currentSubcategories.length > 0 && (
             <div>
               <div className="flex items-center justify-between mb-3">
@@ -446,7 +407,6 @@ const ProductGrid = () => {
             </div>
           )}
 
-          {/* Skin Type Filter */}
           <div>
             <h3 className="font-semibold text-lg mb-3">Phù hợp theo da</h3>
             <div className="space-y-2">
@@ -470,7 +430,6 @@ const ProductGrid = () => {
             </div>
           </div>
 
-          {/* Benefits Filter */}
           <div>
             <h3 className="font-semibold text-lg mb-3">Công dụng</h3>
             <div className="space-y-2">
@@ -494,7 +453,6 @@ const ProductGrid = () => {
             </div>
           </div>
 
-          {/* Price Range Filter */}
           <div>
             <h3 className="font-semibold text-lg mb-3">Khoảng giá</h3>
             <div className="space-y-4">
@@ -525,7 +483,6 @@ const ProductGrid = () => {
             </div>
           </div>
 
-          {/* Reset Filters Button */}
           <button
             onClick={resetFilters}
             className="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-md text-gray-700 transition-colors"
@@ -534,9 +491,7 @@ const ProductGrid = () => {
           </button>
         </div>
 
-        {/* Main Content */}
         <div className="flex-1">
-          {/* Active Filters */}
           {(activeCategory !== "all" ||
             activeSubcategories.length > 0 ||
             activeSkinTypes.length > 0 ||
@@ -605,7 +560,6 @@ const ProductGrid = () => {
               </div>
             )}
 
-          {/* Sort and Results Count */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
             <p className="text-gray-600 mb-2 sm:mb-0">
               Hiển thị {sortedProducts.length} sản phẩm{" "}
@@ -622,7 +576,6 @@ const ProductGrid = () => {
             </select>
           </div>
 
-          {/* Product Grid */}
           {currentProducts.length === 0 ? (
             <div className="text-center py-10">
               <p className="text-gray-500">Không tìm thấy sản phẩm phù hợp với bộ lọc đã chọn.</p>
@@ -679,7 +632,6 @@ const ProductGrid = () => {
             </div>
           )}
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex justify-center mt-10">
               <nav className="flex items-center space-x-2">

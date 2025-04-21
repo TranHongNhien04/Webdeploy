@@ -5,7 +5,6 @@ export default function ServiceSection() {
     return (
         <div className="relative bg-gradient-to-r from-[#D6EAF8] to-[#F0F0F0] text-gray-800 w-full overflow-hidden">
             <div className="flex flex-col md:flex-row items-center justify-between max-w-7xl min-h-[180px]">
-                {/* Text Section */}
                 <div className="md:w-1/2 p-8 pl-40">
                     <h2 className="text-3xl font-bold mb-4">Dịch vụ tư vấn</h2>
                     <p className="text-sm mb-6">
@@ -15,13 +14,10 @@ export default function ServiceSection() {
                         Nhận tư vấn miễn phí
                     </button>
                 </div>
-
-                {/* Images Section */}
                 <div className="relative flex justify-end h-[250px]">
                     <img
                         src={TuVan}
                         alt="Profile"
-
                     />
                 </div>
             </div>
