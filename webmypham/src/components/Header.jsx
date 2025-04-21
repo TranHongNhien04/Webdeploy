@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
 import SearchIcon from '../assets/img/icons/loupe.png';
 import BasketIcon from '../assets/img/icons/basket.png';
-import AccountIcon from '../assets/img/icons/avatar.png';
 
 export default function Header() {
     return (
-        <header className="fixed top-0 w-full z-20">
+        <header className="absolute top-0 left-0 w-full z-20 backdrop-blur-md bg-white/30 shadow-sm">
             <div className=" px-6 py-4 flex justify-between items-center rounded-b-lg bg-white/20  space-x-5">
                 <div className="flex items-baseline ">
                     <span className="text-2xl font-extrabold text-gray-900 tracking-wide uppercase">
