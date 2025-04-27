@@ -44,15 +44,12 @@ export default function FeedbackSection() {
             </div>
             <div className="relative">
                 <div className="relative h-[400px] flex items-center">
-                    {/* Nút chuyển trái */}
                     <button
                         onClick={handlePrev}
                         className="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center z-10"
                     >
                         <img src={LeftArrow} alt="Trước" />
                     </button>
-
-                    {/* Nút chuyển phải */}
                     <button
                         onClick={handleNext}
                         className="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center z-10"
@@ -61,13 +58,11 @@ export default function FeedbackSection() {
                     </button>
 
                     <div className="flex flex-col md:flex-row items-center w-full h-full">
-                        {/* Bên trái: Nội dung phản hồi */}
                         <div className="bg-white text-black p-6 md:w-1/3 rounded-r-xl h-full flex flex-col justify-center shadow-md">
                             <h3 className="text-xl font-semibold">{currentFeedback.name}</h3>
                             <p className="mt-2 italic">"{currentFeedback.feedback}"</p>
                         </div>
 
-                        {/* Bên phải: Ảnh */}
                         <div className="md:w-2/3 h-full">
                             <img
                                 src={currentFeedback.image}

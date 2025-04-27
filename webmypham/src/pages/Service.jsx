@@ -1,12 +1,16 @@
+import DichVuBanner from "../assets/img/DichVuBanner.png"
+
 const HeroSection = () => (
     <section className="relative h-[600px] mb-16 -mx-4 overflow-hidden">
         <img
-            src="../assets/img/backgrounds.png"
+            src={DichVuBanner}
             alt="Dịch vụ tư vấn mỹ phẩm"
             className="w-full h-full object-cover"
             loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50" />
+        <div className="absolute inset-0 " />
+
+
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6 z-10">
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">Dịch Vụ Tư Vấn Chọn Sản Phẩm</h1>
             <p className="text-lg md:text-xl text-white max-w-2xl mb-8">

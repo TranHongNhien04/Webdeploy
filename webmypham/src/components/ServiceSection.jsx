@@ -1,9 +1,11 @@
 import React from 'react';
-import TuVan from '../assets/img/dichvutuvan.jpeg';
+import TuVan from '../assets/img/dichvutuvan.png';
 
 export default function ServiceSection() {
     return (
-        <div className="relative bg-gradient-to-r from-[#D6EAF8] to-[#F0F0F0] text-gray-800 w-full overflow-hidden">
+        <div className="relative bg-gradient-to-r from-[#BDF4F1] via-[#70DED9] to-[#70DED9] text-gray-800 w-full overflow-hidden">
+
+
             <div className="flex flex-col md:flex-row items-center justify-between max-w-7xl min-h-[180px]">
                 <div className="md:w-1/2 p-8 pl-40">
                     <h2 className="text-3xl font-bold mb-4">Dịch vụ tư vấn</h2>
