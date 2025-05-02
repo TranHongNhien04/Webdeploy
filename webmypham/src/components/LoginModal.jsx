@@ -57,6 +57,7 @@ export default function LoginModal({ isOpen, onClose }) {
                     name: data.name,
                     email: data.email,
                     password: data.password,
+                    skinType: data.skinType || 'normal',
                 });
 
                 if (success) {
@@ -176,6 +177,23 @@ export default function LoginModal({ isOpen, onClose }) {
                             </p>
                         )}
                     </div>
+
+                    {!isLoginForm && (
+                        <div>
+                            <label className="block text-gray-700 mb-1">
+                                Loại da
+                            </label>
+                            <select
+                                {...register('skinType')}
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500">
+                                <option value="normal">Da thường</option>
+                                <option value="dry">Da khô</option>
+                                <option value="oily">Da dầu</option>
+                                <option value="combination">Da hỗn hợp</option>
+                                <option value="sensitive">Da nhạy cảm</option>
+                            </select>
+                        </div>
+                    )}
 
                     <button
                         type="submit"

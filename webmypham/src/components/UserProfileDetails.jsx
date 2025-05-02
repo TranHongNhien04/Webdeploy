@@ -1,15 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Pencil } from 'lucide-react';
+import EditProfileModal from './EditProfileModal';
 
-export default function UserProfileDetails({ user }) {
+export default function UserProfileDetails({ user, onUserUpdate }) {
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
     if (!user) return null;
+    const getSkinTypeInVietnamese = (skinType) => {
+        const skinTypeMap = {
+            normal: 'Da thường',
+            dry: 'Da khô',
+            oily: 'Da dầu',
+            combination: 'Da hỗn hợp',
+            sensitive: 'Da nhạy cảm',
+        };
+
+        return skinTypeMap[skinType] || 'Chưa cập nhật';
+    };
 
     return (
         <div className="bg-white shadow-md rounded-lg overflow-hidden">
-            <div className="bg-gray-100 p-6">
+            <div className="bg-gray-100 p-6 flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-gray-800">
                     Thông tin cá nhân
                 </h2>
+                <button
+                    onClick={() => setIsEditModalOpen(true)}
+                    className="text-gray-600 hover:text-gray-900"
+                    title="Chỉnh sửa thông tin">
+                    <Pencil size={20} />
+                </button>
             </div>
 
             <div className="p-6">
@@ -29,7 +50,7 @@ export default function UserProfileDetails({ user }) {
                     <h4 className="font-semibold mb-2">Thông tin chi tiết</h4>
                     <p className="text-sm text-gray-600 mb-1">
                         <span className="font-medium">Loại da:</span>{' '}
-                        {user.skinType || 'Chưa cập nhật'}
+                        {getSkinTypeInVietnamese(user.skinType)}
                     </p>
                     <p className="text-sm text-gray-600">
                         <span className="font-medium">Sản phẩm yêu thích:</span>{' '}
@@ -68,15 +89,25 @@ export default function UserProfileDetails({ user }) {
                                     key={order.id}
                                     className="border rounded p-4">
                                     <div className="flex justify-between mb-2">
-                                        <p className="font-medium">Đơn hàng: {order.id}</p>
-                                        <p className="text-sm text-gray-600">{order.date}</p>
+                                        <p className="font-medium">
+                                            Đơn hàng: {order.id}
+                                        </p>
+                                        <p className="text-sm text-gray-600">
+                                            {order.date}
+                                        </p>
                                     </div>
                                     <p className="text-sm mb-2">
-                                        <span className="font-medium">Trạng thái:</span>{' '}
-                                        <span className="capitalize">{order.status}</span>
+                                        <span className="font-medium">
+                                            Trạng thái:
+                                        </span>{' '}
+                                        <span className="capitalize">
+                                            {order.status}
+                                        </span>
                                     </p>
                                     <p className="text-sm mb-2">
-                                        <span className="font-medium">Số lượng sản phẩm:</span>{' '}
+                                        <span className="font-medium">
+                                            Số lượng sản phẩm:
+                                        </span>{' '}
                                         {order.items.length}
                                     </p>
                                     <p className="text-sm font-medium">
@@ -88,6 +119,13 @@ export default function UserProfileDetails({ user }) {
                     </div>
                 )}
             </div>
+
+            <EditProfileModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                user={user}
+                onUserUpdate={onUserUpdate}
+            />
         </div>
     );
 }

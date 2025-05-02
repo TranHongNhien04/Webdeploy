@@ -3,6 +3,7 @@ import SearchIcon from '../assets/img/icons/loupe.png';
 import BasketIcon from '../assets/img/icons/basket.png';
 import { useState, useRef, useEffect } from 'react';
 import LoginModal from './LoginModal';
+import Toast from './Toast';
 import { useAuth } from '../context/AuthContext';
 import { ChevronDown, User, LogOut, Settings } from 'lucide-react';
 
@@ -89,7 +90,7 @@ export default function Header() {
 
     return (
         <>
-            <header className="bg-white shadow-md">
+            <header className="bg-white shadow-sm fixed w-full z-10">
                 <div className="px-6 py-4 flex justify-between items-center rounded-b-lg bg-white/20 space-x-5">
                     <div className="flex items-baseline">
                         <span className="text-2xl font-extrabold text-gray-900 tracking-wide uppercase">

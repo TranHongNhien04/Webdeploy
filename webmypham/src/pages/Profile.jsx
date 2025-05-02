@@ -46,6 +46,11 @@ export default function Profile() {
         fetchUserDetails();
     }, [user]);
 
+    // Hàm xử lý cập nhật thông tin người dùng
+    const handleUserUpdate = (updatedUser) => {
+        setUserDetails(updatedUser);
+    };
+
     // Nếu chưa đăng nhập, chuyển hướng về trang chủ
     if (!isAuthenticated) {
         return <Navigate to="/" />;
@@ -66,7 +71,10 @@ export default function Profile() {
     return (
         <div className="container mx-auto px-4 py-20">
             <div className="max-w-3xl mx-auto">
-                <UserProfileDetails user={displayUser} />
+                <UserProfileDetails
+                    user={displayUser}
+                    onUserUpdate={handleUserUpdate}
+                />
             </div>
         </div>
     );
