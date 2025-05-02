@@ -1,10 +1,9 @@
-import React from "react";
-import AboutSection from "./AboutSection";
-import CategorySection from "./CategorySection";
-import ServiceSection from "./ServiceSection";
-import FeedbackSection from "./FeedbackSection";
-import BrandsSection from "./BrandsSection";
-
+import React from 'react';
+import AboutSection from './AboutSection';
+import CategorySection from './CategorySection';
+import ServiceSection from './ServiceSection';
+import FeedbackSection from './FeedbackSection';
+import BrandsSection from './BrandsSection';
 
 export default function HomeContent() {
     return (

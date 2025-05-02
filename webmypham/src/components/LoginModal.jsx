@@ -44,6 +44,9 @@ export default function LoginModal({ isOpen, onClose }) {
 
                     // Đóng modal ngay lập tức
                     onClose();
+
+                    // Làm mới trang để cập nhật trạng thái
+                    window.location.reload();
                 } else {
                     // Hiển thị lỗi
                     setLoginError(authError || 'Đăng nhập không thành công');
@@ -66,6 +69,8 @@ export default function LoginModal({ isOpen, onClose }) {
                     // Đóng modal sau 1 giây
                     setTimeout(() => {
                         onClose();
+                        // Làm mới trang để cập nhật trạng thái
+                        window.location.reload();
                     }, 1000);
                 } else {
                     // Hiển thị lỗi

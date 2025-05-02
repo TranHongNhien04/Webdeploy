@@ -12,9 +12,14 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
-            const parsedUser = JSON.parse(storedUser);
-            console.log('Loaded user from localStorage:', parsedUser);
-            setUser(parsedUser);
+            try {
+                const parsedUser = JSON.parse(storedUser);
+                console.log('Loaded user from localStorage:', parsedUser);
+                setUser(parsedUser);
+            } catch (e) {
+                console.error('Error parsing user from localStorage:', e);
+                localStorage.removeItem('user');
+            }
         }
         setLoading(false);
     }, []);
@@ -23,7 +28,7 @@ export function AuthProvider({ children }) {
     const login = async ({ email, password }) => {
         try {
             setError(null);
-            console.log('Attempting login with:', email);
+            console.log('Attempting login with:', email, 'password:', password);
 
             // Gọi API từ JSON Server
             const response = await fetch(
@@ -54,6 +59,7 @@ export function AuthProvider({ children }) {
                     email: foundUser.email,
                     skinType: foundUser.skinType,
                     wishlist: foundUser.wishlist || [],
+                    role: foundUser.role || 'customer', // Thêm role
                 };
 
                 console.log('Login successful, storing user:', userToStore);
@@ -122,6 +128,7 @@ export function AuthProvider({ children }) {
                 email: newUser.email,
                 skinType: newUser.skinType,
                 wishlist: newUser.wishlist,
+                role: newUser.role,
             };
 
             console.log('Registration successful, storing user:', userToStore);

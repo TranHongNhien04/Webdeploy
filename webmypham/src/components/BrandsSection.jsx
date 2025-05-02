@@ -16,7 +16,7 @@ export default function BrandsSection() {
                 }
 
                 const data = await response.json();
-                console.log('Fetched brands:', data);
+                // console.log('Fetched brands:', data);
                 setBrands(data);
                 setError(null);
             } catch (err) {
