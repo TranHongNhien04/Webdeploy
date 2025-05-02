@@ -1,0 +1,157 @@
+import { createContext, useState, useContext, useEffect } from 'react';
+
+const AuthContext = createContext(null);
+
+export const useAuth = () => useContext(AuthContext);
+
+export function AuthProvider({ children }) {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            console.log('Loaded user from localStorage:', parsedUser);
+            setUser(parsedUser);
+        }
+        setLoading(false);
+    }, []);
+
+    // Đăng nhập: kiểm tra user theo email
+    const login = async ({ email, password }) => {
+        try {
+            setError(null);
+            console.log('Attempting login with:', email);
+
+            // Gọi API từ JSON Server
+            const response = await fetch(
+                `http://localhost:3001/users?email=${email}`
+            );
+            if (!response.ok) {
+                console.error(
+                    'API Error:',
+                    response.status,
+                    response.statusText
+                );
+                throw new Error('Không thể kết nối đến cơ sở dữ liệu');
+            }
+
+            const users = await response.json();
+            console.log('API Response:', users);
+
+            // Tìm user theo email và password
+            const foundUser = users.find(
+                (u) => u.email === email && u.password === password
+            );
+            console.log('Found user:', foundUser);
+
+            if (foundUser) {
+                const userToStore = {
+                    id: foundUser.id,
+                    name: foundUser.name,
+                    email: foundUser.email,
+                    skinType: foundUser.skinType,
+                    wishlist: foundUser.wishlist || [],
+                };
+
+                console.log('Login successful, storing user:', userToStore);
+                setUser(userToStore);
+                localStorage.setItem('user', JSON.stringify(userToStore));
+                return true;
+            }
+
+            console.log('Login failed: Invalid credentials');
+            setError('Email hoặc mật khẩu không đúng');
+            return false;
+        } catch (error) {
+            console.error('Login error:', error);
+            setError('Đã xảy ra lỗi khi đăng nhập');
+            return false;
+        }
+    };
+
+    const register = async (userData) => {
+        try {
+            setError(null);
+            console.log('Attempting registration with:', userData.email);
+
+            // Kiểm tra email đã tồn tại chưa
+            const checkResponse = await fetch(
+                `http://localhost:3001/users?email=${userData.email}`
+            );
+            if (!checkResponse.ok) {
+                throw new Error('Không thể kết nối đến cơ sở dữ liệu');
+            }
+
+            const existingUsers = await checkResponse.json();
+            if (existingUsers.length > 0) {
+                console.log('Registration failed: Email already exists');
+                setError('Email đã tồn tại');
+                return false;
+            }
+
+            // Tạo user mới
+            const newUser = {
+                id: `user${Date.now()}`,
+                name: userData.name,
+                email: userData.email,
+                password: userData.password,
+                skinType: userData.skinType || 'normal',
+                wishlist: [],
+                orders: [],
+            };
+
+            // Thêm user mới vào database
+            const addResponse = await fetch('http://localhost:3001/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newUser),
+            });
+
+            if (!addResponse.ok) {
+                throw new Error('Không thể đăng ký tài khoản');
+            }
+
+            const userToStore = {
+                id: newUser.id,
+                name: newUser.name,
+                email: newUser.email,
+                skinType: newUser.skinType,
+                wishlist: newUser.wishlist,
+            };
+
+            console.log('Registration successful, storing user:', userToStore);
+            setUser(userToStore);
+            localStorage.setItem('user', JSON.stringify(userToStore));
+            return true;
+        } catch (error) {
+            console.error('Registration error:', error);
+            setError('Đã xảy ra lỗi khi đăng ký');
+            return false;
+        }
+    };
+
+    const logout = () => {
+        console.log('Logging out');
+        setUser(null);
+        localStorage.removeItem('user');
+    };
+
+    const value = {
+        user,
+        loading,
+        error,
+        login,
+        register,
+        logout,
+        isAuthenticated: !!user,
+    };
+
+    return (
+        <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+    );
+}

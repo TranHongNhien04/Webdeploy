@@ -5,7 +5,11 @@ import ChamSocDaMat from '../assets/img/ChamSocDaMat.webp';
 
 const NewsCard = ({ image, title }) => (
     <div className="bg-white rounded-lg shadow-md overflow-hidden h-[100px] flex">
-        <img src={image} alt={title} className="w-[100px] h-full object-cover" />
+        <img
+            src={image}
+            alt={title}
+            className="w-[100px] h-full object-cover"
+        />
         <div className="p-3 flex-1">
             <h3 className="text-md font-semibold line-clamp-2">{title}</h3>
         </div>
@@ -19,18 +23,15 @@ const CategoryCard = ({ image, title, onPrev, onNext }) => (
             backgroundImage: `url(${image})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-        }}
-    >
+        }}>
         <button
             onClick={onPrev}
-            className="absolute top-1/2 left-4 transform -translate-y-1/2 w-8 h-8 flex items-center justify-center z-10"
-        >
+            className="absolute top-1/2 left-4 transform -translate-y-1/2 w-8 h-8 flex items-center justify-center z-10">
             <img src={LeftArrow} alt="" />
         </button>
         <button
             onClick={onNext}
-            className="absolute top-1/2 right-4 transform -translate-y-1/2 w-8 h-8 flex items-center justify-center z-10"
-        >
+            className="absolute top-1/2 right-4 transform -translate-y-1/2 w-8 h-8 flex items-center justify-center z-10">
             <img src={RightArrow} alt="" />
         </button>
         <div className="absolute bottom-0 p-4 w-full">
@@ -42,30 +43,75 @@ const CategoryCard = ({ image, title, onPrev, onNext }) => (
 export default function CategorySection() {
     const categories = [
         {
-            title: "Chăm sóc da mặt",
+            title: 'Chăm sóc da mặt',
             image: ChamSocDaMat,
             subCategories: [
-                { title: "Sữa rửa mặt", image: "https://via.placeholder.com/400x200" },
-                { title: "Toner/Nước hoa hồng", image: "https://via.placeholder.com/400x200" },
-                { title: "Serum/Essence", image: "https://via.placeholder.com/400x200" },
-                { title: "Kem dưỡng da", image: "https://via.placeholder.com/400x200" },
-                { title: "Mặt nạ", image: "https://via.placeholder.com/400x200" },
-                { title: "Tẩy tế bào chết", image: "https://via.placeholder.com/400x200" },
-                { title: "Kem chống nắng", image: "https://via.placeholder.com/400x200" },
+                {
+                    title: 'Sữa rửa mặt',
+                    image: 'https://via.placeholder.com/400x200',
+                },
+                {
+                    title: 'Toner/Nước hoa hồng',
+                    image: 'https://via.placeholder.com/400x200',
+                },
+                {
+                    title: 'Serum/Essence',
+                    image: 'https://via.placeholder.com/400x200',
+                },
+                {
+                    title: 'Kem dưỡng da',
+                    image: 'https://via.placeholder.com/400x200',
+                },
+                {
+                    title: 'Mặt nạ',
+                    image: 'https://via.placeholder.com/400x200',
+                },
+                {
+                    title: 'Tẩy tế bào chết',
+                    image: 'https://via.placeholder.com/400x200',
+                },
+                {
+                    title: 'Kem chống nắng',
+                    image: 'https://via.placeholder.com/400x200',
+                },
             ],
         },
         {
-            title: "Trang điểm",
-            image: "https://via.placeholder.com/400x300",
+            title: 'Trang điểm',
+            image: 'https://via.placeholder.com/400x300',
             subCategories: [
-                { title: "Kem nền", image: "https://via.placeholder.com/400x200" },
-                { title: "Phấn phủ", image: "https://via.placeholder.com/400x200" },
-                { title: "Che khuyết điểm", image: "https://via.placeholder.com/400x200" },
-                { title: "Son môi", image: "https://via.placeholder.com/400x200" },
-                { title: "Mascara", image: "https://via.placeholder.com/400x200" },
-                { title: "Kẻ mắt", image: "https://via.placeholder.com/400x200" },
-                { title: "Phấn má hồng", image: "https://via.placeholder.com/400x200" },
-                { title: "Kẻ mày", image: "https://via.placeholder.com/400x200" },
+                {
+                    title: 'Kem nền',
+                    image: 'https://via.placeholder.com/400x200',
+                },
+                {
+                    title: 'Phấn phủ',
+                    image: 'https://via.placeholder.com/400x200',
+                },
+                {
+                    title: 'Che khuyết điểm',
+                    image: 'https://via.placeholder.com/400x200',
+                },
+                {
+                    title: 'Son môi',
+                    image: 'https://via.placeholder.com/400x200',
+                },
+                {
+                    title: 'Mascara',
+                    image: 'https://via.placeholder.com/400x200',
+                },
+                {
+                    title: 'Kẻ mắt',
+                    image: 'https://via.placeholder.com/400x200',
+                },
+                {
+                    title: 'Phấn má hồng',
+                    image: 'https://via.placeholder.com/400x200',
+                },
+                {
+                    title: 'Kẻ mày',
+                    image: 'https://via.placeholder.com/400x200',
+                },
             ],
         },
     ];
@@ -101,17 +147,11 @@ export default function CategorySection() {
                     />
                 </div>
                 <div
-                    className="h-[332px] overflow-y-auto space-y-4 pr-2"
+                    className="h-[332px] overflow-y-auto space-y-4 pr-2 scrollbar-none"
                     style={{
                         scrollbarWidth: 'none',
                         msOverflowStyle: 'none',
-                    }}
-                >
-                    <style jsx>{`
-                        div::-webkit-scrollbar {
-                            display: none; // Chrome, Safari, Opera
-                        }
-                    `}</style>
+                    }}>
                     {currentCategory.subCategories.map((subCategory, index) => (
                         <NewsCard
                             key={index}

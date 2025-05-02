@@ -1,15 +1,46 @@
-import BackgroundImage from "../assets/img/backgrounds.png";
-import HeroRecipeCard from "./HeroRecipeCard";
+import React, { useState, useEffect } from 'react';
+import { X } from 'lucide-react';
 
-export default function Hero() {
+export default function Toast({
+    message,
+    type = 'success',
+    duration = 3000,
+    onClose,
+}) {
+    const [isVisible, setIsVisible] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsVisible(false);
+            if (onClose) onClose();
+        }, duration);
+
+        return () => clearTimeout(timer);
+    }, [duration, onClose]);
+
+    if (!isVisible) return null;
+
+    const bgColor =
+        type === 'success'
+            ? 'bg-green-500'
+            : type === 'error'
+            ? 'bg-red-500'
+            : type === 'warning'
+            ? 'bg-yellow-500'
+            : 'bg-blue-500';
+
     return (
-        <section
-            className="relative h-screen bg-cover bg-center"
-            style={{ backgroundImage: `url(${BackgroundImage})` }}
-        >
-            <div className="absolute top-1/2 left-[8%] transform -translate-x-1/2 -translate-y-1/2">
-                <HeroRecipeCard />
-            </div>
-        </section>
+        <div
+            className={`fixed bottom-4 right-4 ${bgColor} text-white px-4 py-2 rounded-lg shadow-lg flex items-center z-50`}>
+            <span>{message}</span>
+            <button
+                onClick={() => {
+                    setIsVisible(false);
+                    if (onClose) onClose();
+                }}
+                className="ml-2 text-white hover:text-gray-200">
+                <X size={18} />
+            </button>
+        </div>
     );
 }
