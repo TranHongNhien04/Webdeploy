@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
 export default function AboutSection() {
     return (
         <section className="py-16 px-6 flex flex-col items-center text-center">
             <div className="max-w-2xl">
-                <div className="flex items-baseline justify-center space-x-1 mb-4">
+                <div className="flex items-baseline justify-center space-x-1 mt-10">
                     <span className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-wide uppercase">
                         FRUVIA
                     </span>
@@ -13,7 +13,8 @@ export default function AboutSection() {
                     </span>
                 </div>
                 <p className="text-gray-600 mb-2 whitespace-nowrap">
-                    Chúng tôi mang đến những sản phẩm làm đẹp được tuyển chọn kỹ lưỡng từ các thương hiệu uy tín toàn cầu.
+                    Chúng tôi mang đến những sản phẩm làm đẹp được tuyển chọn kỹ
+                    lưỡng từ các thương hiệu uy tín toàn cầu.
                 </p>
                 <p className="text-gray-600 whitespace-nowrap">
                     Tôn vinh vẻ đẹp tự nhiên, an toàn và tinh tế dành cho bạn.

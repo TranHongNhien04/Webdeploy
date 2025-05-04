@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 
-export default function Toast({
+export default function Hero({
     message,
     type = 'success',
     duration = 3000,
@@ -31,7 +31,7 @@ export default function Toast({
 
     return (
         <div
-            className={`fixed bottom-4 right-4 ${bgColor} text-white px-4 py-2 rounded-lg shadow-lg flex items-center z-50`}>
+            className={`fixed mt-5 bottom-4 right-4 ${bgColor} text-white px-4 py-2 rounded-lg shadow-lg flex items-center z-50`}>
             <span>{message}</span>
             <button
                 onClick={() => {

@@ -1,9 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import SearchIcon from '../assets/img/icons/loupe.png';
 import BasketIcon from '../assets/img/icons/basket.png';
 import { useState, useRef, useEffect } from 'react';
 import LoginModal from './LoginModal';
-import Toast from './Toast';
 import { useAuth } from '../context/AuthContext';
 import { ChevronDown, User, LogOut, Settings } from 'lucide-react';
 
@@ -13,6 +12,7 @@ export default function Header() {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const { user, logout, isAuthenticated } = useAuth();
+    const location = useLocation();
 
     // Debug logs
     useEffect(() => {
@@ -23,6 +23,17 @@ export default function Header() {
     const openLoginModal = () => setIsLoginModalOpen(true);
     const closeLoginModal = () => setIsLoginModalOpen(false);
     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+
+    // Kiểm tra đường dẫn hiện tại để xác định mục đang được chọn
+    const isActive = (path) => {
+        if (path === '/' && location.pathname === '/') {
+            return true;
+        }
+        if (path !== '/' && location.pathname.startsWith(path)) {
+            return true;
+        }
+        return false;
+    };
 
     // Đóng dropdown khi click ra ngoài
     useEffect(() => {
@@ -47,7 +58,7 @@ export default function Header() {
             return (
                 <div className="relative" ref={dropdownRef}>
                     <button
-                        className="flex items-center gap-2 text-sm font-medium hover:underline"
+                        className="flex items-center gap-2 text-sm font-medium hover:underline "
                         onClick={toggleDropdown}>
                         <span>Xin chào, {user.name}</span>
                         <ChevronDown size={16} />
@@ -102,19 +113,49 @@ export default function Header() {
                     </div>
 
                     <nav className="hidden md:flex space-x-10 text-base text-gray-800 font-semibold">
-                        <Link to="/" className="hover:text-black">
+                        <Link
+                            to="/"
+                            className={`hover:text-teal-600 transition-colors ${
+                                isActive('/')
+                                    ? 'text-teal-700 border-b-2 border-b-teal-700'
+                                    : ''
+                            }`}>
                             Trang chủ
                         </Link>
-                        <Link to="/san-pham" className="hover:text-black">
+                        <Link
+                            to="/san-pham"
+                            className={`hover:text-teal-600 transition-colors ${
+                                isActive('/san-pham')
+                                    ? 'text-teal-700 border-b-2 border-b-teal-700'
+                                    : ''
+                            }`}>
                             Sản phẩm
                         </Link>
-                        <Link to="/dich-vu" className="hover:text-black">
+                        <Link
+                            to="/dich-vu"
+                            className={`hover:text-teal-600 transition-colors ${
+                                isActive('/dich-vu')
+                                    ? 'text-teal-700 border-b-2 border-b-teal-700'
+                                    : ''
+                            }`}>
                             Dịch vụ
                         </Link>
-                        <Link to="/gioi-thieu" className="hover:text-black">
+                        <Link
+                            to="/gioi-thieu"
+                            className={`hover:text-teal-600 transition-colors ${
+                                isActive('/gioi-thieu')
+                                    ? 'text-teal-700 border-b-2 border-b-teal-700'
+                                    : ''
+                            }`}>
                             Giới thiệu
                         </Link>
-                        <Link to="/lien-he" className="hover:text-black">
+                        <Link
+                            to="/lien-he"
+                            className={`hover:text-teal-600 transition-colors ${
+                                isActive('/lien-he')
+                                    ? 'text-teal-700 border-b-2 border-b-teal-700'
+                                    : ''
+                            }`}>
                             Liên hệ
                         </Link>
                     </nav>
@@ -135,7 +176,11 @@ export default function Header() {
                     <div className="flex items-center space-x-4">
                         <Link
                             to="/gio-hang"
-                            className="hidden md:flex text-base text-gray-800 font-semibold gap-1">
+                            className={`hidden md:flex text-base font-semibold gap-1 ${
+                                isActive('/gio-hang')
+                                    ? 'text-teal-600'
+                                    : 'text-gray-800'
+                            }`}>
                             <img
                                 src={BasketIcon}
                                 alt="Giỏ hàng"
