@@ -1,7 +1,11 @@
+import { useRef, useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { useAuth } from '../context/AuthContext';
 import DichVuBanner from '../assets/img/DichVuBanner.png';
+import Toast from '../components/Toast';
 
-const HeroSection = () => (
-    <section className="relative h-[600px] mb-16 -mx-4 overflow-hidden">
+const HeroSection = ({ scrollToBooking, scrollToServices }) => (
+    <section className="relative h-[600px] mb-16 overflow-hidden rounded-lg">
         <img
             src={DichVuBanner}
             alt="Dịch vụ tư vấn mỹ phẩm"
@@ -9,7 +13,7 @@ const HeroSection = () => (
             loading="lazy"
         />
 
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6 z-10">
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6 z-1">
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
                 Dịch Vụ Tư Vấn Chọn Sản Phẩm
             </h1>
@@ -18,10 +22,14 @@ const HeroSection = () => (
                 quan trọng. Hãy để chuyên gia của chúng tôi giúp bạn!
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-                <button className="bg-white text-black hover:bg-gray-100 py-3 px-6 rounded-md text-lg">
+                <button
+                    onClick={scrollToBooking}
+                    className="bg-white text-black hover:bg-gray-100 py-3 px-6 rounded-md text-lg">
                     Đặt Lịch Tư Vấn
                 </button>
-                <button className="text-white border border-white hover:bg-white/20 py-3 px-6 rounded-md text-lg">
+                <button
+                    onClick={scrollToServices}
+                    className="text-white border border-white hover:bg-white/20 py-3 px-6 rounded-md text-lg">
                     Tìm Hiểu Thêm
                 </button>
             </div>
@@ -79,7 +87,7 @@ const BenefitsSection = () => {
     );
 };
 
-const ServicesTabsSection = () => {
+const ServicesTabsSection = ({ servicesRef }) => {
     const services = [
         {
             value: 'skincare',
@@ -136,7 +144,7 @@ const ServicesTabsSection = () => {
     ];
 
     return (
-        <section className="mb-16">
+        <section ref={servicesRef} className="mb-16 pt-5 scroll-mt-24">
             <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold mb-4">
                     Dịch Vụ Tư Vấn Theo Nhu Cầu
@@ -213,30 +221,13 @@ const SkinTypeSection = () => {
                 'Kem dưỡng không hương liệu',
             ],
         },
-        {
-            title: 'Da Mụn',
-            description: 'Giải pháp trị mụn và ngăn ngừa thâm',
-            content:
-                'Các sản phẩm dành cho da mụn giúp kháng khuẩn, giảm viêm, làm lành da và ngăn ngừa thâm sau mụn.',
-            tags: [
-                'Sữa rửa mặt kháng khuẩn',
-                'Serum trị mụn',
-                'Kem dưỡng không gây mụn',
-            ],
-        },
+
         {
             title: 'Da Hỗn Hợp',
             description: 'Giải pháp cân bằng vùng da khác nhau',
             content:
                 'Các sản phẩm dành cho da hỗn hợp giúp cân bằng vùng da dầu (chữ T) và vùng da khô (hai má).',
             tags: ['Sữa rửa mặt cân bằng', 'Toner đa năng', 'Kem dưỡng vùng'],
-        },
-        {
-            title: 'Da Lão Hóa',
-            description: 'Giải pháp chống lão hóa và phục hồi da',
-            content:
-                'Các sản phẩm dành cho da lão hóa giúp làm mờ nếp nhăn, tăng cường đàn hồi và cải thiện kết cấu da.',
-            tags: ['Serum chống lão hóa', 'Kem mắt', 'Kem dưỡng tái tạo'],
         },
     ];
 
@@ -250,7 +241,7 @@ const SkinTypeSection = () => {
                     từng loại da.
                 </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {skinTypes.map((skin, index) => (
                     <div
                         key={index}
@@ -280,115 +271,318 @@ const SkinTypeSection = () => {
     );
 };
 
-const BookingFormSection = () => (
-    <section className="mb-16">
-        <div className="max-w-3xl mx-auto border rounded-lg p-8 bg-gray-50">
-            <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold mb-4">Đặt Lịch Tư Vấn</h2>
-                <p className="text-gray-500">
-                    Điền thông tin của bạn để đặt lịch tư vấn với chuyên gia của
-                    chúng tôi
-                </p>
-            </div>
-            <form className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                        <label htmlFor="name" className="font-medium">
-                            Họ và tên
-                        </label>
-                        <input
-                            id="name"
-                            type="text"
-                            className="w-full p-3 border rounded-md"
-                            placeholder="Nhập họ và tên của bạn"
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <label htmlFor="phone" className="font-medium">
-                            Số điện thoại
-                        </label>
-                        <input
-                            id="phone"
-                            type="tel"
-                            className="w-full p-3 border rounded-md"
-                            placeholder="Nhập số điện thoại của bạn"
-                        />
-                    </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                        <label htmlFor="email" className="font-medium">
-                            Email
-                        </label>
-                        <input
-                            id="email"
-                            type="email"
-                            className="w-full p-3 border rounded-md"
-                            placeholder="Nhập email của bạn"
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <label htmlFor="date" className="font-medium">
-                            Ngày hẹn
-                        </label>
-                        <input
-                            id="date"
-                            type="date"
-                            className="w-full p-3 border rounded-md"
-                        />
-                    </div>
-                </div>
-                <div className="space-y-2">
-                    <label htmlFor="service" className="font-medium">
-                        Dịch vụ tư vấn
-                    </label>
-                    <select
-                        id="service"
-                        className="w-full p-3 border rounded-md">
-                        <option value="">Chọn dịch vụ tư vấn</option>
-                        <option value="skincare">Tư vấn chăm sóc da mặt</option>
-                        <option value="makeup">Tư vấn trang điểm</option>
-                        <option value="body">Tư vấn chăm sóc cơ thể</option>
-                        <option value="hair">Tư vấn chăm sóc tóc</option>
-                    </select>
-                </div>
-                <div className="space-y-2">
-                    <label htmlFor="skin-type" className="font-medium">
-                        Loại da của bạn
-                    </label>
-                    <select
-                        id="skin-type"
-                        className="w-full p-3 border rounded-md">
-                        <option value="">Chọn loại da của bạn</option>
-                        <option value="oily">Da dầu</option>
-                        <option value="dry">Da khô</option>
-                        <option value="sensitive">Da nhạy cảm</option>
-                        <option value="acne">Da mụn</option>
-                        <option value="combination">Da hỗn hợp</option>
-                        <option value="aging">Da lão hóa</option>
-                        <option value="normal">Da thường</option>
-                    </select>
-                </div>
-                <div className="space-y-2">
-                    <label htmlFor="message" className="font-medium">
-                        Nhu cầu cụ thể
-                    </label>
-                    <textarea
-                        id="message"
-                        className="w-full p-3 border rounded-md h-32"
-                        placeholder="Mô tả nhu cầu và vấn đề da của bạn"></textarea>
-                </div>
-                <button
-                    type="submit"
-                    className="w-full bg-black hover:bg-gray-800 text-white py-6 rounded-md text-lg">
-                    Đặt Lịch Ngay
-                </button>
-            </form>
-        </div>
-    </section>
-);
+const BookingFormSection = ({ bookingRef }) => {
+    const { user, isAuthenticated } = useAuth();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [toast, setToast] = useState(null);
+    const [loginRequired, setLoginRequired] = useState(false);
 
-const CTASection = () => (
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset,
+        setValue,
+    } = useForm();
+
+    // Nếu người dùng đã đăng nhập, tự động điền thông tin
+    useEffect(() => {
+        if (user) {
+            setValue('name', user.name || '');
+            setValue('email', user.email || '');
+            setValue('skinType', user.skinType || '');
+        }
+    }, [user, setValue]);
+
+    const onSubmit = async (data) => {
+        // Kiểm tra đăng nhập trước khi đặt lịch
+        if (!isAuthenticated) {
+            setLoginRequired(true);
+            setToast({
+                message: 'Vui lòng đăng nhập để đặt lịch tư vấn',
+                type: 'error',
+            });
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            // Tạo đối tượng booking mới
+            const newBooking = {
+                id: `booking-${Date.now()}`,
+                userId: user.id, // Thêm userId để liên kết với người dùng
+                name: data.name,
+                phone: data.phone,
+                email: data.email,
+                date: data.date,
+                service: data.service,
+                skinType: data.skinType,
+                message: data.message,
+                status: 'pending', // Trạng thái mặc định: chờ xử lý
+                createdAt: new Date().toISOString(),
+            };
+
+            console.log('Đang gửi dữ liệu booking:', newBooking);
+            try {
+                const response = await fetch('http://localhost:3001/bookings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newBooking),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const responseData = await response.json();
+                console.log('Phản hồi từ server:', responseData);
+
+                // Hiển thị thông báo thành công
+                setToast({
+                    message:
+                        'Đặt lịch tư vấn thành công! Chúng tôi sẽ liên hệ với bạn sớm.',
+                    type: 'success',
+                });
+
+                // Reset form
+                reset();
+            } catch (bookingError) {
+                console.error(
+                    'Error saving to bookings collection:',
+                    bookingError
+                );
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setToast({
+                message:
+                    error.message || 'Có lỗi xảy ra. Vui lòng thử lại sau.',
+                type: 'error',
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    return (
+        <section ref={bookingRef} className="mb-16 pt-5 scroll-mt-24">
+            <div className="max-w-3xl mx-auto border rounded-lg p-8 bg-gray-50">
+                <div className="text-center mb-8">
+                    <h2 className="text-3xl font-bold mb-4">Đặt Lịch Tư Vấn</h2>
+                    <p className="text-gray-500">
+                        Điền thông tin của bạn để đặt lịch tư vấn với chuyên gia
+                        của chúng tôi
+                    </p>
+                </div>
+
+                <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <label htmlFor="name" className="font-medium">
+                                Họ và tên
+                            </label>
+                            <input
+                                id="name"
+                                type="text"
+                                className={`w-full p-3 border rounded-md ${
+                                    errors.name ? 'border-red-500' : ''
+                                }`}
+                                placeholder="Nhập họ và tên của bạn"
+                                {...register('name', {
+                                    required: 'Vui lòng nhập họ tên',
+                                    minLength: {
+                                        value: 2,
+                                        message:
+                                            'Họ tên phải có ít nhất 2 ký tự',
+                                    },
+                                })}
+                            />
+                            {errors.name && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.name.message}
+                                </p>
+                            )}
+                        </div>
+                        <div className="space-y-2">
+                            <label htmlFor="phone" className="font-medium">
+                                Số điện thoại
+                            </label>
+                            <input
+                                id="phone"
+                                type="tel"
+                                className={`w-full p-3 border rounded-md ${
+                                    errors.phone ? 'border-red-500' : ''
+                                }`}
+                                placeholder="Nhập số điện thoại của bạn"
+                                {...register('phone', {
+                                    required: 'Vui lòng nhập số điện thoại',
+                                    pattern: {
+                                        value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
+                                        message: 'Số điện thoại không hợp lệ',
+                                    },
+                                })}
+                            />
+                            {errors.phone && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.phone.message}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <label htmlFor="email" className="font-medium">
+                                Email
+                            </label>
+                            <input
+                                id="email"
+                                type="email"
+                                className={`w-full p-3 border rounded-md ${
+                                    errors.email ? 'border-red-500' : ''
+                                }`}
+                                placeholder="Nhập email của bạn"
+                                {...register('email', {
+                                    required: 'Vui lòng nhập email',
+                                    pattern: {
+                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                        message: 'Email không hợp lệ',
+                                    },
+                                })}
+                            />
+                            {errors.email && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.email.message}
+                                </p>
+                            )}
+                        </div>
+                        <div className="space-y-2">
+                            <label htmlFor="date" className="font-medium">
+                                Ngày hẹn
+                            </label>
+                            <input
+                                id="date"
+                                type="date"
+                                className={`w-full p-3 border rounded-md ${
+                                    errors.date ? 'border-red-500' : ''
+                                }`}
+                                {...register('date', {
+                                    required: 'Vui lòng chọn ngày hẹn',
+                                    validate: (value) => {
+                                        const selectedDate = new Date(value);
+                                        const today = new Date();
+                                        today.setHours(0, 0, 0, 0);
+                                        return (
+                                            selectedDate > today ||
+                                            'Ngày hẹn phải đặt sau ngày hôm nay'
+                                        );
+                                    },
+                                })}
+                            />
+                            {errors.date && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.date.message}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <label htmlFor="service" className="font-medium">
+                            Dịch vụ tư vấn
+                        </label>
+                        <select
+                            id="service"
+                            className={`w-full p-3 border rounded-md ${
+                                errors.service ? 'border-red-500' : ''
+                            }`}
+                            {...register('service', {
+                                required: 'Vui lòng chọn dịch vụ tư vấn',
+                            })}>
+                            <option value="">Chọn dịch vụ tư vấn</option>
+                            <option value="skincare">
+                                Tư vấn chăm sóc da mặt
+                            </option>
+                            <option value="makeup">Tư vấn trang điểm</option>
+                            <option value="body">Tư vấn chăm sóc cơ thể</option>
+                            <option value="hair">Tư vấn chăm sóc tóc</option>
+                        </select>
+                        {errors.service && (
+                            <p className="text-red-500 text-sm mt-1">
+                                {errors.service.message}
+                            </p>
+                        )}
+                    </div>
+                    <div className="space-y-2">
+                        <label htmlFor="skin-type" className="font-medium">
+                            Loại da của bạn
+                        </label>
+                        <select
+                            id="skin-type"
+                            className={`w-full p-3 border rounded-md ${
+                                errors.skinType ? 'border-red-500' : ''
+                            }`}
+                            {...register('skinType', {
+                                required: 'Vui lòng chọn loại da của bạn',
+                            })}>
+                            <option value="">Chọn loại da của bạn</option>
+                            <option value="oily">Da dầu</option>
+                            <option value="dry">Da khô</option>
+                            <option value="sensitive">Da nhạy cảm</option>
+                            <option value="combination">Da hỗn hợp</option>
+                        </select>
+                        {errors.skinType && (
+                            <p className="text-red-500 text-sm mt-1">
+                                {errors.skinType.message}
+                            </p>
+                        )}
+                    </div>
+                    <div className="space-y-2">
+                        <label htmlFor="message" className="font-medium">
+                            Nhu cầu cụ thể
+                        </label>
+                        <textarea
+                            id="message"
+                            className={`w-full p-3 border rounded-md h-32 ${
+                                errors.message ? 'border-red-500' : ''
+                            }`}
+                            placeholder="Mô tả nhu cầu và vấn đề da của bạn"
+                            {...register('message', {
+                                required: 'Vui lòng nhập nhu cầu cụ thể',
+                                minLength: {
+                                    value: 10,
+                                    message:
+                                        'Nhu cầu cụ thể phải có ít nhất 10 ký tự',
+                                },
+                            })}></textarea>
+                        {errors.message && (
+                            <p className="text-red-500 text-sm mt-1">
+                                {errors.message.message}
+                            </p>
+                        )}
+                    </div>
+                    <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full bg-black hover:bg-gray-800 text-white py-3 rounded-md text-lg disabled:bg-gray-400 disabled:cursor-not-allowed">
+                        {isSubmitting ? 'Đang xử lý...' : 'Đặt lịch ngay'}
+                    </button>
+                </form>
+            </div>
+
+            {toast && (
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
+        </section>
+    );
+};
+
+const CTASection = ({ scrollToBooking }) => (
     <section className="bg-gradient-to-r from-gray-800 to-black rounded-lg p-8 text-white text-center mb-5">
         <h2 className="text-3xl font-bold mb-4">
             Bắt Đầu Hành Trình Làm Đẹp Của Bạn Ngay Hôm Nay
@@ -398,21 +592,37 @@ const CTASection = () => (
             không phù hợp. Hãy để chuyên gia của chúng tôi giúp bạn tìm ra giải
             pháp tốt nhất!
         </p>
-        <button className="bg-white text-black hover:bg-gray-100 py-3 px-6 rounded-md text-lg">
+        <button
+            onClick={scrollToBooking}
+            className="bg-white text-black hover:bg-gray-100 py-3 px-6 rounded-md text-lg">
             Đặt Lịch Tư Vấn Ngay
         </button>
     </section>
 );
 
 export default function Service() {
+    const bookingRef = useRef(null);
+    const servicesRef = useRef(null);
+
+    const scrollToBooking = () => {
+        bookingRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    const scrollToServices = () => {
+        servicesRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     return (
         <div className="container mx-auto px-4 pt-20">
-            <HeroSection />
+            <HeroSection
+                scrollToBooking={scrollToBooking}
+                scrollToServices={scrollToServices}
+            />
             <BenefitsSection />
-            <ServicesTabsSection />
+            <ServicesTabsSection servicesRef={servicesRef} />
             <SkinTypeSection />
-            <CTASection />
-            <BookingFormSection />
+            <CTASection scrollToBooking={scrollToBooking} />
+            <BookingFormSection bookingRef={bookingRef} />
         </div>
     );
 }

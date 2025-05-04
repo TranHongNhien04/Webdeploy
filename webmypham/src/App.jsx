@@ -8,7 +8,7 @@ import Introduce from './pages/Introduce';
 import Service from './pages/Service';
 import Profile from './pages/Profile';
 import { AuthProvider } from './context/AuthContext';
-
+// json-server --watch src/data/db.json --port 3001
 function App() {
     return (
         <AuthProvider>
