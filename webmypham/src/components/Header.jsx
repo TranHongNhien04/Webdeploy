@@ -53,6 +53,7 @@ export default function Header() {
     }, []);
 
     const handleLogout = () => {
+        console.log('Header: Handling logout');
         logout();
         setIsDropdownOpen(false);
         navigate('/');

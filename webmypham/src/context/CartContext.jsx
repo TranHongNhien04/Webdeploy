@@ -13,6 +13,15 @@ export const CartProvider = ({ children }) => {
         return savedCart ? JSON.parse(savedCart) : [];
     });
 
+    // Theo dõi thay đổi của user để xóa giỏ hàng khi đăng xuất
+    useEffect(() => {
+        // Nếu user chuyển từ có sang null (đăng xuất)
+        if (!user) {
+            console.log('CartContext: User logged out, clearing cart state');
+            setCartItems([]);
+        }
+    }, [user]);
+
     // Lấy giỏ hàng từ user khi đăng nhập
     useEffect(() => {
         const fetchUserCart = async () => {
