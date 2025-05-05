@@ -86,8 +86,16 @@ export const CartProvider = ({ children }) => {
                     quantity: newItems[existingItemIndex].quantity + 1,
                 };
             } else {
-                // Nếu chưa có, thêm mới với số lượng là 1
-                newItems = [...prevItems, { ...product, quantity: 1 }];
+                // Nếu chưa có, thêm mới với số lượng là 1 và chỉ lưu các thông tin cần thiết
+                newItems = [
+                    ...prevItems,
+                    {
+                        productId: product.productId,
+                        title: product.title,
+                        price: product.price,
+                        quantity: 1,
+                    },
+                ];
             }
 
             return newItems;
@@ -131,6 +139,7 @@ export const CartProvider = ({ children }) => {
     // Xóa toàn bộ giỏ hàng
     const clearCart = () => {
         setCartItems([]);
+        localStorage.removeItem('cart');
     };
 
     const value = {

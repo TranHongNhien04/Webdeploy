@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Minus, Plus, Trash2 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { Trash2, Plus, Minus } from 'lucide-react';
 
 export default function Cart() {
     const {
@@ -11,28 +11,81 @@ export default function Cart() {
         getCartTotal,
         clearCart,
     } = useCart();
+    const [products, setProducts] = useState({});
+    const [loading, setLoading] = useState(true);
 
-    if (cartItems.length === 0) {
+    // Lấy thông tin chi tiết của sản phẩm từ API
+    useEffect(() => {
+        async function fetchProductDetails() {
+            if (cartItems.length === 0) {
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const productIds = cartItems.map((item) => item.productId);
+                const uniqueProductIds = [...new Set(productIds)];
+
+                const productDetails = {};
+
+                // Lấy thông tin chi tiết cho từng sản phẩm
+                for (const id of uniqueProductIds) {
+                    const response = await fetch(
+                        `http://localhost:3001/products?productId=${id}`
+                    );
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.length > 0) {
+                            productDetails[id] = data[0];
+                        }
+                    }
+                }
+
+                setProducts(productDetails);
+            } catch (error) {
+                console.error('Error fetching product details:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchProductDetails();
+    }, [cartItems]);
+
+    if (loading) {
         return (
             <div className="container mx-auto px-4 py-24 min-h-screen">
-                <div className="max-w-4xl mx-auto text-center">
-                    <h1 className="text-3xl font-bold mb-6">
-                        Giỏ hàng của bạn
-                    </h1>
-                    <div className="bg-white p-8 rounded-lg shadow-sm">
-                        <p className="text-gray-600 mb-6">
-                            Giỏ hàng của bạn đang trống
-                        </p>
-                        <Link
-                            to="/san-pham"
-                            className="inline-block bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition">
-                            Tiếp tục mua sắm
-                        </Link>
-                    </div>
+                <div className="max-w-6xl mx-auto text-center">
+                    <p>Đang tải thông tin giỏ hàng...</p>
                 </div>
             </div>
         );
     }
+
+    if (cartItems.length === 0) {
+        return (
+            <div className="container mx-auto px-4 py-24 min-h-screen">
+                <div className="max-w-6xl mx-auto text-center">
+                    <h1 className="text-3xl font-bold mb-8">
+                        Giỏ hàng của bạn
+                    </h1>
+                    <p className="text-gray-600 mb-8">
+                        Giỏ hàng của bạn đang trống.
+                    </p>
+                    <Link
+                        to="/san-pham"
+                        className="inline-block bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition-colors">
+                        Tiếp tục mua sắm
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    // Lấy hình ảnh sản phẩm từ thông tin chi tiết nếu có
+    const getProductImage = (productId) => {
+        return products[productId]?.image || '/placeholder.svg';
+    };
 
     return (
         <div className="container mx-auto px-4 py-24 min-h-screen">
@@ -64,10 +117,9 @@ export default function Cart() {
                                         {/* Sản phẩm */}
                                         <div className="col-span-6 flex items-center gap-4">
                                             <img
-                                                src={
-                                                    item.image ||
-                                                    '/placeholder.svg'
-                                                }
+                                                src={getProductImage(
+                                                    item.productId
+                                                )}
                                                 alt={item.title}
                                                 className="w-16 h-16 object-cover rounded"
                                             />
@@ -75,16 +127,23 @@ export default function Cart() {
                                                 <h3 className="font-medium text-gray-800">
                                                     {item.title}
                                                 </h3>
-                                                <button
-                                                    onClick={() =>
-                                                        removeFromCart(
-                                                            item.productId
-                                                        )
-                                                    }
-                                                    className="text-sm text-red-500 flex items-center gap-1 mt-1 hover:text-red-700">
-                                                    <Trash2 size={14} />
-                                                    <span>Xóa</span>
-                                                </button>
+                                                <div className="flex items-center gap-2 mt-1">
+                                                    <button
+                                                        onClick={() =>
+                                                            removeFromCart(
+                                                                item.productId
+                                                            )
+                                                        }
+                                                        className="text-sm text-red-500 flex items-center gap-1 hover:text-red-700">
+                                                        <Trash2 size={14} />
+                                                        <span>Xóa</span>
+                                                    </button>
+                                                    <Link
+                                                        to={`/san-pham/${item.productId}`}
+                                                        className="text-sm text-blue-500 hover:text-blue-700">
+                                                        Xem chi tiết
+                                                    </Link>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -139,17 +198,12 @@ export default function Cart() {
                                 </div>
                             ))}
 
-                            <div className="p-4 border-t border-gray-100 flex justify-between">
+                            <div className="p-4 border-t border-gray-100">
                                 <button
                                     onClick={clearCart}
                                     className="text-sm text-red-500 hover:text-red-700">
                                     Xóa tất cả
                                 </button>
-                                <Link
-                                    to="/san-pham"
-                                    className="text-sm text-blue-600 hover:text-blue-800">
-                                    Tiếp tục mua sắm
-                                </Link>
                             </div>
                         </div>
                     </div>
@@ -162,23 +216,35 @@ export default function Cart() {
                             </h2>
 
                             <div className="space-y-3 mb-6">
-                                <div className="flex justify-between text-gray-600">
-                                    <span>Tạm tính</span>
+                                <div className="flex justify-between">
+                                    <span className="text-gray-600">
+                                        Tạm tính
+                                    </span>
                                     <span>${getCartTotal().toFixed(2)}</span>
                                 </div>
-                                <div className="flex justify-between text-gray-600">
-                                    <span>Phí vận chuyển</span>
+                                <div className="flex justify-between">
+                                    <span className="text-gray-600">
+                                        Phí vận chuyển
+                                    </span>
                                     <span>Miễn phí</span>
                                 </div>
-                                <div className="border-t pt-3 mt-3 flex justify-between font-bold text-lg">
+                                <div className="border-t pt-3 flex justify-between font-bold">
                                     <span>Tổng cộng</span>
                                     <span>${getCartTotal().toFixed(2)}</span>
                                 </div>
                             </div>
 
-                            <button className="w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 transition">
-                                Tiến hành thanh toán
+                            <button className="w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 transition-colors">
+                                Thanh toán
                             </button>
+
+                            <div className="mt-4">
+                                <Link
+                                    to="/san-pham"
+                                    className="text-sm text-gray-600 hover:text-gray-800">
+                                    ← Tiếp tục mua sắm
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>

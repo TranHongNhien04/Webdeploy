@@ -55,7 +55,8 @@ export default function Header() {
     const handleLogout = () => {
         logout();
         setIsDropdownOpen(false);
-        navigate('/'); // Chuyển hướng về trang chủ sau khi đăng xuất
+        navigate('/');
+        window.scrollTo(0, 0);
     };
 
     // Render user section based on authentication status

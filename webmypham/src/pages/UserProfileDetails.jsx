@@ -125,7 +125,6 @@ export default function UserProfileDetails() {
 
         return statusMap[status] || 'Không xác định';
     };
-
     const getStatusColor = (status) => {
         const statusColorMap = {
             pending: 'bg-yellow-100 text-yellow-800',

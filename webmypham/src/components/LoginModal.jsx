@@ -5,6 +5,7 @@ import { X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import Toast from './Hero';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginModal({ isOpen, onClose }) {
     const [isLoginForm, setIsLoginForm] = useState(true);
@@ -19,7 +20,7 @@ export default function LoginModal({ isOpen, onClose }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [toast, setToast] = useState(null);
     const [loginError, setLoginError] = useState(null);
-
+    const navigate = useNavigate();
     const onSubmit = async (data) => {
         setIsSubmitting(true);
         setLoginError(null);
@@ -38,16 +39,14 @@ export default function LoginModal({ isOpen, onClose }) {
                 console.log('Kết quả đăng nhập:', success); // Debug
 
                 if (success) {
-                    // Hiển thị thông báo thành công
                     setToast({
                         message: 'Đăng nhập thành công!',
                         type: 'success',
                     });
 
-                    // Đóng modal ngay lập tức
                     onClose();
-
-                    // Làm mới trang để cập nhật trạng thái
+                    navigate('/');
+                    window.scrollTo(0, 0);
                     window.location.reload();
                 } else {
                     // Hiển thị lỗi
@@ -69,6 +68,9 @@ export default function LoginModal({ isOpen, onClose }) {
                         type: 'success',
                     });
 
+                    navigate('/');
+                    window.scrollTo(0, 0);
+
                     // Đóng modal sau 1 giây
                     setTimeout(() => {
                         onClose();
@@ -76,7 +78,6 @@ export default function LoginModal({ isOpen, onClose }) {
                         window.location.reload();
                     }, 1000);
                 } else {
-                    // Hiển thị lỗi
                     setLoginError(authError || 'Đăng ký không thành công');
                 }
             }

@@ -206,7 +206,15 @@ const ProductGrid = () => {
     };
 
     const handleAddToCart = (product) => {
-        addToCart(product);
+        // Chỉ truyền các thông tin cần thiết
+        const cartItem = {
+            productId: product.productId,
+            title: product.title,
+            price: product.price,
+            quantity: 1,
+        };
+
+        addToCart(cartItem);
         alert(`Đã thêm "${product.title}" vào giỏ hàng!`);
     };
 

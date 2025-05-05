@@ -29,7 +29,20 @@
           "total": 33
         }
       ],
-      "cart": []
+      "cart": [
+        {
+          "productId": "1",
+          "title": "Sữa rửa mặt dịu nhẹ",
+          "price": 32,
+          "quantity": 3
+        },
+        {
+          "productId": "4",
+          "title": "Kem dưỡng ẩm sâu",
+          "price": 48,
+          "quantity": 1
+        }
+      ]
     },
     {
       "id": "user456",
@@ -80,7 +93,14 @@
       "skinType": "normal",
       "wishlist": [],
       "orders": [],
-      "cart": []
+      "cart": [
+        {
+          "productId": "2",
+          "title": "Serum Vitamin C",
+          "price": 22,
+          "quantity": 1
+        }
+      ]
     }
   ],
   "brands": [
