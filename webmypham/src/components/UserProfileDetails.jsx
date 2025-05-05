@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import EditProfileModal from './EditProfileModal';
-
+import { Pencil } from 'lucide-react';
 export default function UserProfileDetails({ user, onUserUpdate }) {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [bookings, setBookings] = useState([]);
@@ -107,8 +107,9 @@ export default function UserProfileDetails({ user, onUserUpdate }) {
                 </h2>
                 <button
                     onClick={() => setIsEditModalOpen(true)}
-                    className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors">
-                    Chỉnh sửa
+                    className="text-gray-600 hover:text-gray-900"
+                    title="Chỉnh sửa thông tin">
+                    <Pencil size={20} />
                 </button>
             </div>
 

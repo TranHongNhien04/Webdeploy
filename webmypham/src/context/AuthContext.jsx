@@ -53,6 +53,20 @@ export function AuthProvider({ children }) {
             console.log('Found user:', foundUser);
 
             if (foundUser) {
+                // Đảm bảo user có trường cart
+                if (!foundUser.cart) {
+                    foundUser.cart = [];
+
+                    // Cập nhật user trên server để thêm trường cart
+                    await fetch(`http://localhost:3001/users/${foundUser.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(foundUser),
+                    });
+                }
+
                 const userToStore = {
                     id: foundUser.id,
                     name: foundUser.name,
@@ -106,6 +120,7 @@ export function AuthProvider({ children }) {
                 skinType: userData.skinType || 'normal', // Mặc định là "Da thường"
                 wishlist: [],
                 orders: [],
+                cart: [], // Thêm trường cart
             };
 
             // Thêm user mới vào database
@@ -144,6 +159,7 @@ export function AuthProvider({ children }) {
         console.log('Logging out');
         setUser(null);
         localStorage.removeItem('user');
+        localStorage.removeItem('cart'); // Xóa giỏ hàng khi đăng xuất
     };
 
     const value = {

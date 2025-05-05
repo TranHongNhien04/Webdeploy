@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../context/AuthContext';
+import { useSearchParams } from 'react-router-dom';
 import DichVuBanner from '../assets/img/DichVuBanner.png';
 import Toast from '../components/Toast';
 
@@ -308,10 +309,9 @@ const BookingFormSection = ({ bookingRef }) => {
         setIsSubmitting(true);
 
         try {
-            // Tạo đối tượng booking mới
             const newBooking = {
                 id: `booking-${Date.now()}`,
-                userId: user.id, // Thêm userId để liên kết với người dùng
+                userId: user.id,
                 name: data.name,
                 phone: data.phone,
                 email: data.email,
@@ -340,20 +340,24 @@ const BookingFormSection = ({ bookingRef }) => {
                 const responseData = await response.json();
                 console.log('Phản hồi từ server:', responseData);
 
-                // Hiển thị thông báo thành công
                 setToast({
                     message:
                         'Đặt lịch tư vấn thành công! Chúng tôi sẽ liên hệ với bạn sớm.',
                     type: 'success',
                 });
 
-                // Reset form
                 reset();
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth',
+                });
             } catch (bookingError) {
                 console.error(
                     'Error saving to bookings collection:',
                     bookingError
                 );
+                throw bookingError;
             }
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -603,6 +607,7 @@ const CTASection = ({ scrollToBooking }) => (
 export default function Service() {
     const bookingRef = useRef(null);
     const servicesRef = useRef(null);
+    const [searchParams] = useSearchParams();
 
     const scrollToBooking = () => {
         bookingRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -611,6 +616,17 @@ export default function Service() {
     const scrollToServices = () => {
         servicesRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
+
+    // Xử lý tham số query để cuộn đến form đặt lịch khi trang được tải
+    useEffect(() => {
+        const scrollTo = searchParams.get('scrollTo');
+        if (scrollTo === 'booking') {
+            // Đợi một chút để đảm bảo trang đã tải xong
+            setTimeout(() => {
+                scrollToBooking();
+            }, 500);
+        }
+    }, [searchParams]);
 
     return (
         <div className="container mx-auto px-4 pt-20">

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 import Toast from './Hero';
 
 export default function LoginModal({ isOpen, onClose }) {
@@ -14,6 +15,7 @@ export default function LoginModal({ isOpen, onClose }) {
         reset,
     } = useForm();
     const { login, register: registerUser, error: authError } = useAuth();
+    const { syncCart } = useCart();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [toast, setToast] = useState(null);
     const [loginError, setLoginError] = useState(null);

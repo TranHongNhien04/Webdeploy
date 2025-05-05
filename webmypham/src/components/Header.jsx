@@ -1,18 +1,18 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import SearchIcon from '../assets/img/icons/loupe.png';
 import BasketIcon from '../assets/img/icons/basket.png';
 import { useState, useRef, useEffect } from 'react';
 import LoginModal from './LoginModal';
 import { useAuth } from '../context/AuthContext';
-import { ChevronDown, User, LogOut, Settings } from 'lucide-react';
+import { ChevronDown, User, LogOut } from 'lucide-react';
 
 export default function Header() {
-    const [count, setCount] = useState(0);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
     const { user, logout, isAuthenticated } = useAuth();
     const location = useLocation();
+    const navigate = useNavigate();
 
     // Debug logs
     useEffect(() => {
@@ -52,13 +52,19 @@ export default function Header() {
         };
     }, []);
 
+    const handleLogout = () => {
+        logout();
+        setIsDropdownOpen(false);
+        navigate('/'); // Chuyển hướng về trang chủ sau khi đăng xuất
+    };
+
     // Render user section based on authentication status
     const renderUserSection = () => {
         if (user) {
             return (
                 <div className="relative" ref={dropdownRef}>
                     <button
-                        className="flex items-center gap-2 text-sm font-medium hover:underline "
+                        className="flex items-center gap-2 text-sm font-medium hover:underline"
                         onClick={toggleDropdown}>
                         <span>Xin chào, {user.name}</span>
                         <ChevronDown size={16} />
@@ -67,7 +73,7 @@ export default function Header() {
                     {isDropdownOpen && (
                         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
                             <Link
-                                to="/tai-khoan"
+                                to="/ho-so"
                                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                 onClick={() => setIsDropdownOpen(false)}>
                                 <User size={16} className="mr-2" />
@@ -76,11 +82,7 @@ export default function Header() {
 
                             <button
                                 className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                onClick={() => {
-                                    logout();
-                                    setIsDropdownOpen(false);
-                                    window.location.reload();
-                                }}>
+                                onClick={handleLogout}>
                                 <LogOut size={16} className="mr-2" />
                                 Đăng xuất
                             </button>
@@ -186,7 +188,7 @@ export default function Header() {
                                 alt="Giỏ hàng"
                                 className="h-6"
                             />
-                            <span>Giỏ hàng ({count})</span>
+                            <span>Giỏ hàng</span>
                         </Link>
 
                         {renderUserSection()}

@@ -7,24 +7,30 @@ import Footer from './components/Footer';
 import Introduce from './pages/Introduce';
 import Service from './pages/Service';
 import Profile from './pages/Profile';
+import Cart from './pages/Cart'; // Import trang giỏ hàng
 import { AuthProvider } from './context/AuthContext';
-// json-server --watch src/data/db.json --port 3001
+import { CartProvider } from './context/CartContext'; // Import CartProvider
+import ScrollToTop from './components/ScrollToTop';
+
 function App() {
     return (
         <AuthProvider>
-            <Router>
-                <Header />
-                <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/san-pham" element={<ProductPage />} />
-                    <Route path="/dich-vu" element={<Service />} />
-                    <Route path="/lien-he" element={<Contact />} />
-                    <Route path="/gioi-thieu" element={<Introduce />} />
-                    <Route path="/tai-khoan" element={<Profile />} />
-                    <Route path="/thong-tin-tai-khoan" element={<Profile />} />
-                </Routes>
-                <Footer />
-            </Router>
+            <CartProvider>
+                <Router>
+                    <ScrollToTop />
+                    <Header />
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/san-pham" element={<ProductPage />} />
+                        <Route path="/gioi-thieu" element={<Introduce />} />
+                        <Route path="/dich-vu" element={<Service />} />
+                        <Route path="/lien-he" element={<Contact />} />
+                        <Route path="/ho-so" element={<Profile />} />
+                        <Route path="/gio-hang" element={<Cart />} />
+                    </Routes>
+                    <Footer />
+                </Router>
+            </CartProvider>
         </AuthProvider>
     );
 }

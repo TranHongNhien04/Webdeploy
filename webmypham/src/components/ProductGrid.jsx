@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useCart } from '../context/CartContext';
 
 const ProductGrid = () => {
+    const { addToCart } = useCart();
     const [currentPage, setCurrentPage] = useState(1);
     const [showFilters, setShowFilters] = useState(false);
     const [products, setProducts] = useState([]);
@@ -201,6 +203,11 @@ const ProductGrid = () => {
             setActiveSubcategories(currentSubcategories.map((sub) => sub.id));
         }
         setCurrentPage(1);
+    };
+
+    const handleAddToCart = (product) => {
+        addToCart(product);
+        alert(`Đã thêm "${product.title}" vào giỏ hàng!`);
     };
 
     return (
@@ -589,7 +596,11 @@ const ProductGrid = () => {
                                                         </span>
                                                     )}
                                                 </div>
-                                                <button className="w-8 h-8 bg-white rounded-full flex items-center justify-center border border-gray-200 hover:bg-gray-100">
+                                                <button
+                                                    className="w-8 h-8 bg-white rounded-full flex items-center justify-center border border-gray-200 hover:bg-gray-100"
+                                                    onClick={() =>
+                                                        handleAddToCart(product)
+                                                    }>
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         className="h-5 w-5 text-gray-600"

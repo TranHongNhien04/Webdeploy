@@ -1,7 +1,15 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import TuVan from '../assets/img/dichvutuvan.png';
 
 export default function ServiceSection() {
+    const navigate = useNavigate();
+
+    const handleBookingClick = () => {
+        // Điều hướng đến trang dịch vụ với tham số để cuộn đến form đặt lịch
+        navigate('/dich-vu?scrollTo=booking');
+    };
+
     return (
         <div className="bg-gradient-to-r from-[#BDF4F1] via-[#70DED9] to-[#70DED9] text-gray-800 w-full overflow-hidden">
             <div className="flex flex-col md:flex-row items-center justify-between max-w-7xl min-h-[180px]">
@@ -14,7 +22,9 @@ export default function ServiceSection() {
                         nhất, giúp bạn tự tin tỏa sáng với làn da khỏe mạnh và
                         rạng rỡ.
                     </p>
-                    <button className="bg-gray-700 text-white font-semibold py-2 px-6 rounded-full hover:bg-white hover:text-black border-gray-500 transition">
+                    <button
+                        onClick={handleBookingClick}
+                        className="bg-gray-700 text-white font-semibold py-2 px-6 rounded-full hover:bg-white hover:text-black border-gray-500 transition">
                         Nhận tư vấn miễn phí
                     </button>
                 </div>

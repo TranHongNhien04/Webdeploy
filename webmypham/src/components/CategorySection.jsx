@@ -18,7 +18,7 @@ const NewsCard = ({ image, title }) => (
 
 const CategoryCard = ({ image, title, onPrev, onNext }) => (
     <div
-        className="bg-gray-900 rounded-lg shadow-md overflow-hidden text-white h-[332px] relative"
+        className="bg-gray-900 rounded-lg shadow-md overflow-hidden h-[332px] relative "
         style={{
             backgroundImage: `url(${image})`,
             backgroundSize: 'cover',
@@ -35,7 +35,9 @@ const CategoryCard = ({ image, title, onPrev, onNext }) => (
             <img src={RightArrow} alt="" />
         </button>
         <div className="absolute bottom-0 p-4 w-full">
-            <h3 className="text-xl font-semibold relative z-10">{title}</h3>
+            <h3 className="text-xl font-semibold relative z-10 shadow-lg bg-black bg-opacity-50 text-white px-2 py-1 rounded">
+                {title}
+            </h3>
         </div>
     </div>
 );
