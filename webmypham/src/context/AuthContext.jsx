@@ -157,9 +157,11 @@ export function AuthProvider({ children }) {
 
     const logout = () => {
         console.log('Logging out');
+        // Xóa user từ state
         setUser(null);
+        // Xóa dữ liệu từ localStorage
         localStorage.removeItem('user');
-        localStorage.removeItem('cart'); // Xóa giỏ hàng khi đăng xuất
+        localStorage.removeItem('cart');
     };
 
     const value = {
