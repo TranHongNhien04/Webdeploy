@@ -13,6 +13,22 @@ export default function Cart() {
     } = useCart();
     const [products, setProducts] = useState({});
     const [loading, setLoading] = useState(true);
+    const [selectedItems, setSelectedItems] = useState([]);
+
+    // Tính tổng tiền cho các sản phẩm đã chọn
+    const getSelectedTotal = () => {
+        return cartItems
+            .filter((item) => selectedItems.includes(item.productId))
+            .reduce((total, item) => total + item.price * item.quantity, 0);
+    };
+
+    const toggleItemSelection = (productId) => {
+        if (selectedItems.includes(productId)) {
+            setSelectedItems(selectedItems.filter((id) => id !== productId));
+        } else {
+            setSelectedItems([...selectedItems, productId]);
+        }
+    };
 
     // Lấy thông tin chi tiết của sản phẩm từ API
     useEffect(() => {
@@ -97,7 +113,8 @@ export default function Cart() {
                     <div className="lg:w-2/3">
                         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
                             <div className="hidden md:grid grid-cols-12 gap-4 p-4 bg-gray-50 text-sm font-medium text-gray-600">
-                                <div className="col-span-6">Sản phẩm</div>
+                                <div className="col-span-1"></div>
+                                <div className="col-span-5">Sản phẩm</div>
                                 <div className="col-span-2 text-center">
                                     Giá
                                 </div>
@@ -114,8 +131,24 @@ export default function Cart() {
                                     key={item.productId}
                                     className="border-t border-gray-100 p-4">
                                     <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                                        {/* Checkbox */}
+                                        <div className="md:col-span-1 flex items-center">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedItems.includes(
+                                                    item.productId
+                                                )}
+                                                onChange={() =>
+                                                    toggleItemSelection(
+                                                        item.productId
+                                                    )
+                                                }
+                                                className="w-4 h-4"
+                                            />
+                                        </div>
+
                                         {/* Sản phẩm */}
-                                        <div className="col-span-6 flex items-center gap-4">
+                                        <div className="col-span-5 flex items-center gap-4">
                                             <img
                                                 src={getProductImage(
                                                     item.productId
@@ -218,9 +251,12 @@ export default function Cart() {
                             <div className="space-y-3 mb-6">
                                 <div className="flex justify-between">
                                     <span className="text-gray-600">
-                                        Tạm tính
+                                        Tạm tính ({selectedItems.length} sản
+                                        phẩm)
                                     </span>
-                                    <span>${getCartTotal().toFixed(2)}</span>
+                                    <span>
+                                        ${getSelectedTotal().toFixed(2)}
+                                    </span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-gray-600">
@@ -230,11 +266,19 @@ export default function Cart() {
                                 </div>
                                 <div className="border-t pt-3 flex justify-between font-bold">
                                     <span>Tổng cộng</span>
-                                    <span>${getCartTotal().toFixed(2)}</span>
+                                    <span>
+                                        ${getSelectedTotal().toFixed(2)}
+                                    </span>
                                 </div>
                             </div>
 
-                            <button className="w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 transition-colors">
+                            <button
+                                className={`w-full py-3 rounded-md transition-colors ${
+                                    selectedItems.length > 0
+                                        ? 'bg-black text-white hover:bg-gray-800'
+                                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                }`}
+                                disabled={selectedItems.length === 0}>
                                 Thanh toán
                             </button>
 

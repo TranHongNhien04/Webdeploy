@@ -1,681 +1,720 @@
 {
-    "users": [
+  "users": [
+    {
+      "id": "user123",
+      "name": "Ngọc Linh",
+      "email": "ngoclinh@example.com",
+      "password": "123456",
+      "skinType": "dry",
+      "wishlist": [
+        1,
+        13,
+        17
+      ],
+      "orders": [
         {
-            "id": "user123",
-            "name": "Ngọc Linh",
-            "email": "ngoclinh@example.com",
-            "password": "123456",
-            "skinType": "dry",
-            "wishlist": [1, 13, 17],
-            "orders": [
-                {
-                    "id": "order001",
-                    "date": "2023-05-10",
-                    "status": "delivered",
-                    "items": [
-                        {
-                            "productId": 1,
-                            "quantity": 1
-                        },
-                        {
-                            "productId": 10,
-                            "quantity": 2
-                        }
-                    ],
-                    "total": 33
-                }
-            ],
-            "cart": [
-                {
-                    "productId": "1",
-                    "title": "Sữa rửa mặt dịu nhẹ",
-                    "price": 32,
-                    "quantity": 3
-                },
-                {
-                    "productId": "4",
-                    "title": "Kem dưỡng ẩm sâu",
-                    "price": 48,
-                    "quantity": 1
-                }
-            ]
-        },
-        {
-            "id": "user456",
-            "name": "Thanh Hà",
-            "email": "thanhha@example.com",
-            "password": "123456",
-            "skinType": "normal",
-            "wishlist": [5, 8],
-            "cart": []
-        },
-        {
-            "id": "user789",
-            "name": "Minh Tuấn",
-            "email": "minhtuan@example.com",
-            "password": "000000",
-            "skinType": "oily",
-            "wishlist": [],
-            "cart": []
-        },
-        {
-            "id": "user1746197734020",
-            "name": "Nguyễn Ngọc Hồng Minh",
-            "email": "nguyenngochongminh@gmail.com",
-            "password": "123789",
-            "skinType": "combination",
-            "wishlist": [],
-            "orders": [],
-            "cart": []
-        },
-        {
-            "id": "user1746198473972",
-            "name": "Nhiên",
-            "email": "nhien@gmail.com",
-            "password": "000000",
-            "skinType": "dry",
-            "wishlist": [],
-            "orders": [],
-            "cart": []
-        },
-        {
-            "id": "user1746421471332",
-            "name": "Nguyễn Minh",
-            "email": "azamidevilnguyen@gmail.com",
-            "password": "456789",
-            "skinType": "normal",
-            "wishlist": [],
-            "orders": [],
-            "cart": [
-                {
-                    "productId": "2",
-                    "title": "Serum Vitamin C",
-                    "price": 22,
-                    "quantity": 1
-                }
-            ]
+          "id": "order001",
+          "date": "2023-05-10",
+          "status": "delivered",
+          "items": [
+            {
+              "productId": 1,
+              "quantity": 1
+            },
+            {
+              "productId": 10,
+              "quantity": 2
+            }
+          ],
+          "total": 33
         }
-    ],
-    "brands": [
+      ],
+      "cart": []
+    },
+    {
+      "id": "user456",
+      "name": "Thanh Hà",
+      "email": "thanhha@example.com",
+      "password": "123456",
+      "skinType": "normal",
+      "wishlist": [
+        5,
+        8
+      ],
+      "cart": []
+    },
+    {
+      "id": "user789",
+      "name": "Minh Tuấn",
+      "email": "minhtuan@example.com",
+      "password": "000000",
+      "skinType": "oily",
+      "wishlist": [],
+      "cart": []
+    },
+    {
+      "id": "user1746197734020",
+      "name": "Nguyễn Ngọc Hồng Minh",
+      "email": "nguyenngochongminh@gmail.com",
+      "password": "123789",
+      "skinType": "combination",
+      "wishlist": [],
+      "orders": [],
+      "cart": []
+    },
+    {
+      "id": "user1746198473972",
+      "name": "Nhiên",
+      "email": "nhien@gmail.com",
+      "password": "000000",
+      "skinType": "dry",
+      "wishlist": [],
+      "orders": [],
+      "cart": []
+    },
+    {
+      "id": "user1746421471332",
+      "name": "Nguyễn Minh",
+      "email": "azamidevilnguyen@gmail.com",
+      "password": "456789",
+      "skinType": "normal",
+      "wishlist": [],
+      "orders": [],
+      "cart": []
+    }
+  ],
+  "brands": [
+    {
+      "id": "1",
+      "name": "Dior Beauty",
+      "image": "https://logos-world.net/wp-content/uploads/2021/08/Christian-Dior-Symbol.png",
+      "url": "https://www.dior.com/beauty"
+    },
+    {
+      "id": "2",
+      "name": "La Mer",
+      "image": "https://iconape.com/wp-content/png_logo_vector/la-mer-logo.png",
+      "url": "https://www.cremedelamer.com/"
+    },
+    {
+      "id": "3",
+      "name": "SK-II",
+      "image": "https://beautyinsider.sg/wp-content/uploads/2016/10/skii-logo.png",
+      "url": "https://www.sk-ii.com/"
+    },
+    {
+      "id": "4",
+      "name": "Chanel",
+      "image": "https://logos-world.net/wp-content/uploads/2020/04/Chanel-Logo.png",
+      "url": "https://www.chanel.com/us/skincare/"
+    },
+    {
+      "id": "5",
+      "name": "Estee Lauder",
+      "image": "https://logos-world.net/wp-content/uploads/2020/12/Estee-Lauder-Logo.png",
+      "url": "https://www.esteelauder.com/"
+    }
+  ],
+  "products": [
+    {
+      "productId": "1",
+      "title": "Sữa rửa mặt dịu nhẹ",
+      "description": "Làm sạch sâu, không gây khô da",
+      "price": 800000,
+      "originalPrice": 1000000,
+      "image": "https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lxpkta6s9dqz7e",
+      "onSale": true,
+      "category": "face-care",
+      "subcategory": "cleanser",
+      "skinType": [
+        "sensitive",
+        "dry"
+      ],
+      "benefit": [
+        "hydrating"
+      ],
+      "brandId": 1,
+      "id": "30c9"
+    },
+    {
+      "productId": "2",
+      "title": "Serum Vitamin C",
+      "description": "Làm sáng da, mờ thâm nám",
+      "price": 550000,
+      "originalPrice": 750000,
+      "image": "https://static.beautytocare.com/media/catalog/product/cache/global/image/1300x1300/85e4522595efc69f496374d01ef2bf13/g/a/garnier-skin-active-vitamin-c-anti-dark-spot-serum-30ml_3.jpg",
+      "onSale": true,
+      "category": "face-care",
+      "subcategory": "serum",
+      "skinType": [
+        "combination",
+        "aging"
+      ],
+      "benefit": [
+        "brightening",
+        "anti-aging"
+      ],
+      "brandId": 2,
+      "id": "ebf8"
+    },
+    {
+      "productId": "3",
+      "title": "Kem chống nắng SPF 50",
+      "description": "Bảo vệ da khỏi tia UV",
+      "price": 450000,
+      "originalPrice": 625000,
+      "image": "https://product.hstatic.net/200000773671/product/367994919_623453963153199_1444243585286044090_n_85ef8b9d5d5c4117afd3280910566954_master.jpg",
+      "onSale": true,
+      "category": "face-care",
+      "subcategory": "sunscreen",
+      "skinType": [
+        "all"
+      ],
+      "benefit": [
+        "anti-aging"
+      ],
+      "brandId": 3,
+      "id": "f82b"
+    },
+    {
+      "productId": "4",
+      "title": "Kem dưỡng ẩm sâu",
+      "description": "Cấp ẩm 48h cho da khô",
+      "price": 1200000,
+      "originalPrice": 1500000,
+      "image": "https://zencos.vn/wp-content/uploads/2022/10/gia-cong-kem-duong-am-tang-sau-4-955x960.jpg",
+      "onSale": true,
+      "category": "face-care",
+      "subcategory": "moisturizer",
+      "skinType": [
+        "dry",
+        "sensitive"
+      ],
+      "benefit": [
+        "hydrating"
+      ],
+      "brandId": 4,
+      "id": "e1ac"
+    },
+    {
+      "productId": "5",
+      "title": "Son môi lì mềm mịn",
+      "description": "Màu sắc bền đẹp, không khô môi",
+      "price": 775000,
+      "originalPrice": null,
+      "image": "https://cocolux.com/storage/upload_image/images/cdn_images/2022/08/images/products/1661747725064-son-kem-loreal-chiffon-signature-2.jpeg",
+      "onSale": false,
+      "category": "makeup",
+      "subcategory": "lipstick",
+      "skinType": [
+        "all"
+      ],
+      "benefit": [],
+      "brandId": 5,
+      "id": "3555"
+    },
+    {
+      "productId": "6",
+      "title": "Kem nền mỏng nhẹ",
+      "description": "Che phủ tự nhiên, kiềm dầu tốt",
+      "price": 1000000,
+      "originalPrice": 1375000,
+      "image": "https://cf.shopee.vn/file/7e35cadc91b4d8dbd559ddb9630c2637",
+      "onSale": true,
+      "category": "makeup",
+      "subcategory": "foundation",
+      "skinType": [
+        "oily",
+        "combination"
+      ],
+      "benefit": [],
+      "brandId": 1,
+      "id": "da1d"
+    },
+    {
+      "productId": "7",
+      "title": "Dầu gội dưỡng tóc",
+      "description": "Phục hồi tóc hư tổn, bóng mượt",
+      "price": 650000,
+      "originalPrice": null,
+      "image": "https://image.hsv-tech.io/0x1920/bbx/l_oreal_paris_elseve_extraordinary_nourishing_shampoo_650ml_e402fb29e4c84876bee63175d8ae06db.png",
+      "onSale": false,
+      "category": "hair-care",
+      "subcategory": "shampoo",
+      "skinType": [],
+      "benefit": [],
+      "brandId": 2,
+      "id": "c999"
+    },
+    {
+      "productId": "8",
+      "title": "Sữa tắm dưỡng ẩm",
+      "description": "Làm sạch và dưỡng ẩm cho da",
+      "price": 450000,
+      "originalPrice": null,
+      "image": "https://media.hasaki.vn/wysiwyg/PhuongThao/sua-tam-duong-the-dove-da-am-min-luu-huong-ngot-ngao-500g-1.jpg",
+      "onSale": false,
+      "category": "body-care",
+      "subcategory": "shower-gel",
+      "skinType": [
+        "dry",
+        "sensitive"
+      ],
+      "benefit": [
+        "hydrating"
+      ],
+      "brandId": 3,
+      "id": "15f1"
+    },
+    {
+      "productId": "9",
+      "title": "Toner cân bằng da",
+      "description": "Se khít lỗ chân lông, làm sạch sâu",
+      "price": 1300000,
+      "originalPrice": null,
+      "image": "https://myphamthuanchay.com/data/upload_file/Image/3390/toner-sen-cocoon-310ml-hau-giang.jpg",
+      "onSale": true,
+      "category": "face-care",
+      "subcategory": "toner",
+      "skinType": [
+        "oily",
+        "acne"
+      ],
+      "benefit": [],
+      "brandId": 4,
+      "id": "f405"
+    },
+    {
+      "productId": "10",
+      "title": "Phấn phủ kiềm dầu",
+      "description": "Kiềm dầu lâu, mịn da tự nhiên",
+      "price": 1175000,
+      "originalPrice": null,
+      "image": "https://cdn.tgdd.vn/Files/2023/03/03/1514648/8-loai-phan-phu-kiem-dau-tot-nhat-hien-nay-danh-cho-da-dau-202303040714328674.jpg",
+      "onSale": false,
+      "category": "makeup",
+      "subcategory": "powder",
+      "skinType": [
+        "oily",
+        "combination"
+      ],
+      "benefit": [],
+      "brandId": 5,
+      "id": "760b"
+    },
+    {
+      "productId": "11",
+      "title": "Dầu xả dưỡng tóc",
+      "description": "Mềm mượt tóc, dễ chải",
+      "price": 1100000,
+      "originalPrice": null,
+      "image": "https://tse2.mm.bing.net/th?id=OIP.vRGg9pyLMee538eZZpc7MAHaHL&pid=Api&P=0&h=220",
+      "onSale": false,
+      "category": "hair-care",
+      "subcategory": "conditioner",
+      "skinType": [],
+      "benefit": [],
+      "brandId": 1,
+      "id": "7e57"
+    },
+    {
+      "productId": "12",
+      "title": "Kem dưỡng chống lão hóa",
+      "description": "Giảm nếp nhăn, săn chắc da",
+      "price": 800000,
+      "originalPrice": 1125000,
+      "image": "https://toplist.vn/images/800px/kem-duong-da-chong-lao-hoa-giau-am-shiseido-benefiance-wrinkle-smoothing-cream-enriched-800076.jpg",
+      "onSale": true,
+      "category": "face-care",
+      "subcategory": "moisturizer",
+      "skinType": [
+        "aging"
+      ],
+      "benefit": [
+        "anti-aging"
+      ],
+      "brandId": 2,
+      "id": "9bbf"
+    }
+  ],
+  "categories": [
+    {
+      "id": "face-care",
+      "name": "Chăm sóc da mặt",
+      "image": "https://vitaclinic.vn/storage/app/media/cham-soc-da-mat-1.png",
+      "subcategories": [
         {
-            "id": "1",
-            "name": "Dior Beauty",
-            "image": "https://logos-world.net/wp-content/uploads/2021/08/Christian-Dior-Symbol.png",
-            "url": "https://www.dior.com/beauty"
+          "id": "cleanser",
+          "name": "Sữa rửa mặt",
+          "image": "https://tiki.vn/blog/wp-content/uploads/2022/12/sua-rua-mat.png"
         },
         {
-            "id": "2",
-            "name": "La Mer",
-            "image": "https://iconape.com/wp-content/png_logo_vector/la-mer-logo.png",
-            "url": "https://www.cremedelamer.com/"
+          "id": "toner",
+          "name": "Toner/Nước hoa hồng",
+          "image": "https://bizweb.dktcdn.net/thumb/1024x1024/100/426/039/products/nuoc-hoa-hong-cocoon-140ml.jpg?v=1658721383053"
         },
         {
-            "id": "3",
-            "name": "SK-II",
-            "image": "https://beautyinsider.sg/wp-content/uploads/2016/10/skii-logo.png",
-            "url": "https://www.sk-ii.com/"
+          "id": "serum",
+          "name": "Serum/Essence",
+          "image": "https://i.pinimg.com/originals/2f/32/ea/2f32eaf7cd92634d815127a2ee43e877.jpg"
         },
         {
-            "id": "4",
-            "name": "Chanel",
-            "image": "https://logos-world.net/wp-content/uploads/2020/04/Chanel-Logo.png",
-            "url": "https://www.chanel.com/us/skincare/"
+          "id": "moisturizer",
+          "name": "Kem dưỡng da",
+          "image": "https://topaz.vn/wp-content/uploads/2021/04/kem-duong-da-han-quoc-1.jpg"
         },
         {
-            "id": "5",
-            "name": "Estee Lauder",
-            "image": "https://logos-world.net/wp-content/uploads/2020/12/Estee-Lauder-Logo.png",
-            "url": "https://www.esteelauder.com/"
+          "id": "mask",
+          "name": "Mặt nạ",
+          "image": "https://bizweb.dktcdn.net/100/371/892/files/mat-na-duong-da-02.jpg?v=1620716278812"
+        },
+        {
+          "id": "exfoliator",
+          "name": "Tẩy tế bào chết",
+          "image": "https://bloganchoi.com/wp-content/uploads/2018/12/tay-te-bao-chet-cho-da-kho.jpg"
+        },
+        {
+          "id": "sunscreen",
+          "name": "Kem chống nắng",
+          "image": "https://zomedical.vn/wp-content/uploads/2019/05/bao-ve-da-bang-5-cach-co-ban-6.jpg"
         }
-    ],
-    "products": [
+      ]
+    },
+    {
+      "id": "makeup",
+      "name": "Trang điểm",
+      "image": "http://file.hstatic.net/200000073977/article/co-trang-diem-mat_7cfe329cdd1a469f988e6f721033b50c.png",
+      "subcategories": [
         {
-            "productId": "1",
-            "title": "Sữa rửa mặt dịu nhẹ",
-            "description": "Làm sạch sâu, không gây khô da",
-            "price": 800000,
-            "originalPrice": 1000000,
-            "image": "https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lxpkta6s9dqz7e",
-            "onSale": true,
-            "category": "face-care",
-            "subcategory": "cleanser",
-            "skinType": ["sensitive", "dry"],
-            "benefit": ["hydrating"],
-            "brandId": 1
+          "id": "foundation",
+          "name": "Kem nền",
+          "image": "https://file.hstatic.net/1000036599/file/ink_lasting_foundation_fa3ba45a5a234ba7ad9153af6f4ab8a1.png"
         },
         {
-            "productId": "2",
-            "title": "Serum Vitamin C",
-            "description": "Làm sáng da, mờ thâm nám",
-            "price": 550000,
-            "originalPrice": 750000,
-            "image": "https://static.beautytocare.com/media/catalog/product/cache/global/image/1300x1300/85e4522595efc69f496374d01ef2bf13/g/a/garnier-skin-active-vitamin-c-anti-dark-spot-serum-30ml_3.jpg",
-            "onSale": true,
-            "category": "face-care",
-            "subcategory": "serum",
-            "skinType": ["combination", "aging"],
-            "benefit": ["brightening", "anti-aging"],
-            "brandId": 2
+          "id": "powder",
+          "name": "Phấn phủ",
+          "image": "http://bizweb.dktcdn.net/100/239/651/files/no-sebum-rose-pactscreen1.jpg?v=1555724301980"
         },
         {
-            "productId": "3",
-            "title": "Kem chống nắng SPF 50",
-            "description": "Bảo vệ da khỏi tia UV",
-            "price": 450000,
-            "originalPrice": 625000,
-            "image": "https://product.hstatic.net/200000773671/product/367994919_623453963153199_1444243585286044090_n_85ef8b9d5d5c4117afd3280910566954_master.jpg",
-            "onSale": true,
-            "category": "face-care",
-            "subcategory": "sunscreen",
-            "skinType": ["all"],
-            "benefit": ["anti-aging"],
-            "brandId": 3
+          "id": "concealer",
+          "name": "Che khuyết điểm",
+          "image": "https://file.hstatic.net/200000523795/file/dung-kem-che-khuyet-diem-nhu-the-nao_6fe5dae85302499a958b7b5c58ad52c8_1024x1024.jpg"
         },
         {
-            "productId": "4",
-            "title": "Kem dưỡng ẩm sâu",
-            "description": "Cấp ẩm 48h cho da khô",
-            "price": 1200000,
-            "originalPrice": 1500000,
-            "image": "https://zencos.vn/wp-content/uploads/2022/10/gia-cong-kem-duong-am-tang-sau-4-955x960.jpg",
-            "onSale": true,
-            "category": "face-care",
-            "subcategory": "moisturizer",
-            "skinType": ["dry", "sensitive"],
-            "benefit": ["hydrating"],
-            "brandId": 4
+          "id": "lipstick",
+          "name": "Son môi",
+          "image": "https://topaz.vn/wp-content/uploads/2021/05/son-moi-11.jpg"
         },
         {
-            "productId": "5",
-            "title": "Son môi lì mềm mịn",
-            "description": "Màu sắc bền đẹp, không khô môi",
-            "price": 775000,
-            "originalPrice": null,
-            "image": "https://cocolux.com/storage/upload_image/images/cdn_images/2022/08/images/products/1661747725064-son-kem-loreal-chiffon-signature-2.jpeg",
-            "onSale": false,
-            "category": "makeup",
-            "subcategory": "lipstick",
-            "skinType": ["all"],
-            "benefit": [],
-            "brandId": 5
+          "id": "mascara",
+          "name": "Mascara",
+          "image": "https://reallyree.com/wp-content/uploads/2019/09/best-waterproof-mascaras.jpg"
         },
         {
-            "productId": "6",
-            "title": "Kem nền mỏng nhẹ",
-            "description": "Che phủ tự nhiên, kiềm dầu tốt",
-            "price": 1000000,
-            "originalPrice": 1375000,
-            "image": "https://cf.shopee.vn/file/7e35cadc91b4d8dbd559ddb9630c2637",
-            "onSale": true,
-            "category": "makeup",
-            "subcategory": "foundation",
-            "skinType": ["oily", "combination"],
-            "benefit": [],
-            "brandId": 1
+          "id": "eyeliner",
+          "name": "Kẻ mắt",
+          "image": "https://bonita.vn/wp-content/uploads/2022/11/271137518_4820989184589832_4990137105965162688_n.jpg"
         },
         {
-            "productId": "7",
-            "title": "Dầu gội dưỡng tóc",
-            "description": "Phục hồi tóc hư tổn, bóng mượt",
-            "price": 650000,
-            "originalPrice": null,
-            "image": "https://image.hsv-tech.io/0x1920/bbx/l_oreal_paris_elseve_extraordinary_nourishing_shampoo_650ml_e402fb29e4c84876bee63175d8ae06db.png",
-            "onSale": false,
-            "category": "hair-care",
-            "subcategory": "shampoo",
-            "skinType": [],
-            "benefit": [],
-            "brandId": 2
+          "id": "blush",
+          "name": "Phấn má hồng",
+          "image": "https://silkygirl.com.vn/wp-content/uploads/2022/05/avtmh.jpeg"
         },
         {
-            "productId": "8",
-            "title": "Sữa tắm dưỡng ẩm",
-            "description": "Làm sạch và dưỡng ẩm cho da",
-            "price": 450000,
-            "originalPrice": null,
-            "image": "https://media.hasaki.vn/wysiwyg/PhuongThao/sua-tam-duong-the-dove-da-am-min-luu-huong-ngot-ngao-500g-1.jpg",
-            "onSale": false,
-            "category": "body-care",
-            "subcategory": "shower-gel",
-            "skinType": ["dry", "sensitive"],
-            "benefit": ["hydrating"],
-            "brandId": 3
-        },
-        {
-            "productId": "9",
-            "title": "Toner cân bằng da",
-            "description": "Se khít lỗ chân lông, làm sạch sâu",
-            "price": 1300000,
-            "originalPrice": null,
-            "image": "https://myphamthuanchay.com/data/upload_file/Image/3390/toner-sen-cocoon-310ml-hau-giang.jpg",
-            "onSale": true,
-            "category": "face-care",
-            "subcategory": "toner",
-            "skinType": ["oily", "acne"],
-            "benefit": [],
-            "brandId": 4
-        },
-        {
-            "productId": "10",
-            "title": "Phấn phủ kiềm dầu",
-            "description": "Kiềm dầu lâu, mịn da tự nhiên",
-            "price": 1175000,
-            "originalPrice": null,
-            "image": "https://cdn.tgdd.vn/Files/2023/03/03/1514648/8-loai-phan-phu-kiem-dau-tot-nhat-hien-nay-danh-cho-da-dau-202303040714328674.jpg",
-            "onSale": false,
-            "category": "makeup",
-            "subcategory": "powder",
-            "skinType": ["oily", "combination"],
-            "benefit": [],
-            "brandId": 5
-        },
-        {
-            "productId": "11",
-            "title": "Dầu xả dưỡng tóc",
-            "description": "Mềm mượt tóc, dễ chải",
-            "price": 1100000,
-            "originalPrice": null,
-            "image": "https://tse2.mm.bing.net/th?id=OIP.vRGg9pyLMee538eZZpc7MAHaHL&pid=Api&P=0&h=220",
-            "onSale": false,
-            "category": "hair-care",
-            "subcategory": "conditioner",
-            "skinType": [],
-            "benefit": [],
-            "brandId": 1
-        },
-        {
-            "productId": "12",
-            "title": "Kem dưỡng chống lão hóa",
-            "description": "Giảm nếp nhăn, săn chắc da",
-            "price": 800000,
-            "originalPrice": 1125000,
-            "image": "https://toplist.vn/images/800px/kem-duong-da-chong-lao-hoa-giau-am-shiseido-benefiance-wrinkle-smoothing-cream-enriched-800076.jpg",
-            "onSale": true,
-            "category": "face-care",
-            "subcategory": "moisturizer",
-            "skinType": ["aging"],
-            "benefit": ["anti-aging"],
-            "brandId": 2
+          "id": "eyebrow",
+          "name": "Kẻ mày",
+          "image": "https://ihs.org.vn/wp-content/uploads/2024/03/ke-may-1a.jpg"
         }
-    ],
-    "categories": [
+      ]
+    },
+    {
+      "id": "body-care",
+      "name": "Chăm sóc cơ thể",
+      "image": "https://media.hasaki.vn/wysiwyg/minhchau/sua-tam-lifebuoy-detox-va-bao-ve-khoi-vi-khuan-850g-1_1.jpg",
+      "subcategories": [
         {
-            "id": "face-care",
-            "name": "Chăm sóc da mặt",
-            "image": "https://vitaclinic.vn/storage/app/media/cham-soc-da-mat-1.png",
-            "subcategories": [
-                {
-                    "id": "cleanser",
-                    "name": "Sữa rửa mặt",
-                    "image": "https://tiki.vn/blog/wp-content/uploads/2022/12/sua-rua-mat.png"
-                },
-                {
-                    "id": "toner",
-                    "name": "Toner/Nước hoa hồng",
-                    "image": "https://bizweb.dktcdn.net/thumb/1024x1024/100/426/039/products/nuoc-hoa-hong-cocoon-140ml.jpg?v=1658721383053"
-                },
-                {
-                    "id": "serum",
-                    "name": "Serum/Essence",
-                    "image": "https://i.pinimg.com/originals/2f/32/ea/2f32eaf7cd92634d815127a2ee43e877.jpg"
-                },
-                {
-                    "id": "moisturizer",
-                    "name": "Kem dưỡng da",
-                    "image": "https://topaz.vn/wp-content/uploads/2021/04/kem-duong-da-han-quoc-1.jpg"
-                },
-                {
-                    "id": "mask",
-                    "name": "Mặt nạ",
-                    "image": "https://bizweb.dktcdn.net/100/371/892/files/mat-na-duong-da-02.jpg?v=1620716278812"
-                },
-                {
-                    "id": "exfoliator",
-                    "name": "Tẩy tế bào chết",
-                    "image": "https://bloganchoi.com/wp-content/uploads/2018/12/tay-te-bao-chet-cho-da-kho.jpg"
-                },
-                {
-                    "id": "sunscreen",
-                    "name": "Kem chống nắng",
-                    "image": "https://zomedical.vn/wp-content/uploads/2019/05/bao-ve-da-bang-5-cach-co-ban-6.jpg"
-                }
-            ]
+          "id": "shower-gel",
+          "name": "Sữa tắm",
+          "image": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lmkjxiug647zce"
         },
         {
-            "id": "makeup",
-            "name": "Trang điểm",
-            "image": "http://file.hstatic.net/200000073977/article/co-trang-diem-mat_7cfe329cdd1a469f988e6f721033b50c.png",
-            "subcategories": [
-                {
-                    "id": "foundation",
-                    "name": "Kem nền",
-                    "image": "https://file.hstatic.net/1000036599/file/ink_lasting_foundation_fa3ba45a5a234ba7ad9153af6f4ab8a1.png"
-                },
-                {
-                    "id": "powder",
-                    "name": "Phấn phủ",
-                    "image": "http://bizweb.dktcdn.net/100/239/651/files/no-sebum-rose-pactscreen1.jpg?v=1555724301980"
-                },
-                {
-                    "id": "concealer",
-                    "name": "Che khuyết điểm",
-                    "image": "https://file.hstatic.net/200000523795/file/dung-kem-che-khuyet-diem-nhu-the-nao_6fe5dae85302499a958b7b5c58ad52c8_1024x1024.jpg"
-                },
-                {
-                    "id": "lipstick",
-                    "name": "Son môi",
-                    "image": "https://topaz.vn/wp-content/uploads/2021/05/son-moi-11.jpg"
-                },
-                {
-                    "id": "mascara",
-                    "name": "Mascara",
-                    "image": "https://reallyree.com/wp-content/uploads/2019/09/best-waterproof-mascaras.jpg"
-                },
-                {
-                    "id": "eyeliner",
-                    "name": "Kẻ mắt",
-                    "image": "https://bonita.vn/wp-content/uploads/2022/11/271137518_4820989184589832_4990137105965162688_n.jpg"
-                },
-                {
-                    "id": "blush",
-                    "name": "Phấn má hồng",
-                    "image": "https://silkygirl.com.vn/wp-content/uploads/2022/05/avtmh.jpeg"
-                },
-                {
-                    "id": "eyebrow",
-                    "name": "Kẻ mày",
-                    "image": "https://ihs.org.vn/wp-content/uploads/2024/03/ke-may-1a.jpg"
-                }
-            ]
+          "id": "body-lotion",
+          "name": "Dưỡng thể",
+          "image": "https://media.hasaki.vn/wysiwyg/HaNguyen/sua-duong-the-nivea-duong-sang-da-huong-hoa-anh-dao-2.jpg"
         },
         {
-            "id": "body-care",
-            "name": "Chăm sóc cơ thể",
-            "image": "https://media.hasaki.vn/wysiwyg/minhchau/sua-tam-lifebuoy-detox-va-bao-ve-khoi-vi-khuan-850g-1_1.jpg",
-            "subcategories": [
-                {
-                    "id": "shower-gel",
-                    "name": "Sữa tắm",
-                    "image": "https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lmkjxiug647zce"
-                },
-                {
-                    "id": "body-lotion",
-                    "name": "Dưỡng thể",
-                    "image": "https://media.hasaki.vn/wysiwyg/HaNguyen/sua-duong-the-nivea-duong-sang-da-huong-hoa-anh-dao-2.jpg"
-                },
-                {
-                    "id": "body-scrub",
-                    "name": "Tẩy da chết body",
-                    "image": "https://mandalabc.vn/wp-content/uploads/2023/04/tay-te-bao-da-chet-body-1.jpg"
-                }
-            ]
-        },
-        {
-            "id": "hair-care",
-            "name": "Chăm sóc tóc",
-            "image": "https://drpluscell.com.vn/wp-content/uploads/2018/09/cach-cham-soc-toc-1-1.jpg",
-            "subcategories": [
-                {
-                    "id": "shampoo",
-                    "name": "Dầu gội",
-                    "image": "https://baseapi.elle.vn/uploads/dau_goi_thao_duoc_buoi_cocoon_bdc012499c.jpg"
-                },
-                {
-                    "id": "conditioner",
-                    "name": "Dầu xả",
-                    "image": "https://imagevietnam.vn/images/_thumbs/dau_xa_deeply_rooted_1.jpg"
-                },
-                {
-                    "id": "hair-treatment",
-                    "name": "Dưỡng tóc",
-                    "image": "https://media.hasaki.vn/wysiwyg/HaNguyen1/nuoc-duong-toc-cocoon-tinh-dau-buoi-140ml-1.jpg"
-                }
-            ]
+          "id": "body-scrub",
+          "name": "Tẩy da chết body",
+          "image": "https://mandalabc.vn/wp-content/uploads/2023/04/tay-te-bao-da-chet-body-1.jpg"
         }
-    ],
-    "skinTypes": [
+      ]
+    },
+    {
+      "id": "hair-care",
+      "name": "Chăm sóc tóc",
+      "image": "https://drpluscell.com.vn/wp-content/uploads/2018/09/cach-cham-soc-toc-1-1.jpg",
+      "subcategories": [
         {
-            "id": "oily",
-            "name": "Da dầu"
+          "id": "shampoo",
+          "name": "Dầu gội",
+          "image": "https://baseapi.elle.vn/uploads/dau_goi_thao_duoc_buoi_cocoon_bdc012499c.jpg"
         },
         {
-            "id": "dry",
-            "name": "Da khô"
+          "id": "conditioner",
+          "name": "Dầu xả",
+          "image": "https://imagevietnam.vn/images/_thumbs/dau_xa_deeply_rooted_1.jpg"
         },
         {
-            "id": "sensitive",
-            "name": "Da nhạy cảm"
-        },
-        {
-            "id": "acne",
-            "name": "Da mụn"
-        },
-        {
-            "id": "combination",
-            "name": "Da hỗn hợp"
-        },
-        {
-            "id": "aging",
-            "name": "Da lão hóa"
+          "id": "hair-treatment",
+          "name": "Dưỡng tóc",
+          "image": "https://media.hasaki.vn/wysiwyg/HaNguyen1/nuoc-duong-toc-cocoon-tinh-dau-buoi-140ml-1.jpg"
         }
-    ],
-    "benefits": [
-        {
-            "id": "brightening",
-            "name": "Làm trắng sáng da"
-        },
-        {
-            "id": "hydrating",
-            "name": "Cấp ẩm"
-        },
-        {
-            "id": "anti-aging",
-            "name": "Chống lão hóa"
-        }
-    ],
-    "feedbacks": [
-        {
-            "id": "1",
-            "image": "https://via.placeholder.com/800x400?text=Customer+1",
-            "name": "Ngọc Anh – 26 tuổi, Hà Nội",
-            "feedback": "Da mình trước đây rất hay nổi mụn và đổ dầu nhiều. Sau khi được tư vấn và sử dụng sản phẩm của shop, da cải thiện rõ rệt sau 2 tuần!"
-        },
-        {
-            "id": "2",
-            "image": "https://via.placeholder.com/800x400?text=Customer+2",
-            "name": "Linh Chi – 30 tuổi, TP.HCM",
-            "feedback": "Sản phẩm chính hãng, đóng gói đẹp và giao hàng nhanh. Rất thích dịch vụ tư vấn da miễn phí, nhân viên nhiệt tình và hiểu rõ từng loại da."
-        },
-        {
-            "id": "3",
-            "image": "https://via.placeholder.com/800x400?text=Customer+3",
-            "name": "Thu Hương – 22 tuổi, Đà Nẵng",
-            "feedback": "Mình dùng combo serum & kem dưỡng được 1 tháng, da đều màu và mịn hơn. Cảm ơn shop vì đã tư vấn đúng sản phẩm phù hợp với da mình!"
-        }
-    ],
-    "services": [
-        {
-            "id": "skincare",
-            "title": "Tư Vấn Chăm Sóc Da Mặt",
-            "description": "Giải pháp chăm sóc da mặt toàn diện",
-            "content": "Chúng tôi sẽ phân tích loại da của bạn và đề xuất quy trình chăm sóc da phù hợp với các sản phẩm cụ thể cho từng bước.",
-            "items": [
-                "Phân tích loại da (dầu, khô, hỗn hợp, nhạy cảm)",
-                "Tư vấn quy trình chăm sóc da cơ bản và nâng cao",
-                "Đề xuất sản phẩm phù hợp cho từng bước skincare",
-                "Giải pháp cho các vấn đề da cụ thể (mụn, thâm, lão hóa)"
-            ]
-        },
-        {
-            "id": "makeup",
-            "title": "Tư Vấn Trang Điểm",
-            "description": "Trang điểm phù hợp với từng dịp",
-            "content": "Chúng tôi sẽ tư vấn các sản phẩm trang điểm phù hợp với tông da, đặc điểm khuôn mặt và phong cách của bạn.",
-            "items": [
-                "Phân tích tông da và đặc điểm khuôn mặt",
-                "Tư vấn sản phẩm trang điểm phù hợp",
-                "Hướng dẫn kỹ thuật trang điểm cơ bản",
-                "Gợi ý phong cách trang điểm theo từng dịp"
-            ]
-        },
-        {
-            "id": "haircare",
-            "title": "Tư Vấn Chăm Sóc Tóc",
-            "description": "Mái tóc khỏe đẹp từ gốc đến ngọn",
-            "content": "Chúng tôi sẽ đánh giá tình trạng tóc và da đầu của bạn, đề xuất các sản phẩm và phương pháp chăm sóc phù hợp.",
-            "items": [
-                "Phân tích tình trạng tóc và da đầu",
-                "Tư vấn sản phẩm chăm sóc tóc phù hợp",
-                "Hướng dẫn quy trình chăm sóc tóc tại nhà",
-                "Giải pháp cho các vấn đề tóc (khô xơ, gãy rụng, chẻ ngọn)"
-            ]
-        },
-        {
-            "id": "bodycare",
-            "title": "Tư Vấn Chăm Sóc Cơ Thể",
-            "description": "Làn da mịn màng, khỏe khoắn",
-            "content": "Chúng tôi sẽ tư vấn các sản phẩm và phương pháp chăm sóc da toàn thân phù hợp với loại da và nhu cầu của bạn.",
-            "items": [
-                "Phân tích tình trạng da toàn thân",
-                "Tư vấn sản phẩm chăm sóc cơ thể phù hợp",
-                "Hướng dẫn quy trình chăm sóc da toàn thân",
-                "Giải pháp cho các vấn đề da cơ thể (khô ráp, không đều màu)"
-            ]
-        }
-    ],
-    "skinTypeServices": [
-        {
-            "id": "oily",
-            "title": "Da Dầu",
-            "description": "Giải pháp kiểm soát dầu và ngăn ngừa mụn",
-            "content": "Các sản phẩm phù hợp với da dầu giúp kiểm soát lượng dầu thừa, se khít lỗ chân lông và ngăn ngừa mụn hiệu quả.",
-            "tags": [
-                "Sữa rửa mặt dành cho da dầu",
-                "Toner cân bằng dầu",
-                "Kem dưỡng oil-free"
-            ]
-        },
-        {
-            "id": "dry",
-            "title": "Da Khô",
-            "description": "Giải pháp cấp ẩm và phục hồi da",
-            "content": "Các sản phẩm dành cho da khô giúp cung cấp độ ẩm, nuôi dưỡng và phục hồi hàng rào bảo vệ da.",
-            "tags": [
-                "Sữa rửa mặt dịu nhẹ",
-                "Serum cấp ẩm",
-                "Kem dưỡng giàu độ ẩm"
-            ]
-        },
-        {
-            "id": "sensitive",
-            "title": "Da Nhạy Cảm",
-            "description": "Giải pháp chăm sóc da nhẹ nhàng, an toàn",
-            "content": "Các sản phẩm dành cho da nhạy cảm giúp bảo vệ da khỏi các tác nhân gây kích ứng và phục hồi da.",
-            "tags": [
-                "Sữa rửa mặt dịu nhẹ",
-                "Kem dưỡng nhẹ nhàng",
-                "Mặt nạ dưỡng ẩm"
-            ]
-        },
-        {
-            "id": "acne",
-            "title": "Da Mụn",
-            "description": "Giải pháp trị mụn và ngăn ngừa mụn",
-            "content": "Các sản phẩm giúp điều trị mụn và ngăn ngừa mụn tái phát, giúp da trở nên khỏe mạnh và sáng mịn.",
-            "tags": [
-                "Sữa rửa mặt trị mụn",
-                "Serum chống mụn",
-                "Kem dưỡng chống mụn"
-            ]
-        },
-        {
-            "id": "combination",
-            "title": "Da Hỗn Hợp",
-            "description": "Giải pháp cân bằng dầu và ẩm",
-            "content": "Các sản phẩm giúp cân bằng dầu và ẩm, phục hồi da và ngăn ngừa các vấn đề da.",
-            "tags": [
-                "Sữa rửa mặt cân bằng dầu",
-                "Serum dưỡng ẩm",
-                "Kem dưỡng đa năng"
-            ]
-        },
-        {
-            "id": "aging",
-            "title": "Da Lão Hóa",
-            "description": "Giải pháp chống lão hóa và phục hồi da",
-            "content": "Các sản phẩm giúp chống lão hóa, phục hồi da và làm mịn màng hơn.",
-            "tags": [
-                "Sữa rửa mặt chống lão hóa",
-                "Serum chống lão hóa",
-                "Kem dưỡng chống lão hóa"
-            ]
-        }
-    ],
-    "bookings": [
-        {
-            "id": "booking-1746370090956",
-            "userId": "user1746197734020",
-            "name": "Nguyễn Ngọc Hồng Minh",
-            "phone": "0971770425",
-            "email": "nguyenngochongminh@gmail.com",
-            "date": "2025-05-22",
-            "service": "skincare",
-            "skinType": "combination",
-            "message": "da khô bong tróc chảy máu cần chữa trị",
-            "status": "pending",
-            "createdAt": "2025-05-04T14:48:10.956Z"
-        },
-        {
-            "id": "booking-1746370131668",
-            "userId": "user1746197734020",
-            "name": "Nguyễn Ngọc Hồng Minh",
-            "phone": "0971770425",
-            "email": "nguyenngochongminh@gmail.com",
-            "date": "2025-05-04",
-            "service": "makeup",
-            "skinType": "combination",
-            "message": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
-            "status": "pending",
-            "createdAt": "2025-05-04T14:48:51.668Z"
-        },
-        {
-            "id": "booking-1746370941113",
-            "userId": "user123",
-            "name": "Ngọc Linh",
-            "phone": "0971770425",
-            "email": "ngoclinh@example.com",
-            "date": "2025-05-15",
-            "service": "skincare",
-            "skinType": "sensitive",
-            "message": "hfffffffffffffffffffffffffff",
-            "status": "pending",
-            "createdAt": "2025-05-04T15:02:21.113Z"
-        },
-        {
-            "id": "booking-1746371565526",
-            "userId": "user123",
-            "name": "Ngọc Linh",
-            "phone": "0971770425",
-            "email": "ngoclinh@example.com",
-            "date": "2025-05-10",
-            "service": "skincare",
-            "skinType": "dry",
-            "message": "ádddddddddddddddd",
-            "status": "pending",
-            "createdAt": "2025-05-04T15:12:45.526Z"
-        },
-        {
-            "id": "booking-1746371586271",
-            "userId": "user123",
-            "name": "Ngọc Linh",
-            "phone": "0971770425",
-            "email": "ngoclinh@example.com",
-            "date": "2025-05-27",
-            "service": "hair",
-            "skinType": "combination",
-            "message": "áccccccccccccccccc",
-            "status": "pending",
-            "createdAt": "2025-05-04T15:13:06.271Z"
-        }
-    ]
+      ]
+    }
+  ],
+  "skinTypes": [
+    {
+      "id": "oily",
+      "name": "Da dầu"
+    },
+    {
+      "id": "dry",
+      "name": "Da khô"
+    },
+    {
+      "id": "sensitive",
+      "name": "Da nhạy cảm"
+    },
+    {
+      "id": "acne",
+      "name": "Da mụn"
+    },
+    {
+      "id": "combination",
+      "name": "Da hỗn hợp"
+    },
+    {
+      "id": "aging",
+      "name": "Da lão hóa"
+    }
+  ],
+  "benefits": [
+    {
+      "id": "brightening",
+      "name": "Làm trắng sáng da"
+    },
+    {
+      "id": "hydrating",
+      "name": "Cấp ẩm"
+    },
+    {
+      "id": "anti-aging",
+      "name": "Chống lão hóa"
+    }
+  ],
+  "feedbacks": [
+    {
+      "id": "1",
+      "image": "https://via.placeholder.com/800x400?text=Customer+1",
+      "name": "Ngọc Anh – 26 tuổi, Hà Nội",
+      "feedback": "Da mình trước đây rất hay nổi mụn và đổ dầu nhiều. Sau khi được tư vấn và sử dụng sản phẩm của shop, da cải thiện rõ rệt sau 2 tuần!"
+    },
+    {
+      "id": "2",
+      "image": "https://via.placeholder.com/800x400?text=Customer+2",
+      "name": "Linh Chi – 30 tuổi, TP.HCM",
+      "feedback": "Sản phẩm chính hãng, đóng gói đẹp và giao hàng nhanh. Rất thích dịch vụ tư vấn da miễn phí, nhân viên nhiệt tình và hiểu rõ từng loại da."
+    },
+    {
+      "id": "3",
+      "image": "https://via.placeholder.com/800x400?text=Customer+3",
+      "name": "Thu Hương – 22 tuổi, Đà Nẵng",
+      "feedback": "Mình dùng combo serum & kem dưỡng được 1 tháng, da đều màu và mịn hơn. Cảm ơn shop vì đã tư vấn đúng sản phẩm phù hợp với da mình!"
+    }
+  ],
+  "services": [
+    {
+      "id": "skincare",
+      "title": "Tư Vấn Chăm Sóc Da Mặt",
+      "description": "Giải pháp chăm sóc da mặt toàn diện",
+      "content": "Chúng tôi sẽ phân tích loại da của bạn và đề xuất quy trình chăm sóc da phù hợp với các sản phẩm cụ thể cho từng bước.",
+      "items": [
+        "Phân tích loại da (dầu, khô, hỗn hợp, nhạy cảm)",
+        "Tư vấn quy trình chăm sóc da cơ bản và nâng cao",
+        "Đề xuất sản phẩm phù hợp cho từng bước skincare",
+        "Giải pháp cho các vấn đề da cụ thể (mụn, thâm, lão hóa)"
+      ]
+    },
+    {
+      "id": "makeup",
+      "title": "Tư Vấn Trang Điểm",
+      "description": "Trang điểm phù hợp với từng dịp",
+      "content": "Chúng tôi sẽ tư vấn các sản phẩm trang điểm phù hợp với tông da, đặc điểm khuôn mặt và phong cách của bạn.",
+      "items": [
+        "Phân tích tông da và đặc điểm khuôn mặt",
+        "Tư vấn sản phẩm trang điểm phù hợp",
+        "Hướng dẫn kỹ thuật trang điểm cơ bản",
+        "Gợi ý phong cách trang điểm theo từng dịp"
+      ]
+    },
+    {
+      "id": "haircare",
+      "title": "Tư Vấn Chăm Sóc Tóc",
+      "description": "Mái tóc khỏe đẹp từ gốc đến ngọn",
+      "content": "Chúng tôi sẽ đánh giá tình trạng tóc và da đầu của bạn, đề xuất các sản phẩm và phương pháp chăm sóc phù hợp.",
+      "items": [
+        "Phân tích tình trạng tóc và da đầu",
+        "Tư vấn sản phẩm chăm sóc tóc phù hợp",
+        "Hướng dẫn quy trình chăm sóc tóc tại nhà",
+        "Giải pháp cho các vấn đề tóc (khô xơ, gãy rụng, chẻ ngọn)"
+      ]
+    },
+    {
+      "id": "bodycare",
+      "title": "Tư Vấn Chăm Sóc Cơ Thể",
+      "description": "Làn da mịn màng, khỏe khoắn",
+      "content": "Chúng tôi sẽ tư vấn các sản phẩm và phương pháp chăm sóc da toàn thân phù hợp với loại da và nhu cầu của bạn.",
+      "items": [
+        "Phân tích tình trạng da toàn thân",
+        "Tư vấn sản phẩm chăm sóc cơ thể phù hợp",
+        "Hướng dẫn quy trình chăm sóc da toàn thân",
+        "Giải pháp cho các vấn đề da cơ thể (khô ráp, không đều màu)"
+      ]
+    }
+  ],
+  "skinTypeServices": [
+    {
+      "id": "oily",
+      "title": "Da Dầu",
+      "description": "Giải pháp kiểm soát dầu và ngăn ngừa mụn",
+      "content": "Các sản phẩm phù hợp với da dầu giúp kiểm soát lượng dầu thừa, se khít lỗ chân lông và ngăn ngừa mụn hiệu quả.",
+      "tags": [
+        "Sữa rửa mặt dành cho da dầu",
+        "Toner cân bằng dầu",
+        "Kem dưỡng oil-free"
+      ]
+    },
+    {
+      "id": "dry",
+      "title": "Da Khô",
+      "description": "Giải pháp cấp ẩm và phục hồi da",
+      "content": "Các sản phẩm dành cho da khô giúp cung cấp độ ẩm, nuôi dưỡng và phục hồi hàng rào bảo vệ da.",
+      "tags": [
+        "Sữa rửa mặt dịu nhẹ",
+        "Serum cấp ẩm",
+        "Kem dưỡng giàu độ ẩm"
+      ]
+    },
+    {
+      "id": "sensitive",
+      "title": "Da Nhạy Cảm",
+      "description": "Giải pháp chăm sóc da nhẹ nhàng, an toàn",
+      "content": "Các sản phẩm dành cho da nhạy cảm giúp bảo vệ da khỏi các tác nhân gây kích ứng và phục hồi da.",
+      "tags": [
+        "Sữa rửa mặt dịu nhẹ",
+        "Kem dưỡng nhẹ nhàng",
+        "Mặt nạ dưỡng ẩm"
+      ]
+    },
+    {
+      "id": "acne",
+      "title": "Da Mụn",
+      "description": "Giải pháp trị mụn và ngăn ngừa mụn",
+      "content": "Các sản phẩm giúp điều trị mụn và ngăn ngừa mụn tái phát, giúp da trở nên khỏe mạnh và sáng mịn.",
+      "tags": [
+        "Sữa rửa mặt trị mụn",
+        "Serum chống mụn",
+        "Kem dưỡng chống mụn"
+      ]
+    },
+    {
+      "id": "combination",
+      "title": "Da Hỗn Hợp",
+      "description": "Giải pháp cân bằng dầu và ẩm",
+      "content": "Các sản phẩm giúp cân bằng dầu và ẩm, phục hồi da và ngăn ngừa các vấn đề da.",
+      "tags": [
+        "Sữa rửa mặt cân bằng dầu",
+        "Serum dưỡng ẩm",
+        "Kem dưỡng đa năng"
+      ]
+    },
+    {
+      "id": "aging",
+      "title": "Da Lão Hóa",
+      "description": "Giải pháp chống lão hóa và phục hồi da",
+      "content": "Các sản phẩm giúp chống lão hóa, phục hồi da và làm mịn màng hơn.",
+      "tags": [
+        "Sữa rửa mặt chống lão hóa",
+        "Serum chống lão hóa",
+        "Kem dưỡng chống lão hóa"
+      ]
+    }
+  ],
+  "bookings": [
+    {
+      "id": "booking-1746370090956",
+      "userId": "user1746197734020",
+      "name": "Nguyễn Ngọc Hồng Minh",
+      "phone": "0971770425",
+      "email": "nguyenngochongminh@gmail.com",
+      "date": "2025-05-22",
+      "service": "skincare",
+      "skinType": "combination",
+      "message": "da khô bong tróc chảy máu cần chữa trị",
+      "status": "pending",
+      "createdAt": "2025-05-04T14:48:10.956Z"
+    },
+    {
+      "id": "booking-1746370131668",
+      "userId": "user1746197734020",
+      "name": "Nguyễn Ngọc Hồng Minh",
+      "phone": "0971770425",
+      "email": "nguyenngochongminh@gmail.com",
+      "date": "2025-05-04",
+      "service": "makeup",
+      "skinType": "combination",
+      "message": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
+      "status": "pending",
+      "createdAt": "2025-05-04T14:48:51.668Z"
+    },
+    {
+      "id": "booking-1746370941113",
+      "userId": "user123",
+      "name": "Ngọc Linh",
+      "phone": "0971770425",
+      "email": "ngoclinh@example.com",
+      "date": "2025-05-15",
+      "service": "skincare",
+      "skinType": "sensitive",
+      "message": "hfffffffffffffffffffffffffff",
+      "status": "pending",
+      "createdAt": "2025-05-04T15:02:21.113Z"
+    },
+    {
+      "id": "booking-1746371565526",
+      "userId": "user123",
+      "name": "Ngọc Linh",
+      "phone": "0971770425",
+      "email": "ngoclinh@example.com",
+      "date": "2025-05-10",
+      "service": "skincare",
+      "skinType": "dry",
+      "message": "ádddddddddddddddd",
+      "status": "pending",
+      "createdAt": "2025-05-04T15:12:45.526Z"
+    },
+    {
+      "id": "booking-1746371586271",
+      "userId": "user123",
+      "name": "Ngọc Linh",
+      "phone": "0971770425",
+      "email": "ngoclinh@example.com",
+      "date": "2025-05-27",
+      "service": "hair",
+      "skinType": "combination",
+      "message": "áccccccccccccccccc",
+      "status": "pending",
+      "createdAt": "2025-05-04T15:13:06.271Z"
+    }
+  ]
 }

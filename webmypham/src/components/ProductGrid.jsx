@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
+import Toast from './Toast';
 
 const ProductGrid = () => {
     const { addToCart } = useCart();
@@ -18,7 +19,7 @@ const ProductGrid = () => {
     const [activeBenefits, setActiveBenefits] = useState([]);
     const [sortBy, setSortBy] = useState('default');
     const [priceRange, setPriceRange] = useState({ min: 0, max: 10000000 });
-
+    const [toast, setToast] = useState(null);
     // VND formatter
     const formatVND = (amount) => {
         return new Intl.NumberFormat('vi-VN', {
@@ -228,7 +229,10 @@ const ProductGrid = () => {
             quantity: 1,
         };
         addToCart(cartItem);
-        alert(`Đã thêm "${product.title}" vào giỏ hàng!`);
+        setToast({
+            message: `Đã thêm "${product.title}" vào giỏ hàng!`,
+            type: 'success',
+        });
     };
 
     if (loading) {
@@ -712,6 +716,13 @@ const ProductGrid = () => {
                     )}
                 </div>
             </div>
+            {toast && (
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
         </div>
     );
 };
