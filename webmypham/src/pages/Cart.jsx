@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Minus, Plus, Trash2 } from 'lucide-react';
+import { Minus, Plus, Trash2, X } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
+import Toast from '../components/Toast';
 
 export default function Cart() {
     const {
@@ -11,9 +13,123 @@ export default function Cart() {
         getCartTotal,
         clearCart,
     } = useCart();
+    const { user, isAuthenticated } = useAuth();
     const [products, setProducts] = useState({});
     const [loading, setLoading] = useState(true);
     const [selectedItems, setSelectedItems] = useState([]);
+    const [showCheckoutForm, setShowCheckoutForm] = useState(false);
+    const [checkoutInfo, setCheckoutInfo] = useState({
+        fullName: user?.name || '',
+        phone: '',
+        address: '',
+        city: '',
+        district: '',
+        ward: '',
+        note: '',
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [toast, setToast] = useState(null);
+
+    // Xử lý thay đổi form checkout
+    const handleCheckoutChange = (e) => {
+        const { name, value } = e.target;
+        setCheckoutInfo((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    // Xử lý thanh toán
+    const handleCheckout = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+
+        try {
+            // Lọc các sản phẩm đã chọn
+            const selectedProducts = cartItems.filter((item) =>
+                selectedItems.includes(item.productId)
+            );
+
+            if (isAuthenticated && user) {
+                // Lấy thông tin user hiện tại
+                const userResponse = await fetch(
+                    `http://localhost:3001/users/${user.id}`
+                );
+                if (!userResponse.ok) {
+                    throw new Error('Không thể lấy thông tin người dùng');
+                }
+
+                const userData = await userResponse.json();
+
+                // Tạo đơn hàng mới
+                const newOrder = {
+                    id: `order-${Date.now()}`,
+                    date: new Date().toLocaleDateString('vi-VN'),
+                    customerInfo: checkoutInfo,
+                    totalAmount: getSelectedTotal(),
+                    items: selectedProducts.map((item) => ({
+                        productId: item.productId,
+                        quantity: item.quantity,
+                    })),
+                };
+
+                // Thêm đơn hàng mới vào mảng orders
+                const updatedOrders = [...(userData.orders || []), newOrder];
+
+                // Cập nhật thông tin user
+                const updateResponse = await fetch(
+                    `http://localhost:3001/users/${user.id}`,
+                    {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ orders: updatedOrders }),
+                    }
+                );
+
+                if (!updateResponse.ok) {
+                    throw new Error(
+                        'Không thể cập nhật đơn hàng vào tài khoản'
+                    );
+                }
+
+                // Xóa các sản phẩm đã đặt hàng khỏi giỏ hàng
+                selectedItems.forEach((productId) => {
+                    removeFromCart(productId);
+                });
+
+                // Hiển thị thông báo thành công
+                setToast({
+                    message: 'Đặt hàng thành công!',
+                    type: 'success',
+                });
+
+                // Đóng form checkout
+                setShowCheckoutForm(false);
+                setSelectedItems([]);
+            } else {
+                throw new Error('Vui lòng đăng nhập để đặt hàng');
+            }
+        } catch (error) {
+            console.error('Lỗi khi đặt hàng:', error);
+            setToast({
+                message: error.message || 'Có lỗi xảy ra khi đặt hàng',
+                type: 'error',
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    // Hàm format số tiền theo định dạng VND
+    const formatCurrency = (amount) => {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+            minimumFractionDigits: 0,
+        }).format(amount);
+    };
 
     // Tính tổng tiền cho các sản phẩm đã chọn
     const getSelectedTotal = () => {
@@ -185,7 +301,7 @@ export default function Cart() {
                                             <span className="md:hidden inline-block w-20 font-medium">
                                                 Giá:
                                             </span>
-                                            ${item.price}
+                                            {formatCurrency(item.price)}
                                         </div>
 
                                         {/* Số lượng */}
@@ -222,10 +338,9 @@ export default function Cart() {
                                             <span className="md:hidden inline-block w-20 font-medium">
                                                 Tổng:
                                             </span>
-                                            $
-                                            {(
+                                            {formatCurrency(
                                                 item.price * item.quantity
-                                            ).toFixed(2)}
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -255,7 +370,7 @@ export default function Cart() {
                                         phẩm)
                                     </span>
                                     <span>
-                                        ${getSelectedTotal().toFixed(2)}
+                                        {formatCurrency(getSelectedTotal())}
                                     </span>
                                 </div>
                                 <div className="flex justify-between">
@@ -267,12 +382,25 @@ export default function Cart() {
                                 <div className="border-t pt-3 flex justify-between font-bold">
                                     <span>Tổng cộng</span>
                                     <span>
-                                        ${getSelectedTotal().toFixed(2)}
+                                        {formatCurrency(getSelectedTotal())}
                                     </span>
                                 </div>
                             </div>
 
                             <button
+                                onClick={() => {
+                                    if (selectedItems.length > 0) {
+                                        if (!isAuthenticated) {
+                                            setToast({
+                                                message:
+                                                    'Vui lòng đăng nhập để thanh toán',
+                                                type: 'error',
+                                            });
+                                            return;
+                                        }
+                                        setShowCheckoutForm(true);
+                                    }
+                                }}
                                 className={`w-full py-3 rounded-md transition-colors ${
                                     selectedItems.length > 0
                                         ? 'bg-black text-white hover:bg-gray-800'
@@ -293,6 +421,187 @@ export default function Cart() {
                     </div>
                 </div>
             </div>
+
+            {/* Checkout Form Modal */}
+            {showCheckoutForm && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-center p-6 border-b">
+                            <h2 className="text-xl font-bold">
+                                Thông tin thanh toán
+                            </h2>
+                            <button
+                                onClick={() => setShowCheckoutForm(false)}
+                                className="text-gray-500 hover:text-gray-700">
+                                <X size={24} />
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleCheckout} className="p-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Họ và tên
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="fullName"
+                                        value={checkoutInfo.fullName}
+                                        onChange={handleCheckoutChange}
+                                        required
+                                        className="w-full p-2 border border-gray-300 rounded-md"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Số điện thoại
+                                    </label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        value={checkoutInfo.phone}
+                                        onChange={handleCheckoutChange}
+                                        required
+                                        className="w-full p-2 border border-gray-300 rounded-md"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Tỉnh/Thành phố
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="city"
+                                        value={checkoutInfo.city}
+                                        onChange={handleCheckoutChange}
+                                        required
+                                        className="w-full p-2 border border-gray-300 rounded-md"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Quận/Huyện
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="district"
+                                        value={checkoutInfo.district}
+                                        onChange={handleCheckoutChange}
+                                        required
+                                        className="w-full p-2 border border-gray-300 rounded-md"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                        Phường/Xã
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="ward"
+                                        value={checkoutInfo.ward}
+                                        onChange={handleCheckoutChange}
+                                        required
+                                        className="w-full p-2 border border-gray-300 rounded-md"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="mb-6">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Địa chỉ chi tiết
+                                </label>
+                                <input
+                                    type="text"
+                                    name="address"
+                                    value={checkoutInfo.address}
+                                    onChange={handleCheckoutChange}
+                                    required
+                                    className="w-full p-2 border border-gray-300 rounded-md"
+                                    placeholder="Số nhà, tên đường..."
+                                />
+                            </div>
+
+                            <div className="mb-6">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    Ghi chú
+                                </label>
+                                <textarea
+                                    name="note"
+                                    value={checkoutInfo.note}
+                                    onChange={handleCheckoutChange}
+                                    className="w-full p-2 border border-gray-300 rounded-md h-20"
+                                    placeholder="Ghi chú về đơn hàng, ví dụ: thời gian hay chỉ dẫn địa điểm giao hàng chi tiết hơn."
+                                />
+                            </div>
+
+                            <div className="border-t pt-4 mb-6">
+                                <h3 className="font-medium mb-3">
+                                    Chi tiết đơn hàng
+                                </h3>
+                                <div className="space-y-2">
+                                    {cartItems
+                                        .filter((item) =>
+                                            selectedItems.includes(
+                                                item.productId
+                                            )
+                                        )
+                                        .map((item) => (
+                                            <div
+                                                key={item.productId}
+                                                className="flex justify-between">
+                                                <span>
+                                                    {item.title} x{' '}
+                                                    {item.quantity}
+                                                </span>
+                                                <span>
+                                                    {formatCurrency(
+                                                        item.price *
+                                                            item.quantity
+                                                    )}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    <div className="border-t pt-2 font-bold flex justify-between">
+                                        <span>Tổng cộng</span>
+                                        <span>
+                                            {formatCurrency(getSelectedTotal())}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex justify-end gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowCheckoutForm(false)}
+                                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                                    Hủy
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 disabled:bg-gray-400">
+                                    {isSubmitting
+                                        ? 'Đang xử lý...'
+                                        : 'Xác nhận đặt hàng'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {toast && (
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
         </div>
     );
 }

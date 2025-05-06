@@ -11,7 +11,14 @@ export default function UserProfileDetails() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [userDetails, setUserDetails] = useState(null);
-
+    // VND formatter
+    const formatVND = (amount) => {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+            minimumFractionDigits: 0,
+        }).format(amount);
+    };
     // Lấy thông tin chi tiết của người dùng từ API
     useEffect(() => {
         async function fetchUserData() {
@@ -333,22 +340,11 @@ export default function UserProfileDetails() {
                                                         {order.date}
                                                     </p>
                                                 </div>
-                                                <p className="text-sm mb-2">
-                                                    <span className="font-medium">
-                                                        Trạng thái:
-                                                    </span>{' '}
-                                                    <span className="capitalize">
-                                                        {order.status}
-                                                    </span>
-                                                </p>
-                                                <p className="text-sm mb-2">
-                                                    <span className="font-medium">
-                                                        Số lượng sản phẩm:
-                                                    </span>{' '}
-                                                    {order.items.length}
-                                                </p>
                                                 <p className="text-sm font-medium">
-                                                    Tổng tiền: ${order.total}
+                                                    Tổng tiền:{' '}
+                                                    {formatVND(
+                                                        order.totalAmount
+                                                    )}
                                                 </p>
                                             </div>
                                         ))}
