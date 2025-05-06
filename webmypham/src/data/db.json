@@ -80,7 +80,14 @@
       "skinType": "normal",
       "wishlist": [],
       "orders": [],
-      "cart": []
+      "cart": [
+        {
+          "productId": "2",
+          "title": "Serum Vitamin C",
+          "price": 550000,
+          "quantity": 1
+        }
+      ]
     }
   ],
   "brands": [
