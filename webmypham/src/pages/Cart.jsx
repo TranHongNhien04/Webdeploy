@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Minus, Plus, Trash2, X } from 'lucide-react';
+import {
+    Minus,
+    Plus,
+    Trash2,
+    X,
+    AlertCircle,
+    HelpCircle,
+    CheckCircle,
+} from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import Toast from '../components/Toast';
@@ -23,6 +31,45 @@ export default function Cart() {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [toast, setToast] = useState(null);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [productToDelete, setProductToDelete] = useState(null);
+    const [showClearConfirm, setShowClearConfirm] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [lastOrderId, setLastOrderId] = useState(null);
+
+    // Xử lý xóa sản phẩm với xác nhận
+    const handleRemoveItem = (productId) => {
+        setProductToDelete(productId);
+        setShowDeleteConfirm(true);
+    };
+
+    // Xác nhận xóa sản phẩm
+    const confirmDelete = () => {
+        if (productToDelete) {
+            removeFromCart(productToDelete);
+            setToast({
+                message: 'Đã xóa sản phẩm khỏi giỏ hàng',
+                type: 'success',
+            });
+        }
+        setShowDeleteConfirm(false);
+        setProductToDelete(null);
+    };
+
+    // Xử lý xóa tất cả với xác nhận
+    const handleClearCart = () => {
+        setShowClearConfirm(true);
+    };
+
+    // Xác nhận xóa tất cả
+    const confirmClearCart = () => {
+        clearCart();
+        setToast({
+            message: 'Đã xóa tất cả sản phẩm khỏi giỏ hàng',
+            type: 'success',
+        });
+        setShowClearConfirm(false);
+    };
 
     // Xử lý thay đổi form checkout
     const handleCheckoutChange = (e) => {
@@ -57,13 +104,17 @@ export default function Cart() {
 
                 // Tạo đơn hàng mới với thời gian đầy đủ
                 const now = new Date();
+                const shippingFee = getShippingFee();
+                const subtotal = getSelectedTotal();
                 const newOrder = {
                     id: `order-${Date.now()}`,
                     date: now.toLocaleDateString('vi-VN'),
                     time: now.toLocaleTimeString('vi-VN'),
                     createdAt: now.toISOString(), // Lưu thời gian đầy đủ theo chuẩn ISO
                     customerInfo: checkoutInfo,
-                    totalAmount: getSelectedTotal(),
+                    subtotal: subtotal,
+                    shippingFee: shippingFee,
+                    totalAmount: subtotal + shippingFee,
                     items: selectedProducts.map((item) => ({
                         productId: item.productId,
                         price: item.price,
@@ -92,15 +143,12 @@ export default function Cart() {
                     );
                 }
 
+                // Lưu ID đơn hàng vừa tạo
+                setLastOrderId(newOrder.id);
+
                 // Xóa các sản phẩm đã đặt hàng khỏi giỏ hàng
                 selectedItems.forEach((productId) => {
                     removeFromCart(productId);
-                });
-
-                // Hiển thị thông báo thành công
-                setToast({
-                    message: 'Đặt hàng thành công!',
-                    type: 'success',
                 });
 
                 // Đóng form checkout
@@ -134,6 +182,17 @@ export default function Cart() {
         return cartItems
             .filter((item) => selectedItems.includes(item.productId))
             .reduce((total, item) => total + item.price * item.quantity, 0);
+    };
+
+    // Tính phí vận chuyển
+    const getShippingFee = () => {
+        const subtotal = getSelectedTotal();
+        return subtotal >= 300000 ? 0 : 35000;
+    };
+
+    // Tính tổng tiền bao gồm phí vận chuyển
+    const getFinalTotal = () => {
+        return getSelectedTotal() + getShippingFee();
     };
 
     const toggleItemSelection = (productId) => {
@@ -289,7 +348,7 @@ export default function Cart() {
                                                 <div className="flex items-center gap-2 mt-1 md:hidden">
                                                     <button
                                                         onClick={() =>
-                                                            removeFromCart(
+                                                            handleRemoveItem(
                                                                 item.productId
                                                             )
                                                         }
@@ -368,7 +427,7 @@ export default function Cart() {
                                         <div className="col-span-1 text-center hidden md:block">
                                             <button
                                                 onClick={() =>
-                                                    removeFromCart(
+                                                    handleRemoveItem(
                                                         item.productId
                                                     )
                                                 }
@@ -382,8 +441,8 @@ export default function Cart() {
 
                             <div className="p-4 border-t border-gray-100">
                                 <button
-                                    onClick={clearCart}
-                                    className="text-sm text-red-500 hover:text-red-700">
+                                    onClick={handleClearCart}
+                                    className="text-sm text-red-500 hover:text-red-700 hover:font-semibold">
                                     Xóa tất cả
                                 </button>
                             </div>
@@ -407,17 +466,60 @@ export default function Cart() {
                                         {formatCurrency(getSelectedTotal())}
                                     </span>
                                 </div>
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600">
-                                        Phí vận chuyển
-                                    </span>
-                                    <span>Miễn phí</span>
-                                </div>
+
+                                {selectedItems.length > 0 ? (
+                                    <>
+                                        <div className="flex justify-between items-center">
+                                            <span className="flex items-center">
+                                                Phí vận chuyển
+                                                <div className="relative ml-1 group">
+                                                    <HelpCircle
+                                                        size={14}
+                                                        className="text-gray-400 cursor-help"
+                                                    />
+                                                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 p-2 bg-gray-800 text-white text-xs rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity z-10">
+                                                        Đơn hàng từ{' '}
+                                                        {formatCurrency(300000)}{' '}
+                                                        được miễn phí vận
+                                                        chuyển.
+                                                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
+                                                    </div>
+                                                </div>
+                                            </span>
+                                            {getShippingFee() === 0 ? (
+                                                <span className="text-green-500">
+                                                    Miễn phí
+                                                </span>
+                                            ) : (
+                                                <span>
+                                                    {formatCurrency(
+                                                        getShippingFee()
+                                                    )}
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        {getShippingFee() > 0 && (
+                                            <div className="text-xs text-gray-500 italic">
+                                                Mua thêm{' '}
+                                                {formatCurrency(
+                                                    300000 - getSelectedTotal()
+                                                )}{' '}
+                                                để được miễn phí vận chuyển
+                                            </div>
+                                        )}
+                                    </>
+                                ) : null}
+
                                 <div className="border-t pt-3 flex justify-between font-bold">
                                     <span>Tổng cộng</span>
-                                    <span>
-                                        {formatCurrency(getSelectedTotal())}
-                                    </span>
+                                    {selectedItems.length === 0 ? (
+                                        <span className="text-gray-400">-</span>
+                                    ) : (
+                                        <span>
+                                            {formatCurrency(getFinalTotal())}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
 
@@ -447,7 +549,7 @@ export default function Cart() {
                             <div className="mt-4">
                                 <Link
                                     to="/san-pham"
-                                    className="text-sm text-gray-600 hover:text-gray-800">
+                                    className="text-sm text-gray-600 hover:text-blue-700 hover:font-semibold">
                                     ← Tiếp tục mua sắm
                                 </Link>
                             </div>
@@ -599,10 +701,30 @@ export default function Cart() {
                                                 </span>
                                             </div>
                                         ))}
+                                    <div className="pt-2 flex justify-between">
+                                        <span>Tạm tính</span>
+                                        <span>
+                                            {formatCurrency(getSelectedTotal())}
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span>Phí vận chuyển</span>
+                                        {getShippingFee() === 0 ? (
+                                            <span className="text-green-500">
+                                                Miễn phí
+                                            </span>
+                                        ) : (
+                                            <span>
+                                                {formatCurrency(
+                                                    getShippingFee()
+                                                )}
+                                            </span>
+                                        )}
+                                    </div>
                                     <div className="border-t pt-2 font-bold flex justify-between">
                                         <span>Tổng cộng</span>
                                         <span>
-                                            {formatCurrency(getSelectedTotal())}
+                                            {formatCurrency(getFinalTotal())}
                                         </span>
                                     </div>
                                 </div>
@@ -625,6 +747,108 @@ export default function Cart() {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal xác nhận xóa sản phẩm */}
+            {showDeleteConfirm && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-lg max-w-md w-full p-6">
+                        <div className="flex items-center mb-4 text-red-500">
+                            <AlertCircle className="mr-2" size={24} />
+                            <h3 className="text-lg font-medium">
+                                Xác nhận xóa
+                            </h3>
+                        </div>
+                        <p className="mb-6">
+                            Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ
+                            hàng?
+                        </p>
+                        <div className="flex justify-end gap-3">
+                            <button
+                                onClick={() => setShowDeleteConfirm(false)}
+                                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                                Hủy
+                            </button>
+                            <button
+                                onClick={confirmDelete}
+                                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
+                                Xóa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal xác nhận xóa tất cả */}
+            {showClearConfirm && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-lg max-w-md w-full p-6">
+                        <div className="flex items-center mb-4 text-red-500">
+                            <AlertCircle className="mr-2" size={24} />
+                            <h3 className="text-lg font-medium">
+                                Xác nhận xóa tất cả
+                            </h3>
+                        </div>
+                        <p className="mb-6">
+                            Bạn có chắc chắn muốn xóa tất cả sản phẩm khỏi giỏ
+                            hàng?
+                        </p>
+                        <div className="flex justify-end gap-3">
+                            <button
+                                onClick={() => setShowClearConfirm(false)}
+                                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                                Hủy
+                            </button>
+                            <button
+                                onClick={confirmClearCart}
+                                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 ">
+                                Xóa tất cả
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal thông báo đặt hàng thành công */}
+            {showSuccessModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-lg max-w-md w-full p-6">
+                        <div className="flex items-center mb-4 text-green-500">
+                            <CheckCircle className="mr-2" size={24} />
+                            <h3 className="text-lg font-medium">
+                                Đặt hàng thành công!
+                            </h3>
+                        </div>
+                        <div className="mb-6">
+                            <p className="mb-2">
+                                Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng
+                                tôi.
+                            </p>
+                            <p className="mb-2">
+                                Mã đơn hàng:{' '}
+                                <span className="font-medium">
+                                    {lastOrderId}
+                                </span>
+                            </p>
+                            <p>
+                                Bạn có thể theo dõi đơn hàng trong phần "Lịch sử
+                                đơn hàng" ở trang hồ sơ cá nhân.
+                            </p>
+                        </div>
+                        <div className="flex justify-end gap-3">
+                            <Link
+                                to="/ho-so"
+                                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                                Xem đơn hàng
+                            </Link>
+                            <button
+                                onClick={() => setShowSuccessModal(false)}
+                                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                Đóng
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

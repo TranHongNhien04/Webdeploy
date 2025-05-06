@@ -214,13 +214,25 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
                             <div className="border-t pt-4">
                                 <div className="flex justify-between mb-2">
                                     <p className="font-medium">Tạm tính:</p>
-                                    <p>{formatVND(order.totalAmount)}</p>
+                                    <p>
+                                        {formatVND(
+                                            order.subtotal || order.totalAmount
+                                        )}
+                                    </p>
                                 </div>
                                 <div className="flex justify-between mb-2">
                                     <p className="font-medium">
                                         Phí vận chuyển:
                                     </p>
-                                    <p className="text-green-500">Miễn phí</p>
+                                    {order.shippingFee === 0 ? (
+                                        <p className="text-green-500">
+                                            Miễn phí
+                                        </p>
+                                    ) : (
+                                        <p>
+                                            {formatVND(order.shippingFee || 0)}
+                                        </p>
+                                    )}
                                 </div>
                                 <div className="flex justify-between font-bold text-lg">
                                     <p>Tổng cộng:</p>
