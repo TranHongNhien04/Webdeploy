@@ -1,16 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import EditProfileModal from '../components/EditProfileModal';
-import { Pencil } from 'lucide-react';
+import OrderDetailsModal from '../components/OrderDetailsModal';
+import { Pencil, ChevronRight, Eye } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function UserProfileDetails() {
     const { user, isAuthenticated } = useAuth();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isOrderDetailsModalOpen, setIsOrderDetailsModalOpen] =
+        useState(false);
+    const [selectedOrder, setSelectedOrder] = useState(null);
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [userDetails, setUserDetails] = useState(null);
+
+    // Mở modal chi tiết đơn hàng
+    const openOrderDetails = (order) => {
+        setSelectedOrder(order);
+        setIsOrderDetailsModalOpen(true);
+    };
+
+    // Đóng modal chi tiết đơn hàng
+    const closeOrderDetails = () => {
+        setIsOrderDetailsModalOpen(false);
+        setSelectedOrder(null);
+    };
     // VND formatter
     const formatVND = (amount) => {
         return new Intl.NumberFormat('vi-VN', {
@@ -120,27 +136,6 @@ export default function UserProfileDetails() {
         };
 
         return skinTypeMap[skinType] || skinType || 'Chưa xác định';
-    };
-
-    const getStatusName = (status) => {
-        const statusMap = {
-            pending: 'Chờ xác nhận',
-            confirmed: 'Đã xác nhận',
-            completed: 'Đã hoàn thành',
-            cancelled: 'Đã hủy',
-        };
-
-        return statusMap[status] || 'Không xác định';
-    };
-    const getStatusColor = (status) => {
-        const statusColorMap = {
-            pending: 'bg-yellow-100 text-yellow-800',
-            confirmed: 'bg-blue-100 text-blue-800',
-            completed: 'bg-green-100 text-green-800',
-            cancelled: 'bg-red-100 text-red-800',
-        };
-
-        return statusColorMap[status] || 'bg-gray-100 text-gray-800';
     };
 
     const formatDate = (dateString) => {
@@ -270,12 +265,8 @@ export default function UserProfileDetails() {
                                                     </p>
                                                 </div>
                                                 <span
-                                                    className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                                                        booking.status
-                                                    )}`}>
-                                                    {getStatusName(
-                                                        booking.status
-                                                    )}
+                                                    className={`px-2 py-1 rounded-full text-xs font-medium ${booking.status}`}>
+                                                    {booking.status}
                                                 </span>
                                             </div>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm mb-2">
@@ -336,16 +327,36 @@ export default function UserProfileDetails() {
                                                     <p className="font-medium">
                                                         Đơn hàng: {order.id}
                                                     </p>
-                                                    <p className="text-sm text-gray-600">
-                                                        {order.date}
-                                                    </p>
+                                                    <div className="text-sm text-gray-600">
+                                                        <p>{order.date}</p>
+                                                        {order.time && (
+                                                            <p className="text-xs">
+                                                                {order.time}
+                                                            </p>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                                <p className="text-sm font-medium">
-                                                    Tổng tiền:{' '}
-                                                    {formatVND(
-                                                        order.totalAmount
-                                                    )}
-                                                </p>
+                                                <div className="flex justify-between items-center">
+                                                    <p className="text-sm font-medium">
+                                                        Tổng tiền:{' '}
+                                                        {formatVND(
+                                                            order.totalAmount
+                                                        )}
+                                                    </p>
+                                                    <button
+                                                        onClick={() =>
+                                                            openOrderDetails(
+                                                                order
+                                                            )
+                                                        }
+                                                        className="flex items-center text-blue-600 hover:text-blue-800 text-sm">
+                                                        <Eye
+                                                            size={16}
+                                                            className="mr-1"
+                                                        />
+                                                        Chi tiết đơn hàng
+                                                    </button>
+                                                </div>
                                             </div>
                                         ))}
                                     </div>
@@ -358,6 +369,12 @@ export default function UserProfileDetails() {
                         onClose={() => setIsEditModalOpen(false)}
                         user={displayUser}
                         onUserUpdate={handleUserUpdate}
+                    />
+
+                    <OrderDetailsModal
+                        isOpen={isOrderDetailsModalOpen}
+                        onClose={closeOrderDetails}
+                        order={selectedOrder}
                     />
                 </div>
             </div>

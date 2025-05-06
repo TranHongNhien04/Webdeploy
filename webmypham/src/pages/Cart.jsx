@@ -6,13 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import Toast from '../components/Toast';
 
 export default function Cart() {
-    const {
-        cartItems,
-        removeFromCart,
-        updateQuantity,
-        getCartTotal,
-        clearCart,
-    } = useCart();
+    const { cartItems, removeFromCart, updateQuantity, clearCart } = useCart();
     const { user, isAuthenticated } = useAuth();
     const [products, setProducts] = useState({});
     const [loading, setLoading] = useState(true);
@@ -61,14 +55,18 @@ export default function Cart() {
 
                 const userData = await userResponse.json();
 
-                // Tạo đơn hàng mới
+                // Tạo đơn hàng mới với thời gian đầy đủ
+                const now = new Date();
                 const newOrder = {
                     id: `order-${Date.now()}`,
-                    date: new Date().toLocaleDateString('vi-VN'),
+                    date: now.toLocaleDateString('vi-VN'),
+                    time: now.toLocaleTimeString('vi-VN'),
+                    createdAt: now.toISOString(), // Lưu thời gian đầy đủ theo chuẩn ISO
                     customerInfo: checkoutInfo,
                     totalAmount: getSelectedTotal(),
                     items: selectedProducts.map((item) => ({
                         productId: item.productId,
+                        price: item.price,
                         quantity: item.quantity,
                     })),
                 };
@@ -230,15 +228,18 @@ export default function Cart() {
                         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
                             <div className="hidden md:grid grid-cols-12 gap-4 p-4 bg-gray-50 text-sm font-medium text-gray-600">
                                 <div className="col-span-1"></div>
-                                <div className="col-span-5">Sản phẩm</div>
+                                <div className="col-span-4">Sản phẩm</div>
                                 <div className="col-span-2 text-center">
-                                    Giá
+                                    Đơn giá
                                 </div>
                                 <div className="col-span-2 text-center">
                                     Số lượng
                                 </div>
                                 <div className="col-span-2 text-center">
-                                    Tổng
+                                    Thành tiền
+                                </div>
+                                <div className="col-span-1 text-center">
+                                    Thao tác
                                 </div>
                             </div>
 
@@ -264,44 +265,56 @@ export default function Cart() {
                                         </div>
 
                                         {/* Sản phẩm */}
-                                        <div className="col-span-5 flex items-center gap-4">
-                                            <img
-                                                src={getProductImage(
-                                                    item.productId
+                                        <div className="col-span-4 flex items-center gap-4">
+                                            <div className="relative">
+                                                <img
+                                                    src={getProductImage(
+                                                        item.productId
+                                                    )}
+                                                    alt={item.title}
+                                                    className="w-16 h-16 object-cover rounded"
+                                                />
+                                                {products[item.productId]
+                                                    ?.onSale && (
+                                                    <span className="absolute top-0 left-0 bg-red-500 text-white text-xs px-1 py-0.5">
+                                                        Sale
+                                                    </span>
                                                 )}
-                                                alt={item.title}
-                                                className="w-16 h-16 object-cover rounded"
-                                            />
+                                            </div>
                                             <div>
-                                                <h3 className="font-medium text-gray-800">
+                                                <h3 className="font-medium text-gray-800 text-sm">
                                                     {item.title}
                                                 </h3>
-                                                <div className="flex items-center gap-2 mt-1">
+
+                                                <div className="flex items-center gap-2 mt-1 md:hidden">
                                                     <button
                                                         onClick={() =>
                                                             removeFromCart(
                                                                 item.productId
                                                             )
                                                         }
-                                                        className="text-sm text-red-500 flex items-center gap-1 hover:text-red-700">
-                                                        <Trash2 size={14} />
+                                                        className="text-xs text-red-500 flex items-center gap-1 hover:text-red-700">
+                                                        <Trash2 size={12} />
                                                         <span>Xóa</span>
                                                     </button>
-                                                    <Link
-                                                        to={`/san-pham/${item.productId}`}
-                                                        className="text-sm text-blue-500 hover:text-blue-700">
-                                                        Xem chi tiết
-                                                    </Link>
                                                 </div>
                                             </div>
                                         </div>
 
                                         {/* Giá */}
                                         <div className="col-span-2 text-center">
-                                            <span className="md:hidden inline-block w-20 font-medium">
-                                                Giá:
-                                            </span>
-                                            {formatCurrency(item.price)}
+                                            {products[item.productId]
+                                                ?.originalPrice && (
+                                                <div className="text-gray-400 line-through text-xs">
+                                                    {formatCurrency(
+                                                        products[item.productId]
+                                                            .originalPrice
+                                                    )}
+                                                </div>
+                                            )}
+                                            <div className="text-red-500 font-medium">
+                                                {formatCurrency(item.price)}
+                                            </div>
                                         </div>
 
                                         {/* Số lượng */}
@@ -314,12 +327,23 @@ export default function Cart() {
                                                             item.quantity - 1
                                                         )
                                                     }
-                                                    className="px-2 py-1 text-gray-600 hover:bg-gray-100">
-                                                    <Minus size={16} />
+                                                    className="px-2 py-1 text-gray-600 hover:bg-gray-100 border-r">
+                                                    <Minus size={14} />
                                                 </button>
-                                                <span className="w-10 text-center">
-                                                    {item.quantity}
-                                                </span>
+                                                <input
+                                                    type="number"
+                                                    min="1"
+                                                    value={item.quantity}
+                                                    onChange={(e) =>
+                                                        updateQuantity(
+                                                            item.productId,
+                                                            parseInt(
+                                                                e.target.value
+                                                            ) || 1
+                                                        )
+                                                    }
+                                                    className="w-10 text-center border-none focus:outline-none"
+                                                />
                                                 <button
                                                     onClick={() =>
                                                         updateQuantity(
@@ -327,20 +351,30 @@ export default function Cart() {
                                                             item.quantity + 1
                                                         )
                                                     }
-                                                    className="px-2 py-1 text-gray-600 hover:bg-gray-100">
-                                                    <Plus size={16} />
+                                                    className="px-2 py-1 text-gray-600 hover:bg-gray-100 border-l">
+                                                    <Plus size={14} />
                                                 </button>
                                             </div>
                                         </div>
 
                                         {/* Tổng */}
-                                        <div className="col-span-2 text-center font-medium">
-                                            <span className="md:hidden inline-block w-20 font-medium">
-                                                Tổng:
-                                            </span>
+                                        <div className="col-span-2 text-center font-medium text-red-500">
                                             {formatCurrency(
                                                 item.price * item.quantity
                                             )}
+                                        </div>
+
+                                        {/* Thao tác */}
+                                        <div className="col-span-1 text-center hidden md:block">
+                                            <button
+                                                onClick={() =>
+                                                    removeFromCart(
+                                                        item.productId
+                                                    )
+                                                }
+                                                className="text-red-500 hover:text-red-700">
+                                                <Trash2 size={18} />
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
