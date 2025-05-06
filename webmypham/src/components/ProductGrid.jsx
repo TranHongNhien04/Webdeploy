@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
+import { Link } from 'react-router-dom';
 
 const ProductGrid = () => {
     const { addToCart } = useCart();
@@ -19,7 +20,6 @@ const ProductGrid = () => {
     const [sortBy, setSortBy] = useState('default');
     const [priceRange, setPriceRange] = useState({ min: 0, max: 10000000 });
 
-    // VND formatter
     const formatVND = (amount) => {
         return new Intl.NumberFormat('vi-VN', {
             style: 'currency',
@@ -32,60 +32,32 @@ const ProductGrid = () => {
         async function fetchData() {
             setLoading(true);
             try {
-                // Fetch products
-                const productsResponse = await fetch(
-                    'http://localhost:3001/products'
-                );
-                if (!productsResponse.ok) {
-                    throw new Error(
-                        `HTTP error! Status: ${productsResponse.status}`
-                    );
+                const [productsResponse, categoriesResponse, skinTypesResponse, benefitsResponse] = await Promise.all([
+                    fetch('http://localhost:3001/products'),
+                    fetch('http://localhost:3001/categories'),
+                    fetch('http://localhost:3001/skinTypes'),
+                    fetch('http://localhost:3001/benefits'),
+                ]);
+
+                if (!productsResponse.ok || !categoriesResponse.ok || !skinTypesResponse.ok || !benefitsResponse.ok) {
+                    throw new Error('Lỗi khi tải dữ liệu');
                 }
-                const productsData = await productsResponse.json();
+
+                const [productsData, categoriesData, skinTypesData, benefitsData] = await Promise.all([
+                    productsResponse.json(),
+                    categoriesResponse.json(),
+                    skinTypesResponse.json(),
+                    benefitsResponse.json(),
+                ]);
+
                 setProducts(productsData);
-
-                // Fetch categories
-                const categoriesResponse = await fetch(
-                    'http://localhost:3001/categories'
-                );
-                if (!categoriesResponse.ok) {
-                    throw new Error(
-                        `HTTP error! Status: ${categoriesResponse.status}`
-                    );
-                }
-                const categoriesData = await categoriesResponse.json();
                 setCategories(categoriesData);
-
-                // Fetch skin types
-                const skinTypesResponse = await fetch(
-                    'http://localhost:3001/skinTypes'
-                );
-                if (!skinTypesResponse.ok) {
-                    throw new Error(
-                        `HTTP error! Status: ${skinTypesResponse.status}`
-                    );
-                }
-                const skinTypesData = await skinTypesResponse.json();
                 setSkinTypes(skinTypesData);
-
-                // Fetch benefits
-                const benefitsResponse = await fetch(
-                    'http://localhost:3001/benefits'
-                );
-                if (!benefitsResponse.ok) {
-                    throw new Error(
-                        `HTTP error! Status: ${benefitsResponse.status}`
-                    );
-                }
-                const benefitsData = await benefitsResponse.json();
                 setBenefits(benefitsData);
-
                 setError(null);
             } catch (err) {
-                console.error('Error fetching data:', err);
-                setError(
-                    'Không thể tải dữ liệu sản phẩm. Vui lòng thử lại sau.'
-                );
+                console.error('Lỗi khi tải dữ liệu:', err);
+                setError('Không thể tải dữ liệu sản phẩm. Vui lòng thử lại sau.');
             } finally {
                 setLoading(false);
             }
@@ -95,64 +67,38 @@ const ProductGrid = () => {
     }, []);
 
     const toggleSubcategory = (subcategoryId) => {
-        if (activeSubcategories.includes(subcategoryId)) {
-            setActiveSubcategories(
-                activeSubcategories.filter((id) => id !== subcategoryId)
-            );
-        } else {
-            setActiveSubcategories([...activeSubcategories, subcategoryId]);
-        }
+        setActiveSubcategories((prev) =>
+            prev.includes(subcategoryId)
+                ? prev.filter((id) => id !== subcategoryId)
+                : [...prev, subcategoryId]
+        );
         setCurrentPage(1);
     };
 
     const toggleSkinType = (skinTypeId) => {
-        if (activeSkinTypes.includes(skinTypeId)) {
-            setActiveSkinTypes(
-                activeSkinTypes.filter((id) => id !== skinTypeId)
-            );
-        } else {
-            setActiveSkinTypes([...activeSkinTypes, skinTypeId]);
-        }
+        setActiveSkinTypes((prev) =>
+            prev.includes(skinTypeId)
+                ? prev.filter((id) => id !== skinTypeId)
+                : [...prev, skinTypeId]
+        );
         setCurrentPage(1);
     };
 
     const toggleBenefit = (benefitId) => {
-        if (activeBenefits.includes(benefitId)) {
-            setActiveBenefits(activeBenefits.filter((id) => id !== benefitId));
-        } else {
-            setActiveBenefits([...activeBenefits, benefitId]);
-        }
+        setActiveBenefits((prev) =>
+            prev.includes(benefitId)
+                ? prev.filter((id) => id !== benefitId)
+                : [...prev, benefitId]
+        );
         setCurrentPage(1);
     };
 
     const filteredProducts = products.filter((product) => {
-        if (activeCategory !== 'all' && product.category !== activeCategory)
-            return false;
-        if (
-            activeSubcategories.length > 0 &&
-            !activeSubcategories.includes(product.subcategory)
-        )
-            return false;
-        if (activeSkinTypes.length > 0) {
-            if (
-                !product.skinType.some((type) =>
-                    activeSkinTypes.includes(type)
-                ) &&
-                !product.skinType.includes('all')
-            )
-                return false;
-        }
-        if (activeBenefits.length > 0) {
-            if (
-                !product.benefit.some((benefit) =>
-                    activeBenefits.includes(benefit)
-                )
-            )
-                return false;
-        }
-        if (product.price < priceRange.min || product.price > priceRange.max)
-            return false;
-
+        if (activeCategory !== 'all' && product.category !== activeCategory) return false;
+        if (activeSubcategories.length > 0 && !activeSubcategories.includes(product.subcategory)) return false;
+        if (activeSkinTypes.length > 0 && !product.skinType.some((type) => activeSkinTypes.includes(type) || type === 'all')) return false;
+        if (activeBenefits.length > 0 && !product.benefit.some((benefit) => activeBenefits.includes(benefit))) return false;
+        if (product.price < priceRange.min || product.price > priceRange.max) return false;
         return true;
     });
 
@@ -194,22 +140,16 @@ const ProductGrid = () => {
     const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-    const currentProducts = sortedProducts.slice(
-        indexOfFirstProduct,
-        indexOfLastProduct
-    );
+    const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
     const currentSubcategories =
         activeCategory === 'all'
             ? []
-            : categories.find((cat) => cat.id === activeCategory)
-                ?.subcategories || [];
+            : categories.find((cat) => cat.id === activeCategory)?.subcategories || [];
 
     const allSubcategoriesSelected =
         currentSubcategories.length > 0 &&
-        currentSubcategories.every((sub) =>
-            activeSubcategories.includes(sub.id)
-        );
+        currentSubcategories.every((sub) => activeSubcategories.includes(sub.id));
 
     const toggleAllSubcategories = () => {
         if (allSubcategoriesSelected) {
@@ -231,6 +171,13 @@ const ProductGrid = () => {
         alert(`Đã thêm "${product.title}" vào giỏ hàng!`);
     };
 
+    const getBenefitNames = (benefitIds) => {
+        return benefitIds
+            .map((id) => benefits.find((b) => b.id === id)?.name)
+            .filter(Boolean)
+            .join(', ');
+    };
+
     if (loading) {
         return <div className="text-center py-10">Đang tải...</div>;
     }
@@ -248,8 +195,7 @@ const ProductGrid = () => {
                     <span>Bộ lọc</span>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className={`h-5 w-5 transition-transform ${showFilters ? 'rotate-180' : ''
-                            }`}
+                        className={`h-5 w-5 transition-transform ${showFilters ? 'rotate-180' : ''}`}
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor">
@@ -265,102 +211,69 @@ const ProductGrid = () => {
 
             <div className="flex flex-col md:flex-row gap-6">
                 <div
-                    className={`md:w-1/4 lg:w-1/5 space-y-6 ${showFilters ? 'block' : 'hidden md:block'
-                        } bg-white p-4 rounded-lg shadow-sm`}>
+                    className={`md:w-1/4 lg:w-1/5 space-y-6 ${showFilters ? 'block' : 'hidden md:block'} bg-white p-4 rounded-lg shadow-sm`}>
                     <div>
                         <h3 className="font-semibold text-lg mb-3">Danh mục</h3>
                         <div className="space-y-2">
                             <div
-                                className={`cursor-pointer ${activeCategory === 'all'
-                                        ? 'font-medium text-gray-900'
-                                        : 'text-gray-600 hover:text-gray-900'
-                                    }`}
+                                className={`cursor-pointer ${activeCategory === 'all' ? 'font-medium text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
                                 onClick={() => handleCategoryChange('all')}>
                                 Tất cả sản phẩm
                             </div>
                             {categories.map((category) => (
                                 <div
                                     key={category.id}
-                                    className={`cursor-pointer ${activeCategory === category.id
-                                            ? 'font-medium text-gray-900'
-                                            : 'text-gray-600 hover:text-gray-900'
-                                        }`}
-                                    onClick={() =>
-                                        handleCategoryChange(category.id)
-                                    }>
+                                    className={`cursor-pointer ${activeCategory === category.id ? 'font-medium text-gray-900' : 'text-gray-600 hover:text-gray-900'}`}
+                                    onClick={() => handleCategoryChange(category.id)}>
                                     {category.name}
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    {activeCategory !== 'all' &&
-                        currentSubcategories.length > 0 && (
-                            <div>
-                                <div className="flex items-center justify-between mb-3">
-                                    <h3 className="font-semibold text-lg">
-                                        {
-                                            categories.find(
-                                                (cat) =>
-                                                    cat.id === activeCategory
-                                            )?.name
-                                        }
-                                    </h3>
-                                    <button
-                                        onClick={toggleAllSubcategories}
-                                        className="text-xs text-gray-700 hover:text-gray-900 hover:underline">
-                                        {allSubcategoriesSelected
-                                            ? 'Bỏ chọn tất cả'
-                                            : 'Chọn tất cả'}
-                                    </button>
-                                </div>
-                                <div className="space-y-2">
-                                    {currentSubcategories.map((subcategory) => (
-                                        <div
-                                            key={subcategory.id}
-                                            className="flex items-center">
-                                            <input
-                                                type="checkbox"
-                                                id={`subcategory-${subcategory.id}`}
-                                                checked={activeSubcategories.includes(
-                                                    subcategory.id
-                                                )}
-                                                onChange={() =>
-                                                    toggleSubcategory(
-                                                        subcategory.id
-                                                    )
-                                                }
-                                                className="mr-2 h-4 w-4 rounded border-gray-300 text-gray-800 focus:ring-gray-500"
-                                            />
-                                            <label
-                                                htmlFor={`subcategory-${subcategory.id}`}
-                                                className="text-sm text-gray-700 cursor-pointer hover:text-gray-900">
-                                                {subcategory.name}
-                                            </label>
-                                        </div>
-                                    ))}
-                                </div>
+                    {activeCategory !== 'all' && currentSubcategories.length > 0 && (
+                        <div>
+                            <div className="flex items-center justify-between mb-3">
+                                <h3 className="font-semibold text-lg">
+                                    {categories.find((cat) => cat.id === activeCategory)?.name}
+                                </h3>
+                                <button
+                                    onClick={toggleAllSubcategories}
+                                    className="text-xs text-gray-700 hover:text-gray-900 hover:underline">
+                                    {allSubcategoriesSelected ? 'Bỏ chọn tất cả' : 'Chọn tất cả'}
+                                </button>
                             </div>
-                        )}
+                            <div className="space-y-2">
+                                {currentSubcategories.map((subcategory) => (
+                                    <div key={subcategory.id} className="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            id={`subcategory-${subcategory.id}`}
+                                            checked={activeSubcategories.includes(subcategory.id)}
+                                            onChange={() => toggleSubcategory(subcategory.id)}
+                                            className="mr-2 h-4 w-4 rounded border-gray-300 text-gray-800 focus:ring-gray-500"
+                                        />
+                                        <label
+                                            htmlFor={`subcategory-${subcategory.id}`}
+                                            className="text-sm text-gray-700 cursor-pointer hover:text-gray-900">
+                                            {subcategory.name}
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     <div>
-                        <h3 className="font-semibold text-lg mb-3">
-                            Phù hợp theo da
-                        </h3>
+                        <h3 className="font-semibold text-lg mb-3">Phù hợp theo da</h3>
                         <div className="space-y-2">
                             {skinTypes.map((skinType) => (
-                                <div
-                                    key={skinType.id}
-                                    className="flex items-center">
+                                <div key={skinType.id} className="flex items-center">
                                     <input
                                         type="checkbox"
                                         id={`skin-${skinType.id}`}
-                                        checked={activeSkinTypes.includes(
-                                            skinType.id
-                                        )}
-                                        onChange={() =>
-                                            toggleSkinType(skinType.id)
-                                        }
+                                        checked={activeSkinTypes.includes(skinType.id)}
+                                        onChange={() => toggleSkinType(skinType.id)}
                                         className="mr-2 h-4 w-4 rounded border-gray-300 text-gray-800 focus:ring-gray-500"
                                     />
                                     <label
@@ -374,23 +287,15 @@ const ProductGrid = () => {
                     </div>
 
                     <div>
-                        <h3 className="font-semibold text-lg mb-3">
-                            Công dụng
-                        </h3>
+                        <h3 className="font-semibold text-lg mb-3">Công dụng</h3>
                         <div className="space-y-2">
                             {benefits.map((benefit) => (
-                                <div
-                                    key={benefit.id}
-                                    className="flex items-center">
+                                <div key={benefit.id} className="flex items-center">
                                     <input
                                         type="checkbox"
                                         id={`benefit-${benefit.id}`}
-                                        checked={activeBenefits.includes(
-                                            benefit.id
-                                        )}
-                                        onChange={() =>
-                                            toggleBenefit(benefit.id)
-                                        }
+                                        checked={activeBenefits.includes(benefit.id)}
+                                        onChange={() => toggleBenefit(benefit.id)}
                                         className="mr-2 h-4 w-4 rounded border-gray-300 text-gray-800 focus:ring-gray-500"
                                     />
                                     <label
@@ -404,9 +309,7 @@ const ProductGrid = () => {
                     </div>
 
                     <div>
-                        <h3 className="font-semibold text-lg mb-3">
-                            Khoảng giá
-                        </h3>
+                        <h3 className="font-semibold text-lg mb-3">Khoảng giá</h3>
                         <div className="space-y-4">
                             <div className="flex items-center space-x-2">
                                 <input
@@ -414,9 +317,7 @@ const ProductGrid = () => {
                                     min="0"
                                     max={priceRange.max}
                                     value={priceRange.min}
-                                    onChange={(e) =>
-                                        handlePriceChange('min', e.target.value)
-                                    }
+                                    onChange={(e) => handlePriceChange('min', e.target.value)}
                                     className="w-full p-2 border rounded-md text-sm"
                                     placeholder="Từ"
                                 />
@@ -425,9 +326,7 @@ const ProductGrid = () => {
                                     type="number"
                                     min={priceRange.min}
                                     value={priceRange.max}
-                                    onChange={(e) =>
-                                        handlePriceChange('max', e.target.value)
-                                    }
+                                    onChange={(e) => handlePriceChange('max', e.target.value)}
                                     className="w-full p-2 border rounded-md text-sm"
                                     placeholder="Đến"
                                 />
@@ -452,42 +351,25 @@ const ProductGrid = () => {
                         activeSkinTypes.length > 0 ||
                         activeBenefits.length > 0) && (
                             <div className="mb-4 flex flex-wrap gap-2">
-                                {activeCategory !== 'all' &&
-                                    activeSubcategories.length === 0 && (
-                                        <div className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
-                                            <span>
-                                                {
-                                                    categories.find(
-                                                        (cat) =>
-                                                            cat.id ===
-                                                            activeCategory
-                                                    )?.name
-                                                }
-                                            </span>
-                                            <button
-                                                onClick={() =>
-                                                    handleCategoryChange('all')
-                                                }
-                                                className="ml-2 text-gray-500 hover:text-gray-700">
-                                                ×
-                                            </button>
-                                        </div>
-                                    )}
+                                {activeCategory !== 'all' && activeSubcategories.length === 0 && (
+                                    <div className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
+                                        <span>{categories.find((cat) => cat.id === activeCategory)?.name}</span>
+                                        <button
+                                            onClick={() => handleCategoryChange('all')}
+                                            className="ml-2 text-gray-500 hover:text-gray-700">
+                                            ×
+                                        </button>
+                                    </div>
+                                )}
 
                                 {activeSubcategories.map((subId) => {
-                                    const subcategory = currentSubcategories.find(
-                                        (sub) => sub.id === subId
-                                    );
+                                    const subcategory = currentSubcategories.find((sub) => sub.id === subId);
                                     if (!subcategory) return null;
                                     return (
-                                        <div
-                                            key={subId}
-                                            className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
+                                        <div key={subId} className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
                                             <span>{subcategory.name}</span>
                                             <button
-                                                onClick={() =>
-                                                    toggleSubcategory(subId)
-                                                }
+                                                onClick={() => toggleSubcategory(subId)}
                                                 className="ml-2 text-gray-500 hover:text-gray-700">
                                                 ×
                                             </button>
@@ -496,18 +378,12 @@ const ProductGrid = () => {
                                 })}
 
                                 {activeSkinTypes.map((skinTypeId) => {
-                                    const skinType = skinTypes.find(
-                                        (type) => type.id === skinTypeId
-                                    );
+                                    const skinType = skinTypes.find((type) => type.id === skinTypeId);
                                     return (
-                                        <div
-                                            key={skinTypeId}
-                                            className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
+                                        <div key={skinTypeId} className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
                                             <span>{skinType.name}</span>
                                             <button
-                                                onClick={() =>
-                                                    toggleSkinType(skinTypeId)
-                                                }
+                                                onClick={() => toggleSkinType(skinTypeId)}
                                                 className="ml-2 text-gray-500 hover:text-gray-700">
                                                 ×
                                             </button>
@@ -516,18 +392,12 @@ const ProductGrid = () => {
                                 })}
 
                                 {activeBenefits.map((benefitId) => {
-                                    const benefit = benefits.find(
-                                        (b) => b.id === benefitId
-                                    );
+                                    const benefit = benefits.find((b) => b.id === benefitId);
                                     return (
-                                        <div
-                                            key={benefitId}
-                                            className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
+                                        <div key={benefitId} className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
                                             <span>{benefit.name}</span>
                                             <button
-                                                onClick={() =>
-                                                    toggleBenefit(benefitId)
-                                                }
+                                                onClick={() => toggleBenefit(benefitId)}
                                                 className="ml-2 text-gray-500 hover:text-gray-700">
                                                 ×
                                             </button>
@@ -553,10 +423,7 @@ const ProductGrid = () => {
                             Hiển thị {sortedProducts.length} sản phẩm{' '}
                             {activeCategory !== 'all' &&
                                 activeSubcategories.length === 0 &&
-                                `trong ${categories.find(
-                                    (cat) => cat.id === activeCategory
-                                )?.name
-                                }`}
+                                `trong ${categories.find((cat) => cat.id === activeCategory)?.name}`}
                         </p>
                         <select
                             className="border rounded-md px-3 py-2"
@@ -564,9 +431,7 @@ const ProductGrid = () => {
                             onChange={handleSortChange}>
                             <option value="default">Sắp xếp theo</option>
                             <option value="price-asc">Giá: Thấp đến cao</option>
-                            <option value="price-desc">
-                                Giá: Cao đến thấp
-                            </option>
+                            <option value="price-desc">Giá: Cao đến thấp</option>
                             <option value="name-asc">Tên: A-Z</option>
                             <option value="name-desc">Tên: Z-A</option>
                         </select>
@@ -575,8 +440,7 @@ const ProductGrid = () => {
                     {currentProducts.length === 0 ? (
                         <div className="text-center py-10">
                             <p className="text-gray-500">
-                                Không tìm thấy sản phẩm phù hợp với bộ lọc đã
-                                chọn.
+                                Không tìm thấy sản phẩm phù hợp với bộ lọc đã chọn.
                             </p>
                             <button
                                 onClick={resetFilters}
@@ -587,14 +451,15 @@ const ProductGrid = () => {
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {currentProducts.map((product) => (
-                                <div key={product.productId} className="relative">
+                                <Link
+                                    key={product.productId}
+                                    to={`/san-pham/${product.productId}`}
+                                    className="relative"
+                                    onClick={() => console.log(`Navigating to /san-pham/${product.productId}`)}>
                                     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                                         <div className="relative">
                                             <img
-                                                src={
-                                                    product.image ||
-                                                    '/placeholder.svg'
-                                                }
+                                                src={product.image || '/placeholder.svg'}
                                                 alt={product.title}
                                                 className="w-full h-64 object-cover"
                                             />
@@ -605,30 +470,26 @@ const ProductGrid = () => {
                                             )}
                                         </div>
                                         <div className="p-4">
-                                            <h3 className="font-medium text-gray-900">
-                                                {product.title}
-                                            </h3>
+                                            <h3 className="font-medium text-gray-900">{product.title}</h3>
+                                            <p className="text-sm text-gray-500 mb-2">{product.description}</p>
                                             <p className="text-sm text-gray-500 mb-2">
-                                                {product.description}
+                                                Công dụng: {getBenefitNames(product.benefit) || 'Không có'}
                                             </p>
                                             <div className="flex items-center justify-between">
                                                 <div className="flex items-center">
-                                                    <span className="font-bold text-lg">
-                                                        {formatVND(product.price)}
-                                                    </span>
+                                                    <span className="font-bold text-lg">{formatVND(product.price)}</span>
                                                     {product.originalPrice && (
                                                         <span className="text-gray-400 line-through ml-2 text-sm">
-                                                            {formatVND(
-                                                                product.originalPrice
-                                                            )}
+                                                            {formatVND(product.originalPrice)}
                                                         </span>
                                                     )}
                                                 </div>
                                                 <button
                                                     className="w-8 h-8 bg-white rounded-full flex items-center justify-center border border-gray-200 hover:bg-gray-100"
-                                                    onClick={() =>
-                                                        handleAddToCart(product)
-                                                    }>
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        handleAddToCart(product);
+                                                    }}>
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         className="h-5 w-5 text-gray-600"
@@ -646,7 +507,7 @@ const ProductGrid = () => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     )}
@@ -655,44 +516,25 @@ const ProductGrid = () => {
                         <div className="flex justify-center mt-10">
                             <nav className="flex items-center space-x-2">
                                 <button
-                                    onClick={() =>
-                                        setCurrentPage((prev) =>
-                                            Math.max(prev - 1, 1)
-                                        )
-                                    }
+                                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                                     disabled={currentPage === 1}
-                                    className={`w-8 h-8 flex items-center justify-center rounded-full ${currentPage === 1
-                                            ? 'text-gray-400 cursor-not-allowed'
-                                            : 'text-gray-700 hover:bg-gray-100'
-                                        }`}>
+                                    className={`w-8 h-8 flex items-center justify-center rounded-full ${currentPage === 1 ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'}`}>
                                     {"<"}
                                 </button>
 
                                 {[...Array(totalPages)].map((_, index) => (
                                     <button
                                         key={index}
-                                        onClick={() =>
-                                            setCurrentPage(index + 1)
-                                        }
-                                        className={`w-8 h-8 flex items-center justify-center rounded-full ${currentPage === index + 1
-                                                ? 'bg-gray-800 text-white'
-                                                : 'text-gray-700 hover:bg-gray-100'
-                                            }`}>
+                                        onClick={() => setCurrentPage(index + 1)}
+                                        className={`w-8 h-8 flex items-center justify-center rounded-full ${currentPage === index + 1 ? 'bg-gray-800 text-white' : 'text-gray-700 hover:bg-gray-100'}`}>
                                         {index + 1}
                                     </button>
                                 ))}
 
                                 <button
-                                    onClick={() =>
-                                        setCurrentPage((prev) =>
-                                            Math.min(prev + 1, totalPages)
-                                        )
-                                    }
+                                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                                     disabled={currentPage === totalPages}
-                                    className={`w-8 h-8 flex items-center justify-center rounded-full ${currentPage === totalPages
-                                            ? 'text-gray-400 cursor-not-allowed'
-                                            : 'text-gray-700 hover:bg-gray-100'
-                                        }`}>
+                                    className={`w-8 h-8 flex items-center justify-center rounded-full ${currentPage === totalPages ? 'text-gray-400 cursor-not-allowed' : 'text-gray-700 hover:bg-gray-100'}`}>
                                     {">"}
                                 </button>
                             </nav>
