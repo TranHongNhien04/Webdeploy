@@ -352,7 +352,20 @@
           ]
         }
       ],
-      "cart": []
+      "cart": [
+        {
+          "productId": "7",
+          "title": "Dầu gội dưỡng tóc",
+          "price": 650000,
+          "quantity": 1
+        },
+        {
+          "productId": "11",
+          "title": "Dầu xả dưỡng tóc",
+          "price": 1100000,
+          "quantity": 1
+        }
+      ]
     }
   ],
   "brands": [

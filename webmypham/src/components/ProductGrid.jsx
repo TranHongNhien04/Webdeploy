@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import Toast from './Toast';
+import { Link } from 'react-router-dom';
 
 const ProductGrid = () => {
     const { addToCart } = useCart();
@@ -20,7 +21,6 @@ const ProductGrid = () => {
     const [sortBy, setSortBy] = useState('default');
     const [priceRange, setPriceRange] = useState({ min: 0, max: 10000000 });
     const [toast, setToast] = useState(null);
-    // VND formatter
     const formatVND = (amount) => {
         return new Intl.NumberFormat('vi-VN', {
             style: 'currency',
@@ -33,57 +33,46 @@ const ProductGrid = () => {
         async function fetchData() {
             setLoading(true);
             try {
-                // Fetch products
-                const productsResponse = await fetch(
-                    'http://localhost:3001/products'
-                );
-                if (!productsResponse.ok) {
-                    throw new Error(
-                        `HTTP error! Status: ${productsResponse.status}`
-                    );
+                const [
+                    productsResponse,
+                    categoriesResponse,
+                    skinTypesResponse,
+                    benefitsResponse,
+                ] = await Promise.all([
+                    fetch('http://localhost:3001/products'),
+                    fetch('http://localhost:3001/categories'),
+                    fetch('http://localhost:3001/skinTypes'),
+                    fetch('http://localhost:3001/benefits'),
+                ]);
+
+                if (
+                    !productsResponse.ok ||
+                    !categoriesResponse.ok ||
+                    !skinTypesResponse.ok ||
+                    !benefitsResponse.ok
+                ) {
+                    throw new Error('Lỗi khi tải dữ liệu');
                 }
-                const productsData = await productsResponse.json();
+
+                const [
+                    productsData,
+                    categoriesData,
+                    skinTypesData,
+                    benefitsData,
+                ] = await Promise.all([
+                    productsResponse.json(),
+                    categoriesResponse.json(),
+                    skinTypesResponse.json(),
+                    benefitsResponse.json(),
+                ]);
+
                 setProducts(productsData);
-
-                // Fetch categories
-                const categoriesResponse = await fetch(
-                    'http://localhost:3001/categories'
-                );
-                if (!categoriesResponse.ok) {
-                    throw new Error(
-                        `HTTP error! Status: ${categoriesResponse.status}`
-                    );
-                }
-                const categoriesData = await categoriesResponse.json();
                 setCategories(categoriesData);
-
-                // Fetch skin types
-                const skinTypesResponse = await fetch(
-                    'http://localhost:3001/skinTypes'
-                );
-                if (!skinTypesResponse.ok) {
-                    throw new Error(
-                        `HTTP error! Status: ${skinTypesResponse.status}`
-                    );
-                }
-                const skinTypesData = await skinTypesResponse.json();
                 setSkinTypes(skinTypesData);
-
-                // Fetch benefits
-                const benefitsResponse = await fetch(
-                    'http://localhost:3001/benefits'
-                );
-                if (!benefitsResponse.ok) {
-                    throw new Error(
-                        `HTTP error! Status: ${benefitsResponse.status}`
-                    );
-                }
-                const benefitsData = await benefitsResponse.json();
                 setBenefits(benefitsData);
-
                 setError(null);
             } catch (err) {
-                console.error('Error fetching data:', err);
+                console.error('Lỗi khi tải dữ liệu:', err);
                 setError(
                     'Không thể tải dữ liệu sản phẩm. Vui lòng thử lại sau.'
                 );
@@ -96,33 +85,29 @@ const ProductGrid = () => {
     }, []);
 
     const toggleSubcategory = (subcategoryId) => {
-        if (activeSubcategories.includes(subcategoryId)) {
-            setActiveSubcategories(
-                activeSubcategories.filter((id) => id !== subcategoryId)
-            );
-        } else {
-            setActiveSubcategories([...activeSubcategories, subcategoryId]);
-        }
+        setActiveSubcategories((prev) =>
+            prev.includes(subcategoryId)
+                ? prev.filter((id) => id !== subcategoryId)
+                : [...prev, subcategoryId]
+        );
         setCurrentPage(1);
     };
 
     const toggleSkinType = (skinTypeId) => {
-        if (activeSkinTypes.includes(skinTypeId)) {
-            setActiveSkinTypes(
-                activeSkinTypes.filter((id) => id !== skinTypeId)
-            );
-        } else {
-            setActiveSkinTypes([...activeSkinTypes, skinTypeId]);
-        }
+        setActiveSkinTypes((prev) =>
+            prev.includes(skinTypeId)
+                ? prev.filter((id) => id !== skinTypeId)
+                : [...prev, skinTypeId]
+        );
         setCurrentPage(1);
     };
 
     const toggleBenefit = (benefitId) => {
-        if (activeBenefits.includes(benefitId)) {
-            setActiveBenefits(activeBenefits.filter((id) => id !== benefitId));
-        } else {
-            setActiveBenefits([...activeBenefits, benefitId]);
-        }
+        setActiveBenefits((prev) =>
+            prev.includes(benefitId)
+                ? prev.filter((id) => id !== benefitId)
+                : [...prev, benefitId]
+        );
         setCurrentPage(1);
     };
 
@@ -134,26 +119,20 @@ const ProductGrid = () => {
             !activeSubcategories.includes(product.subcategory)
         )
             return false;
-        if (activeSkinTypes.length > 0) {
-            if (
-                !product.skinType.some((type) =>
-                    activeSkinTypes.includes(type)
-                ) &&
-                !product.skinType.includes('all')
+        if (
+            activeSkinTypes.length > 0 &&
+            !product.skinType.some(
+                (type) => activeSkinTypes.includes(type) || type === 'all'
             )
-                return false;
-        }
-        if (activeBenefits.length > 0) {
-            if (
-                !product.benefit.some((benefit) =>
-                    activeBenefits.includes(benefit)
-                )
-            )
-                return false;
-        }
+        )
+            return false;
+        if (
+            activeBenefits.length > 0 &&
+            !product.benefit.some((benefit) => activeBenefits.includes(benefit))
+        )
+            return false;
         if (product.price < priceRange.min || product.price > priceRange.max)
             return false;
-
         return true;
     });
 
@@ -233,6 +212,13 @@ const ProductGrid = () => {
             message: `Đã thêm "${product.title}" vào giỏ hàng!`,
             type: 'success',
         });
+    };
+
+    const getBenefitNames = (benefitIds) => {
+        return benefitIds
+            .map((id) => benefits.find((b) => b.id === id)?.name)
+            .filter(Boolean)
+            .join(', ');
     };
 
     if (loading) {
@@ -548,6 +534,78 @@ const ProductGrid = () => {
                                 activeSkinTypes.length > 0 ||
                                 activeBenefits.length > 0) && (
                                 <button
+                                    onClick={() => handleCategoryChange('all')}
+                                    className="ml-2 text-gray-500 hover:text-gray-700">
+                                    ×
+                                </button>
+                            )}
+
+                            {activeSubcategories.map((subId) => {
+                                const subcategory = currentSubcategories.find(
+                                    (sub) => sub.id === subId
+                                );
+                                if (!subcategory) return null;
+                                return (
+                                    <div
+                                        key={subId}
+                                        className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
+                                        <span>{subcategory.name}</span>
+                                        <button
+                                            onClick={() =>
+                                                toggleSubcategory(subId)
+                                            }
+                                            className="ml-2 text-gray-500 hover:text-gray-700">
+                                            ×
+                                        </button>
+                                    </div>
+                                );
+                            })}
+
+                            {activeSkinTypes.map((skinTypeId) => {
+                                const skinType = skinTypes.find(
+                                    (type) => type.id === skinTypeId
+                                );
+                                return (
+                                    <div
+                                        key={skinTypeId}
+                                        className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
+                                        <span>{skinType.name}</span>
+                                        <button
+                                            onClick={() =>
+                                                toggleSkinType(skinTypeId)
+                                            }
+                                            className="ml-2 text-gray-500 hover:text-gray-700">
+                                            ×
+                                        </button>
+                                    </div>
+                                );
+                            })}
+
+                            {activeBenefits.map((benefitId) => {
+                                const benefit = benefits.find(
+                                    (b) => b.id === benefitId
+                                );
+                                return (
+                                    <div
+                                        key={benefitId}
+                                        className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
+                                        <span>{benefit.name}</span>
+                                        <button
+                                            onClick={() =>
+                                                toggleBenefit(benefitId)
+                                            }
+                                            className="ml-2 text-gray-500 hover:text-gray-700">
+                                            ×
+                                        </button>
+                                    </div>
+                                );
+                            })}
+
+                            {(activeCategory !== 'all' ||
+                                activeSubcategories.length > 0 ||
+                                activeSkinTypes.length > 0 ||
+                                activeBenefits.length > 0) && (
+                                <button
                                     onClick={resetFilters}
                                     className="text-gray-700 text-sm hover:text-gray-900 hover:underline">
                                     Xóa tất cả
@@ -596,9 +654,15 @@ const ProductGrid = () => {
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {currentProducts.map((product) => (
-                                <div
+                                <Link
                                     key={product.productId}
-                                    className="relative">
+                                    to={`/san-pham/${product.productId}`}
+                                    className="relative"
+                                    onClick={() =>
+                                        console.log(
+                                            `Navigating to /san-pham/${product.productId}`
+                                        )
+                                    }>
                                     <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                                         <div className="relative">
                                             <img
@@ -622,6 +686,12 @@ const ProductGrid = () => {
                                             <p className="text-sm text-gray-500 mb-2">
                                                 {product.description}
                                             </p>
+                                            <p className="text-sm text-gray-500 mb-2">
+                                                Công dụng:{' '}
+                                                {getBenefitNames(
+                                                    product.benefit
+                                                ) || 'Không có'}
+                                            </p>
                                             <div className="flex items-center justify-between">
                                                 <div className="flex items-center">
                                                     <span className="font-bold text-lg">
@@ -639,9 +709,12 @@ const ProductGrid = () => {
                                                 </div>
                                                 <button
                                                     className="w-8 h-8 bg-white rounded-full flex items-center justify-center border border-gray-200 hover:bg-gray-100"
-                                                    onClick={() =>
-                                                        handleAddToCart(product)
-                                                    }>
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        handleAddToCart(
+                                                            product
+                                                        );
+                                                    }}>
                                                     <svg
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         className="h-5 w-5 text-gray-600"
@@ -659,7 +732,7 @@ const ProductGrid = () => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     )}

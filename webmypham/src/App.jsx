@@ -11,6 +11,7 @@ import ScrollToTop from './components/ScrollToTop';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import UserProfileDetails from './pages/UserProfileDetails';
+import ProductDetailPage from './pages/ProductDetailPage';
 
 function App() {
     return (
@@ -22,6 +23,10 @@ function App() {
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/san-pham" element={<ProductPage />} />
+                        <Route
+                            path="/san-pham/:productId"
+                            element={<ProductDetailPage />}
+                        />
                         <Route path="/gioi-thieu" element={<Introduce />} />
                         <Route path="/dich-vu" element={<Service />} />
                         <Route path="/lien-he" element={<Contact />} />
