@@ -79,7 +79,8 @@
             "ward": "Bà điểm",
             "note": ""
           },
-          "totalAmount": 1850000,
+          "totalAmount": 1450000,
+          "status": "Chưa giao",
           "items": [
             {
               "productId": "9",
@@ -88,7 +89,7 @@
             },
             {
               "productId": "2",
-              "price": 550000,
+              "price": 150000,
               "quantity": 1
             }
           ]
@@ -107,11 +108,12 @@
             "ward": "Bà điểm",
             "note": "wwwwwwwwwwwwwwwwwwwwww"
           },
-          "totalAmount": 800000,
+          "totalAmount": 200000,
+          "status": "Chưa giao",
           "items": [
             {
               "productId": "1",
-              "price": 800000,
+              "price": "200000",
               "quantity": 1
             }
           ]
@@ -133,6 +135,7 @@
           "subtotal": 150000,
           "shippingFee": 35000,
           "totalAmount": 185000,
+          "status": "Đang giao",
           "items": [
             {
               "productId": "2",
@@ -158,6 +161,7 @@
           "subtotal": 570000,
           "shippingFee": 0,
           "totalAmount": 570000,
+          "status": "Đang giao",
           "items": [
             {
               "productId": "3",
@@ -188,6 +192,7 @@
           "subtotal": 200000,
           "shippingFee": 35000,
           "totalAmount": 235000,
+          "status": "Đã giao",
           "items": [
             {
               "productId": "1",
@@ -213,6 +218,7 @@
           "subtotal": 210000,
           "shippingFee": 35000,
           "totalAmount": 245000,
+          "status": "Đang giao",
           "items": [
             {
               "productId": "3",
@@ -238,6 +244,7 @@
           "subtotal": 1890000,
           "shippingFee": 0,
           "totalAmount": 1890000,
+          "status": "Chưa giao",
           "items": [
             {
               "productId": "3",
@@ -263,6 +270,7 @@
           "subtotal": 350000,
           "shippingFee": 0,
           "totalAmount": 350000,
+          "status": "Chưa giao",
           "items": [
             {
               "productId": "1",
@@ -293,6 +301,7 @@
           "subtotal": 150000,
           "shippingFee": 35000,
           "totalAmount": 185000,
+          "status": "Đang giao",
           "items": [
             {
               "productId": "2",
@@ -318,6 +327,7 @@
           "subtotal": 200000,
           "shippingFee": 35000,
           "totalAmount": 235000,
+          "status": "Chưa giao",
           "items": [
             {
               "productId": "1",
@@ -343,6 +353,7 @@
           "subtotal": 200000,
           "shippingFee": 35000,
           "totalAmount": 235000,
+          "status": "Đã hủy",
           "items": [
             {
               "productId": "1",
@@ -548,7 +559,7 @@
       "description": "Làm sạch và dưỡng ẩm cho da",
       "price": 450000,
       "originalPrice": null,
-      "image": "https://media.hasaki.vn/wysiwyg/PhuongThao/sua-tam-duong-the-dove-da-am-min-luu-huong-ngot-ngao-500g-1.jpg",
+      "image": "https://media.hasaki.vn/wysiwyg/minhchau/sua-tam-lifebuoy-detox-va-bao-ve-khoi-vi-khuan-850g-1.jpg",
       "onSale": false,
       "category": "body-care",
       "subcategory": "shower-gel",
@@ -724,7 +735,7 @@
     {
       "id": "body-care",
       "name": "Chăm sóc cơ thể",
-      "image": "https://media.hasaki.vn/wysiwyg/minhchau/sua-tam-lifebuoy-detox-va-bao-ve-khoi-vi-khuan-850g-1_1.jpg",
+      "image": "https://media.hasaki.vn/wysiwyg/minhchau/sua-tam-lifebuoy-detox-va-bao-ve-khoi-vi-khuan-850g-1.jpg",
       "subcategories": [
         {
           "id": "shower-gel",
@@ -1005,6 +1016,43 @@
       "message": "áccccccccccccccccc",
       "status": "pending",
       "createdAt": "2025-05-04T15:13:06.271Z"
+    }
+  ],
+  "contacts": [
+    {
+      "id": "1",
+      "name": "Ngọc Linh",
+      "email": "ngoclinh@example.com",
+      "message": "Mình muốn hỏi thêm về sản phẩm Serum Vitamin C, có phù hợp với da khô không?",
+      "date": "2025-05-07"
+    },
+    {
+      "id": "2",
+      "name": "Thanh Hà",
+      "email": "thanhha@example.com",
+      "message": "Shop có sản phẩm nào dành cho da thường không? Mình cần tư vấn thêm.",
+      "date": "2025-05-08"
+    },
+    {
+      "id": "3",
+      "name": "Minh Tuấn",
+      "email": "minhtuan@example.com",
+      "message": "Da mình bị dầu nhiều, có toner nào giúp kiềm dầu tốt không?",
+      "date": "2025-05-08"
+    },
+    {
+      "id": "4",
+      "name": "Nguyễn Ngọc Hồng Minh",
+      "email": "nguyenngochongminh@gmail.com",
+      "message": "Mình muốn đặt lịch tư vấn chăm sóc da mặt, da mình bị khô và bong tróc nhiều.",
+      "date": "2025-05-07"
+    },
+    {
+      "id": "5",
+      "name": "Nhiên",
+      "email": "nhien@gmail.com",
+      "message": "Shop có kem dưỡng nào dành cho da khô và nhạy cảm không?",
+      "date": "2025-05-06"
     }
   ]
 }

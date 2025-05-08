@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import * as XLSX from 'xlsx'; // Requires: npm install xlsx
+import * as XLSX from 'xlsx';
 
 const Dashboard = () => {
     const [reportData, setReportData] = useState([]);
@@ -19,85 +19,94 @@ const Dashboard = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
 
-    // Helper to format date from "6/5/2025" to "06/05/2025"
     const formatDate = (dateStr) => {
-        const [day, month, year] = dateStr.split('/');
+        const [year, month, day] = dateStr.split('-');
         return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
     };
 
-    // Helper to format currency in VND
     const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('vi-VN', {
-            style: 'currency',
-            currency: 'VND',
-        }).format(amount);
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
     };
 
-    // Helper to determine delivery status based on order age
-    const getStatus = (orderDate) => {
-        const [day, month, year] = orderDate.split('/').map(Number);
-        const orderDateObj = new Date(year, month - 1, day);
-        const today = new Date('2025-05-08'); // Current date from context
-        const diffDays = Math.floor((today - orderDateObj) / (1000 * 60 * 60 * 24));
-
-        if (diffDays <= 7) {
-            return { status: 'Chưa giao', statusColor: 'text-blue-500' };
-        } else if (diffDays <= 14) {
-            return { status: 'Đang giao', statusColor: 'text-yellow-500' };
-        } else {
-            return { status: 'Đã giao', statusColor: 'text-green-500' };
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'Chưa giao': return 'text-blue-500';
+            case 'Đang giao': return 'text-yellow-500';
+            case 'Đã giao': return 'text-green-500';
+            case 'Đã hủy': return 'text-red-500';
+            default: return 'text-gray-500';
         }
     };
 
-    // Convert date string "DD/MM/YYYY" to Date object for comparison
+    const mapStatusToFilter = (status) => {
+        switch (status) {
+            case 'Chưa giao': return 'pending';
+            case 'Đang giao': return 'shipped';
+            case 'Đã giao': return 'delivered';
+            case 'Đã hủy': return 'canceled';
+            default: return '';
+        }
+    };
+
+    const mapFilterToStatus = (filter) => {
+        switch (filter) {
+            case 'pending': return 'Chưa giao';
+            case 'shipped': return 'Đang giao';
+            case 'delivered': return 'Đã giao';
+            case 'canceled': return 'Đã hủy';
+            default: return '';
+        }
+    };
+
     const parseDate = (dateStr) => {
-        const [day, month, year] = dateStr.split('/').map(Number);
+        const [year, month, day] = dateStr.split('-').map(Number);
         return new Date(year, month - 1, day);
     };
 
-    // Fetch and process order data
     useEffect(() => {
         fetch('http://localhost:3001/users')
             .then((response) => response.json())
             .then((users) => {
                 const orders = users
-                    .filter((user) => user.orders && user.orders.length > 0)
                     .flatMap((user) =>
                         user.orders.map((order) => ({
                             ...order,
                             customerName: user.name,
                             userId: user.id,
+                            rawDate: order.date,
                         }))
-                    );
-
-                const formattedData = orders.map((order) => {
-                    const statusInfo = getStatus(order.date);
-                    return {
+                    )
+                    .map((order) => ({
                         orderId: order.id,
-                        name: order.customerInfo.fullName,
+                        name: order.customerName,
                         value: formatCurrency(order.totalAmount),
                         date: formatDate(order.date),
                         rawDate: order.date,
-                        status: statusInfo.status,
-                        statusColor: statusInfo.statusColor,
-                    };
-                });
-                setReportData(formattedData);
-                setFilteredData(formattedData);
+                        status: order.status,
+                        statusColor: getStatusColor(order.status),
+                    }));
+                setReportData(orders);
+                setFilteredData(orders);
 
-                const totalRevenue = orders.reduce((sum, order) => sum + order.totalAmount, 0);
+                const totalRevenue = users
+                    .flatMap((user) => user.orders)
+                    .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
                 setRevenue(totalRevenue);
                 const profitMargin = 0.35;
                 setProfit(totalRevenue * profitMargin);
+
                 const uniqueUsers = new Set(
-                    orders.filter((order) => order.date.startsWith('5/')).map((order) => order.userId)
+                    users
+                        .filter((user) =>
+                            user.orders.some((o) => parseDate(o.date) >= new Date('2025-05-01'))
+                        )
+                        .map((user) => user.id)
                 );
                 setNewCustomers(uniqueUsers.size);
             })
             .catch((error) => console.error('Error fetching orders:', error));
     }, []);
 
-    // Apply filters
     useEffect(() => {
         let filtered = reportData;
 
@@ -110,7 +119,8 @@ const Dashboard = () => {
             filtered = filtered.filter((order) => parseDate(order.rawDate) <= end);
         }
         if (filters.status) {
-            filtered = filtered.filter((order) => order.status === filters.status);
+            const statusDisplay = mapFilterToStatus(filters.status);
+            filtered = filtered.filter((order) => order.status === statusDisplay);
         }
 
         setFilteredData(filtered);
@@ -119,16 +129,11 @@ const Dashboard = () => {
         setSelectAll(false);
     }, [filters, reportData]);
 
-    // Handle filter changes
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-        setFilters((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        setFilters((prev) => ({ ...prev, [name]: value }));
     };
 
-    // Pagination logic
     const totalPages = Math.ceil(filteredData.length / rowsPerPage);
     const paginatedData = filteredData.slice(
         (currentPage - 1) * rowsPerPage,
@@ -150,27 +155,18 @@ const Dashboard = () => {
         setSelectedOrders([]);
     };
 
-    // Handle select all checkbox
     const handleSelectAll = () => {
         setSelectAll(!selectAll);
         if (!selectAll) {
-            const currentPageIndices = paginatedData.map((_, index) =>
-                getGlobalIndex(index)
-            );
+            const currentPageIndices = paginatedData.map((_, index) => (currentPage - 1) * rowsPerPage + index);
             setSelectedOrders(currentPageIndices);
         } else {
             setSelectedOrders([]);
         }
     };
 
-    // Helper to get global index in filteredData
-    const getGlobalIndex = (localIndex) => {
-        return (currentPage - 1) * rowsPerPage + localIndex;
-    };
-
-    // Handle individual row checkbox
     const handleRowSelect = (index) => {
-        const globalIndex = getGlobalIndex(index);
+        const globalIndex = (currentPage - 1) * rowsPerPage + index;
         setSelectedOrders((prev) => {
             if (prev.includes(globalIndex)) {
                 const newSelected = prev.filter((i) => i !== globalIndex);
@@ -184,17 +180,22 @@ const Dashboard = () => {
         });
     };
 
-    // Update status of selected orders
     const handlePrepareAndDeliver = () => {
         const updatedData = [...reportData];
         let changesMade = false;
 
         selectedOrders.forEach((globalIndex) => {
             const order = updatedData[globalIndex];
-            if (order && order.status === 'Chưa giao') {
-                order.status = 'Đang giao';
-                order.statusColor = 'text-yellow-500';
-                changesMade = true;
+            if (order) {
+                if (order.status === 'Chưa giao') {
+                    order.status = 'Đang giao';
+                    order.statusColor = 'text-yellow-500';
+                    changesMade = true;
+                } else if (order.status === 'Đang giao') {
+                    order.status = 'Đã giao';
+                    order.statusColor = 'text-green-500';
+                    changesMade = true;
+                }
             }
         });
 
@@ -203,12 +204,122 @@ const Dashboard = () => {
             setFilteredData(updatedData);
             setSelectedOrders([]);
             setSelectAll(false);
+
+            fetch('http://localhost:3001/users')
+                .then((response) => response.json())
+                .then((users) => {
+                    users.forEach((user) => {
+                        user.orders.forEach((order) => {
+                            const matchingOrder = updatedData.find((o) => o.orderId === order.id);
+                            if (matchingOrder) {
+                                order.status = matchingOrder.status;
+                            }
+                        });
+                    });
+                    return fetch('http://localhost:3001/users', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(users),
+                    });
+                })
+                .catch((error) => console.error('Error updating orders:', error));
         }
     };
 
-    // Export to Excel
+    const handleImport = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+            const data = new Uint8Array(event.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+            const updatedOrders = jsonData.map((row) => ({
+                id: row['Mã đơn hàng'] || `order-${Date.now()}`,
+                date: row['Ngày đặt hàng'] ? row['Ngày đặt hàng'].split('/').reverse().join('-') : '2025-05-08',
+                time: new Date().toLocaleTimeString(),
+                createdAt: new Date().toISOString(),
+                customerInfo: {
+                    fullName: row['Tên khách hàng'] || 'Unknown',
+                    phone: 'N/A',
+                    address: 'N/A',
+                    city: 'N/A',
+                    district: 'N/A',
+                    ward: 'N/A',
+                    note: '',
+                },
+                totalAmount: parseFloat(row['Giá trị đơn hàng'].replace(/[^0-9.-]+/g, '')) || 0,
+                status: row['Trạng thái'] || 'Chưa giao',
+                items: [], // Simplified; you can extend to include items if needed
+            }));
+
+            fetch('http://localhost:3001/users')
+                .then((response) => response.json())
+                .then((users) => {
+                    const targetUser = users.find((user) => user.id === 'user1746421471332');
+                    if (targetUser) {
+                        targetUser.orders.push(...updatedOrders);
+                        return fetch('http://localhost:3001/users', {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(users),
+                        });
+                    }
+                })
+                .then(() => {
+                    fetch('http://localhost:3001/users')
+                        .then((response) => response.json())
+                        .then((users) => {
+                            const orders = users
+                                .flatMap((user) =>
+                                    user.orders.map((order) => ({
+                                        ...order,
+                                        customerName: user.name,
+                                        userId: user.id,
+                                        rawDate: order.date,
+                                    }))
+                                )
+                                .map((order) => ({
+                                    orderId: order.id,
+                                    name: order.customerName,
+                                    value: formatCurrency(order.totalAmount),
+                                    date: formatDate(order.date),
+                                    rawDate: order.date,
+                                    status: order.status,
+                                    statusColor: getStatusColor(order.status),
+                                }));
+                            setReportData(orders);
+                            setFilteredData(orders);
+
+                            const totalRevenue = users
+                                .flatMap((user) => user.orders)
+                                .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+                            setRevenue(totalRevenue);
+                            const profitMargin = 0.35;
+                            setProfit(totalRevenue * profitMargin);
+
+                            const uniqueUsers = new Set(
+                                users
+                                    .filter((user) =>
+                                        user.orders.some((o) => parseDate(o.date) >= new Date('2025-05-01'))
+                                    )
+                                    .map((user) => user.id)
+                            );
+                            setNewCustomers(uniqueUsers.size);
+                        });
+                })
+                .catch((error) => console.error('Error importing orders:', error));
+        };
+
+        reader.readAsArrayBuffer(file);
+    };
+
     const handleExport = () => {
         const exportData = filteredData.map((row) => ({
+            'Mã đơn hàng': row.orderId,
             'Tên khách hàng': row.name,
             'Giá trị đơn hàng': row.value,
             'Ngày đặt hàng': row.date,
@@ -221,13 +332,11 @@ const Dashboard = () => {
         XLSX.writeFile(workbook, 'orders_export.xlsx');
     };
 
-    // Handle view order details
     const handleViewDetails = (order) => {
         setSelectedOrder(order);
         setShowModal(true);
     };
 
-    // Close modal
     const handleCloseModal = () => {
         setShowModal(false);
         setSelectedOrder(null);
@@ -285,9 +394,10 @@ const Dashboard = () => {
                                 className="w-full p-2 border rounded"
                             >
                                 <option value="">Tất cả</option>
-                                <option value="Chưa giao">Chưa giao</option>
-                                <option value="Đang giao">Đang giao</option>
-                                <option value="Đã giao">Đã giao</option>
+                                <option value="pending">Chưa giao</option>
+                                <option value="shipped">Đang giao</option>
+                                <option value="delivered">Đã giao</option>
+                                <option value="canceled">Đã hủy</option>
                             </select>
                         </div>
                     </div>
@@ -306,7 +416,15 @@ const Dashboard = () => {
                         >
                             Chuẩn bị và giao
                         </button>
-                        <button className="bg-blue-500 text-white px-4 py-2 rounded">Nhập</button>
+                        <label className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer">
+                            Nhập
+                            <input
+                                type="file"
+                                accept=".xlsx, .xls"
+                                onChange={handleImport}
+                                className="hidden"
+                            />
+                        </label>
                         <button
                             onClick={handleExport}
                             className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -334,11 +452,11 @@ const Dashboard = () => {
                     </thead>
                     <tbody>
                         {paginatedData.map((row, index) => (
-                            <tr key={index} className="border-b">
+                            <tr key={row.orderId} className="border-b">
                                 <td className="p-2">
                                     <input
                                         type="checkbox"
-                                        checked={selectedOrders.includes(getGlobalIndex(index))}
+                                        checked={selectedOrders.includes((currentPage - 1) * rowsPerPage + index)}
                                         onChange={() => handleRowSelect(index)}
                                     />
                                 </td>
@@ -362,7 +480,6 @@ const Dashboard = () => {
                     </tbody>
                 </table>
 
-                {/* Modal for Order Details */}
                 {showModal && selectedOrder && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
@@ -401,10 +518,7 @@ const Dashboard = () => {
                                 <button
                                     key={page}
                                     onClick={() => handlePageChange(page)}
-                                    className={`px-3 py-1 rounded ${currentPage === page
-                                        ? 'bg-blue-500 text-white'
-                                        : 'border'
-                                        }`}
+                                    className={`px-3 py-1 rounded ${currentPage === page ? 'bg-blue-500 text-white' : 'border'}`}
                                 >
                                     {page}
                                 </button>

@@ -16,31 +16,31 @@ import AdminPage from './pages/AdminPage';
 
 function App() {
     return (
-        <Router>
-            <AdminPage />
-        </Router>
-        // <AuthProvider>
-        //     <CartProvider>
-        //         <Router>
-        //             <ScrollToTop />
-        //             <Header />
-        //             <Routes>
-        //                 <Route path="/" element={<HomePage />} />
-        //                 <Route path="/san-pham" element={<ProductPage />} />
-        //                 <Route
-        //                     path="/san-pham/:productId"
-        //                     element={<ProductDetailPage />}
-        //                 />
-        //                 <Route path="/gioi-thieu" element={<Introduce />} />
-        //                 <Route path="/dich-vu" element={<Service />} />
-        //                 <Route path="/lien-he" element={<Contact />} />
-        //                 <Route path="/ho-so" element={<UserProfileDetails />} />
-        //                 <Route path="/gio-hang" element={<Cart />} />
-        //             </Routes>
-        //             <Footer />
-        //         </Router>
-        //     </CartProvider>
-        // </AuthProvider>
+        // <Router>
+        //     <AdminPage />
+        // </Router>
+        <AuthProvider>
+            <CartProvider>
+                <Router>
+                    <ScrollToTop />
+                    <Header />
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/san-pham" element={<ProductPage />} />
+                        <Route
+                            path="/san-pham/:productId"
+                            element={<ProductDetailPage />}
+                        />
+                        <Route path="/gioi-thieu" element={<Introduce />} />
+                        <Route path="/dich-vu" element={<Service />} />
+                        <Route path="/lien-he" element={<Contact />} />
+                        <Route path="/ho-so" element={<UserProfileDetails />} />
+                        <Route path="/gio-hang" element={<Cart />} />
+                    </Routes>
+                    <Footer />
+                </Router>
+            </CartProvider>
+        </AuthProvider>
     );
 }
 
