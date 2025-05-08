@@ -11,38 +11,8 @@
         13,
         17
       ],
-      "orders": [
-        {
-          "id": "order001",
-          "date": "2023-05-10",
-          "status": "delivered",
-          "items": [
-            {
-              "productId": 1,
-              "quantity": 1
-            },
-            {
-              "productId": 10,
-              "quantity": 2
-            }
-          ],
-          "total": 33
-        }
-      ],
-      "cart": [
-        {
-          "productId": "1",
-          "title": "Sữa rửa mặt dịu nhẹ",
-          "price": 32,
-          "quantity": 3
-        },
-        {
-          "productId": "4",
-          "title": "Kem dưỡng ẩm sâu",
-          "price": 48,
-          "quantity": 1
-        }
-      ]
+      "orders": [],
+      "cart": []
     },
     {
       "id": "user456",
@@ -54,6 +24,7 @@
         5,
         8
       ],
+      "orders": [],
       "cart": []
     },
     {
@@ -63,6 +34,7 @@
       "password": "000000",
       "skinType": "oily",
       "wishlist": [],
+      "orders": [],
       "cart": []
     },
     {
@@ -92,15 +64,306 @@
       "password": "456789",
       "skinType": "normal",
       "wishlist": [],
-      "orders": [],
-      "cart": [
+      "orders": [
         {
-          "productId": "2",
-          "title": "Serum Vitamin C",
-          "price": 22,
-          "quantity": 1
+          "id": "order-1746541296701",
+          "date": "2025-05-06",
+          "time": "21:21:36",
+          "createdAt": "2025-05-06T14:21:36.701Z",
+          "customerInfo": {
+            "fullName": "Nguyễn Minh",
+            "phone": "0971770425",
+            "address": "Hóc Môn",
+            "city": "Tp.Hồ Chí Minh",
+            "district": "Hóc môn",
+            "ward": "Bà điểm",
+            "note": ""
+          },
+          "totalAmount": 1450000,
+          "status": "Chưa giao",
+          "items": [
+            {
+              "productId": "9",
+              "price": 1300000,
+              "quantity": 1
+            },
+            {
+              "productId": "2",
+              "price": 150000,
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "id": "order-1746542082378",
+          "date": "2025-05-06",
+          "time": "21:34:42",
+          "createdAt": "2025-05-06T14:34:42.378Z",
+          "customerInfo": {
+            "fullName": "Nguyễn Minh",
+            "phone": "0971770425",
+            "address": "Hóc Môn",
+            "city": "Tp.Hồ Chí Minh",
+            "district": "Hóc môn",
+            "ward": "Bà điểm",
+            "note": "wwwwwwwwwwwwwwwwwwwwww"
+          },
+          "totalAmount": 200000,
+          "status": "Chưa giao",
+          "items": [
+            {
+              "productId": "1",
+              "price": 200000,
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "id": "order-1746542554956",
+          "date": "2025-05-06",
+          "time": "21:42:34",
+          "createdAt": "2025-05-06T14:42:34.956Z",
+          "customerInfo": {
+            "fullName": "Nguyễn Minh",
+            "phone": "0971770425",
+            "address": "Hóc Môn",
+            "city": "Tp.Hồ Chí Minh",
+            "district": "Hóc môn",
+            "ward": "Bà điểm",
+            "note": ""
+          },
+          "subtotal": 150000,
+          "shippingFee": 35000,
+          "totalAmount": 185000,
+          "status": "Đang giao",
+          "items": [
+            {
+              "productId": "2",
+              "price": 150000,
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "id": "order-1746543164928",
+          "date": "2025-05-06",
+          "time": "21:52:44",
+          "createdAt": "2025-05-06T14:52:44.928Z",
+          "customerInfo": {
+            "fullName": "Nguyễn Minh",
+            "phone": "0971770425",
+            "address": "Hóc Môn",
+            "city": "Tp.Hồ Chí Minh",
+            "district": "Hóc môn",
+            "ward": "ssssssssssss",
+            "note": ""
+          },
+          "subtotal": 570000,
+          "shippingFee": 0,
+          "totalAmount": 570000,
+          "status": "Đang giao",
+          "items": [
+            {
+              "productId": "3",
+              "price": 210000,
+              "quantity": 1
+            },
+            {
+              "productId": "4",
+              "price": 120000,
+              "quantity": 3
+            }
+          ]
+        },
+        {
+          "id": "order-1746543197215",
+          "date": "2025-05-06",
+          "time": "21:53:17",
+          "createdAt": "2025-05-06T14:53:17.215Z",
+          "customerInfo": {
+            "fullName": "Nguyễn Minh",
+            "phone": "0971770425",
+            "address": "Hóc Môn",
+            "city": "Tp.Hồ Chí Minh",
+            "district": "Hóc môn",
+            "ward": "ssssssssssss",
+            "note": ""
+          },
+          "subtotal": 200000,
+          "shippingFee": 35000,
+          "totalAmount": 235000,
+          "status": "Đã giao",
+          "items": [
+            {
+              "productId": "1",
+              "price": 200000,
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "id": "order-1746543216608",
+          "date": "2025-05-06",
+          "time": "21:53:36",
+          "createdAt": "2025-05-06T14:53:36.608Z",
+          "customerInfo": {
+            "fullName": "Nguyễn Minh",
+            "phone": "0971770425",
+            "address": "Hóc Môn",
+            "city": "Tp.Hồ Chí Minh",
+            "district": "Hóc môn",
+            "ward": "ssssssssssss",
+            "note": ""
+          },
+          "subtotal": 210000,
+          "shippingFee": 35000,
+          "totalAmount": 245000,
+          "status": "Đang giao",
+          "items": [
+            {
+              "productId": "3",
+              "price": 210000,
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "id": "order-1746543236227",
+          "date": "2025-05-06",
+          "time": "21:53:56",
+          "createdAt": "2025-05-06T14:53:56.227Z",
+          "customerInfo": {
+            "fullName": "Nguyễn Minh",
+            "phone": "0971770425",
+            "address": "Hóc Môn",
+            "city": "Tp.Hồ Chí Minh",
+            "district": "Hóc môn",
+            "ward": "ssssssssssss",
+            "note": ""
+          },
+          "subtotal": 1890000,
+          "shippingFee": 0,
+          "totalAmount": 1890000,
+          "status": "Chưa giao",
+          "items": [
+            {
+              "productId": "3",
+              "price": 210000,
+              "quantity": 9
+            }
+          ]
+        },
+        {
+          "id": "order-1746543440310",
+          "date": "2025-05-06",
+          "time": "21:57:20",
+          "createdAt": "2025-05-06T14:57:20.310Z",
+          "customerInfo": {
+            "fullName": "Nguyễn Minh",
+            "phone": "0971770425",
+            "address": "Hóc Môn",
+            "city": "Tp.Hồ Chí Minh",
+            "district": "Hóc môn",
+            "ward": "ssssssssssss",
+            "note": ""
+          },
+          "subtotal": 350000,
+          "shippingFee": 0,
+          "totalAmount": 350000,
+          "status": "Chưa giao",
+          "items": [
+            {
+              "productId": "1",
+              "price": 200000,
+              "quantity": 1
+            },
+            {
+              "productId": "2",
+              "price": 150000,
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "id": "order-1746543725228",
+          "date": "2025-05-06",
+          "time": "22:02:05",
+          "createdAt": "2025-05-06T15:02:05.227Z",
+          "customerInfo": {
+            "fullName": "Nguyễn Minh",
+            "phone": "0971770425",
+            "address": "Hóc Môn",
+            "city": "Tp.Hồ Chí Minh",
+            "district": "Hóc môn",
+            "ward": "ssssssssssss",
+            "note": ""
+          },
+          "subtotal": 150000,
+          "shippingFee": 35000,
+          "totalAmount": 185000,
+          "status": "Đang giao",
+          "items": [
+            {
+              "productId": "2",
+              "price": 150000,
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "id": "order-1746543894476",
+          "date": "2025-05-06",
+          "time": "22:04:54",
+          "createdAt": "2025-05-06T15:04:54.476Z",
+          "customerInfo": {
+            "fullName": "Nguyễn Minh",
+            "phone": "0971770425",
+            "address": "Hóc Môn",
+            "city": "Tp.Hồ Chí Minh",
+            "district": "Hóc môn",
+            "ward": "ssssssssssss",
+            "note": ""
+          },
+          "subtotal": 200000,
+          "shippingFee": 35000,
+          "totalAmount": 235000,
+          "status": "Chưa giao",
+          "items": [
+            {
+              "productId": "1",
+              "price": 200000,
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "id": "order-1746544258111",
+          "date": "2025-05-06",
+          "time": "22:10:58",
+          "createdAt": "2025-05-06T15:10:58.111Z",
+          "customerInfo": {
+            "fullName": "Nguyễn Ngọc Hồng Minh",
+            "phone": "0971770425",
+            "address": "Hóc Môn",
+            "city": "Tp.Hồ Chí Minh",
+            "district": "Hóc môn",
+            "ward": "ssssssssssss",
+            "note": ""
+          },
+          "subtotal": 200000,
+          "shippingFee": 35000,
+          "totalAmount": 235000,
+          "status": "Đã hủy",
+          "items": [
+            {
+              "productId": "1",
+              "price": 200000,
+              "quantity": 1
+            }
+          ]
         }
-      ]
+      ],
+      "cart": []
     }
   ],
   "brands": [
@@ -140,8 +403,8 @@
       "productId": "1",
       "title": "Sữa rửa mặt dịu nhẹ",
       "description": "Làm sạch sâu, không gây khô da",
-      "price": 800000,
-      "originalPrice": 1000000,
+      "price": 200000,
+      "originalPrice": 300000,
       "image": "https://down-vn.img.susercontent.com/file/vn-11134201-7r98o-lxpkta6s9dqz7e",
       "onSale": true,
       "category": "face-care",
@@ -153,14 +416,15 @@
       "benefit": [
         "hydrating"
       ],
-      "brandId": 1
+      "brandId": 1,
+      "id": "30c9"
     },
     {
       "productId": "2",
       "title": "Serum Vitamin C",
       "description": "Làm sáng da, mờ thâm nám",
-      "price": 550000,
-      "originalPrice": 750000,
+      "price": 150000,
+      "originalPrice": 200000,
       "image": "https://static.beautytocare.com/media/catalog/product/cache/global/image/1300x1300/85e4522595efc69f496374d01ef2bf13/g/a/garnier-skin-active-vitamin-c-anti-dark-spot-serum-30ml_3.jpg",
       "onSale": true,
       "category": "face-care",
@@ -173,14 +437,15 @@
         "brightening",
         "anti-aging"
       ],
-      "brandId": 2
+      "brandId": 2,
+      "id": "ebf8"
     },
     {
       "productId": "3",
       "title": "Kem chống nắng SPF 50",
       "description": "Bảo vệ da khỏi tia UV",
-      "price": 450000,
-      "originalPrice": 625000,
+      "price": 210000,
+      "originalPrice": 375000,
       "image": "https://product.hstatic.net/200000773671/product/367994919_623453963153199_1444243585286044090_n_85ef8b9d5d5c4117afd3280910566954_master.jpg",
       "onSale": true,
       "category": "face-care",
@@ -191,14 +456,15 @@
       "benefit": [
         "anti-aging"
       ],
-      "brandId": 3
+      "brandId": 3,
+      "id": "f82b"
     },
     {
       "productId": "4",
       "title": "Kem dưỡng ẩm sâu",
       "description": "Cấp ẩm 48h cho da khô",
-      "price": 1200000,
-      "originalPrice": 1500000,
+      "price": 120000,
+      "originalPrice": 150000,
       "image": "https://zencos.vn/wp-content/uploads/2022/10/gia-cong-kem-duong-am-tang-sau-4-955x960.jpg",
       "onSale": true,
       "category": "face-care",
@@ -210,7 +476,8 @@
       "benefit": [
         "hydrating"
       ],
-      "brandId": 4
+      "brandId": 4,
+      "id": "e1ac"
     },
     {
       "productId": "5",
@@ -226,7 +493,8 @@
         "all"
       ],
       "benefit": [],
-      "brandId": 5
+      "brandId": 5,
+      "id": "3555"
     },
     {
       "productId": "6",
@@ -243,7 +511,8 @@
         "combination"
       ],
       "benefit": [],
-      "brandId": 1
+      "brandId": 1,
+      "id": "da1d"
     },
     {
       "productId": "7",
@@ -257,7 +526,8 @@
       "subcategory": "shampoo",
       "skinType": [],
       "benefit": [],
-      "brandId": 2
+      "brandId": 2,
+      "id": "c999"
     },
     {
       "productId": "8",
@@ -276,7 +546,8 @@
       "benefit": [
         "hydrating"
       ],
-      "brandId": 3
+      "brandId": 3,
+      "id": "15f1"
     },
     {
       "productId": "9",
@@ -293,7 +564,8 @@
         "acne"
       ],
       "benefit": [],
-      "brandId": 4
+      "brandId": 4,
+      "id": "f405"
     },
     {
       "productId": "10",
@@ -310,7 +582,8 @@
         "combination"
       ],
       "benefit": [],
-      "brandId": 5
+      "brandId": 5,
+      "id": "760b"
     },
     {
       "productId": "11",
@@ -324,7 +597,8 @@
       "subcategory": "conditioner",
       "skinType": [],
       "benefit": [],
-      "brandId": 1
+      "brandId": 1,
+      "id": "7e57"
     },
     {
       "productId": "12",
@@ -342,7 +616,8 @@
       "benefit": [
         "anti-aging"
       ],
-      "brandId": 2
+      "brandId": 2,
+      "id": "9bbf"
     }
   ],
   "categories": [
