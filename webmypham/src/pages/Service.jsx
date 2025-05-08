@@ -16,7 +16,7 @@ const HeroSection = ({ scrollToBooking, scrollToServices }) => (
 
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6 z-1">
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
-                Dịch Vụ Tư Vấn Chọn Sản Phẩm
+                Dịch vụ tư vấn chọn sản phẩm
             </h1>
             <p className="text-lg md:text-xl text-white max-w-2xl mb-8">
                 Để có làn da khỏe đẹp, việc lựa chọn sản phẩm phù hợp là vô cùng
@@ -26,12 +26,12 @@ const HeroSection = ({ scrollToBooking, scrollToServices }) => (
                 <button
                     onClick={scrollToBooking}
                     className="bg-white text-black hover:bg-gray-100 py-3 px-6 rounded-md text-lg">
-                    Đặt Lịch Tư Vấn
+                    Đặt lịch tư vấn
                 </button>
                 <button
                     onClick={scrollToServices}
-                    className="text-white border border-white hover:bg-white/20 py-3 px-6 rounded-md text-lg">
-                    Tìm Hiểu Thêm
+                    className="text-black border bg-[#d4ecfe] hover:bg-[#6bb8f2] hover:text-black py-3 px-6 rounded-md text-lg">
+                    Tìm hiểu thêm
                 </button>
             </div>
         </div>
@@ -629,7 +629,7 @@ export default function Service() {
     }, [searchParams]);
 
     return (
-        <div className="container mx-auto px-4 pt-20">
+        <div className="mx-auto px-4 pt-5">
             <HeroSection
                 scrollToBooking={scrollToBooking}
                 scrollToServices={scrollToServices}

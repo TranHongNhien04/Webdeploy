@@ -7,7 +7,7 @@ import BrandsSection from './BrandsSection';
 
 export default function HomeContent() {
     return (
-        <div className="space-y-32">
+        <div className="space-y-32 bg-[#EDF6F9]">
             <AboutSection />
             <CategorySection />
             <BrandsSection />

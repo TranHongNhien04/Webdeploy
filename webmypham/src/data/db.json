@@ -364,6 +364,18 @@
           "title": "Dầu xả dưỡng tóc",
           "price": 1100000,
           "quantity": 1
+        },
+        {
+          "productId": "4",
+          "title": "Kem dưỡng ẩm sâu",
+          "price": 120000,
+          "quantity": 3
+        },
+        {
+          "productId": "2",
+          "title": "Serum Vitamin C",
+          "price": 150000,
+          "quantity": 1
         }
       ]
     }
@@ -432,8 +444,7 @@
       "category": "face-care",
       "subcategory": "serum",
       "skinType": [
-        "combination",
-        "aging"
+        "combination"
       ],
       "benefit": [
         "brightening",
@@ -612,9 +623,7 @@
       "onSale": true,
       "category": "face-care",
       "subcategory": "moisturizer",
-      "skinType": [
-        "aging"
-      ],
+      "skinType": [],
       "benefit": [
         "anti-aging"
       ],
@@ -771,16 +780,12 @@
       "name": "Da nhạy cảm"
     },
     {
-      "id": "acne",
-      "name": "Da mụn"
-    },
-    {
       "id": "combination",
       "name": "Da hỗn hợp"
     },
     {
-      "id": "aging",
-      "name": "Da lão hóa"
+      "id": "normal",
+      "name": "Da thường"
     }
   ],
   "benefits": [

@@ -1,8 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
-
+import Toast from './Toast';
 const ProductDetail = ({ product, brand, benefits }) => {
     const { addToCart } = useCart();
+    const [skinTypes, setSkinTypes] = useState([]);
+    const [toast, setToast] = useState(null);
+    useEffect(() => {
+        // Fetch skin types data
+        const fetchSkinTypes = async () => {
+            try {
+                const response = await fetch('http://localhost:3001/skinTypes');
+                if (response.ok) {
+                    const data = await response.json();
+                    setSkinTypes(data);
+                }
+            } catch (error) {
+                console.error('Error fetching skin types:', error);
+            }
+        };
+
+        fetchSkinTypes();
+    }, []);
 
     const formatVND = (amount) => {
         return new Intl.NumberFormat('vi-VN', {
@@ -20,13 +38,27 @@ const ProductDetail = ({ product, brand, benefits }) => {
             quantity: 1,
         };
         addToCart(cartItem);
-        alert(`Đã thêm "${product.title}" vào giỏ hàng!`);
+        setToast({
+            message: `Đã thêm "${product.title}" vào giỏ hàng!`,
+            type: 'success',
+        });
     };
 
     const getBenefitNames = (benefitIds) => {
         return benefitIds
             .map((id) => benefits.find((b) => b.id === id)?.name)
             .filter(Boolean)
+            .join(', ');
+    };
+
+    const getSkinTypeNames = (skinTypeIds) => {
+        if (!skinTypeIds || skinTypeIds.length === 0) return 'Tất cả loại da';
+
+        return skinTypeIds
+            .map((id) => {
+                const skinType = skinTypes.find((st) => st.id === id);
+                return skinType ? skinType.name : id;
+            })
             .join(', ');
     };
 
@@ -44,16 +76,27 @@ const ProductDetail = ({ product, brand, benefits }) => {
 
             {/* Thông tin sản phẩm */}
             <div className="w-full md:w-2/3">
-                <h1 className="text-2xl font-bold text-gray-800">{product.title}</h1>
-                <p className="text-lg text-gray-600 mt-1">Thương hiệu: {brand?.name || 'Không xác định'}</p>
-                <p className="text-3xl font-semibold text-gray-800 mt-2">{formatVND(product.price)}</p>
+                <h1 className="text-2xl font-bold text-gray-800">
+                    {product.title}
+                </h1>
+                <p className="text-lg text-gray-600 mt-1">
+                    Thương hiệu: {brand?.name || 'Không xác định'}
+                </p>
+                <p className="text-3xl font-semibold text-gray-800 mt-2">
+                    {formatVND(product.price)}
+                </p>
                 {product.originalPrice && (
-                    <p className="text-gray-400 line-through mt-1">{formatVND(product.originalPrice)}</p>
+                    <p className="text-gray-400 line-through mt-1">
+                        {formatVND(product.originalPrice)}
+                    </p>
                 )}
                 <p className="text-gray-600 mt-4">{product.description}</p>
-                <p className="text-gray-600 mt-2">Công dụng: {getBenefitNames(product.benefit) || 'Không có'}</p>
                 <p className="text-gray-600 mt-2">
-                    Phù hợp với: {product.skinType.join(', ') || 'Tất cả loại da'}
+                    Công dụng: {getBenefitNames(product.benefit) || 'Không có'}
+                </p>
+                <p className="text-gray-600 mt-2">
+                    Phù hợp với:{' '}
+                    {getSkinTypeNames(product.skinType) || 'Tất cả loại da'}
                 </p>
                 <div className="mt-4 flex gap-4">
                     <button
@@ -63,6 +106,13 @@ const ProductDetail = ({ product, brand, benefits }) => {
                     </button>
                 </div>
             </div>
+            {toast && (
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
+            )}
         </div>
     );
 };

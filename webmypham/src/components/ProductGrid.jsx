@@ -230,7 +230,7 @@ const ProductGrid = () => {
     }
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="mx-auto px-4 py-8 bg-[#EDF6F9]">
             <div className="md:hidden mb-4">
                 <button
                     className="w-full py-2 px-4 bg-gray-100 rounded-md flex items-center justify-between"
@@ -254,7 +254,7 @@ const ProductGrid = () => {
                 </button>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex flex-col md:flex-row gap-6 ">
                 <div
                     className={`md:w-1/4 lg:w-1/5 space-y-6 ${
                         showFilters ? 'block' : 'hidden md:block'
@@ -448,7 +448,7 @@ const ProductGrid = () => {
                         <div className="mb-4 flex flex-wrap gap-2">
                             {activeCategory !== 'all' &&
                                 activeSubcategories.length === 0 && (
-                                    <div className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
+                                    <div className="bg-[#97d3e7] text-sm rounded-full px-3 py-1 flex items-center">
                                         <span>
                                             {
                                                 categories.find(
@@ -476,7 +476,7 @@ const ProductGrid = () => {
                                 return (
                                     <div
                                         key={subId}
-                                        className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
+                                        className="bg-[#97d3e7] text-sm rounded-full px-3 py-1 flex items-center">
                                         <span>{subcategory.name}</span>
                                         <button
                                             onClick={() =>
@@ -496,7 +496,7 @@ const ProductGrid = () => {
                                 return (
                                     <div
                                         key={skinTypeId}
-                                        className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
+                                        className="bg-[#97d3e7] text-sm rounded-full px-3 py-1 flex items-center">
                                         <span>{skinType.name}</span>
                                         <button
                                             onClick={() =>
@@ -516,7 +516,7 @@ const ProductGrid = () => {
                                 return (
                                     <div
                                         key={benefitId}
-                                        className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
+                                        className="bg-[#97d3e7] text-sm rounded-full px-3 py-1 flex items-center">
                                         <span>{benefit.name}</span>
                                         <button
                                             onClick={() =>
@@ -548,7 +548,7 @@ const ProductGrid = () => {
                                 return (
                                     <div
                                         key={subId}
-                                        className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
+                                        className="bg-[#97d3e7] text-sm rounded-full px-3 py-1 flex items-center">
                                         <span>{subcategory.name}</span>
                                         <button
                                             onClick={() =>
@@ -568,7 +568,7 @@ const ProductGrid = () => {
                                 return (
                                     <div
                                         key={skinTypeId}
-                                        className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
+                                        className="bg-[#97d3e7] text-sm rounded-full px-3 py-1 flex items-center">
                                         <span>{skinType.name}</span>
                                         <button
                                             onClick={() =>
@@ -588,7 +588,7 @@ const ProductGrid = () => {
                                 return (
                                     <div
                                         key={benefitId}
-                                        className="bg-gray-100 text-sm rounded-full px-3 py-1 flex items-center">
+                                        className="bg-[#97d3e7] text-sm rounded-full px-3 py-1 flex items-center">
                                         <span>{benefit.name}</span>
                                         <button
                                             onClick={() =>
@@ -626,7 +626,10 @@ const ProductGrid = () => {
                                 }`}
                         </p>
                         <select
-                            className="border rounded-md px-3 py-2"
+                            className="bg-[#CBD5D3] text-[#2F4F4F] border border-transparent rounded-xl px-4 py-2 font-medium shadow-sm
+             focus:outline-none focus:ring-2 focus:ring-[#94A3B8]
+             hover:bg-[#d8e0de] hover:shadow-md
+             transition-all duration-200 ease-in-out"
                             value={sortBy}
                             onChange={handleSortChange}>
                             <option value="default">Sắp xếp theo</option>
