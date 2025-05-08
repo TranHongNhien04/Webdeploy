@@ -1,46 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import BackgroundImage from '../assets/img/backgrounds.png';
 
-export default function Hero({
-    message,
-    type = 'success',
-    duration = 3000,
-    onClose,
-}) {
-    const [isVisible, setIsVisible] = useState(true);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsVisible(false);
-            if (onClose) onClose();
-        }, duration);
-
-        return () => clearTimeout(timer);
-    }, [duration, onClose]);
-
-    if (!isVisible) return null;
-
-    const bgColor =
-        type === 'success'
-            ? 'bg-green-500'
-            : type === 'error'
-            ? 'bg-red-500'
-            : type === 'warning'
-            ? 'bg-yellow-500'
-            : 'bg-blue-500';
-
+export default function Hero() {
     return (
-        <div
-            className={`fixed mt-5 bottom-4 right-4 ${bgColor} text-white px-4 py-2 rounded-lg shadow-lg flex items-center z-50`}>
-            <span>{message}</span>
-            <button
-                onClick={() => {
-                    setIsVisible(false);
-                    if (onClose) onClose();
-                }}
-                className="ml-2 text-white hover:text-gray-200">
-                <X size={18} />
-            </button>
-        </div>
+        <section className="relative h-[600px] bg-cover bg-center">
+            <img
+                src={BackgroundImage}
+                alt=""
+                className="absolute top-2 w-full h-full"
+            />
+            <div className="absolute left-[50px] right-[50px] bg-gray-800 bg-opacity-40 flex items-center justify-center mt-20 shadow-lg p-8 rounded-2xl">
+                <div className="text-center text-white drop-shadow-md">
+                    <h1 className="text-4xl md:text-6xl font-bold mb-4">
+                        Khơi nguồn vẻ đẹp tự nhiên – Tỏa sáng theo cách của bạn
+                    </h1>
+                    <p className="text-lg md:text-xl mb-6">
+                        Fruvia Beauty – Vẻ đẹp tinh khiết, chuẩn phong cách mới
+                    </p>
+                </div>
+            </div>
+        </section>
     );
 }
