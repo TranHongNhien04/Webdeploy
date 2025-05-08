@@ -1,6 +1,17 @@
 {
   "users": [
     {
+      "id": "admin001",
+      "name": "Quản Trị Viên",
+      "email": "admin@fruviabeauty.com",
+      "password": "admin123",
+      "skinType": "normal",
+      "wishlist": [],
+      "orders": [],
+      "cart": [],
+      "role": "Admin"
+    },
+    {
       "id": "user123",
       "name": "Ngọc Linh",
       "email": "ngoclinh@example.com",
@@ -962,7 +973,7 @@
       "service": "skincare",
       "skinType": "combination",
       "message": "da khô bong tróc chảy máu cần chữa trị",
-      "status": "pending",
+      "status": "completed",
       "createdAt": "2025-05-04T14:48:10.956Z"
     },
     {
@@ -1024,35 +1035,45 @@
       "name": "Ngọc Linh",
       "email": "ngoclinh@example.com",
       "message": "Mình muốn hỏi thêm về sản phẩm Serum Vitamin C, có phù hợp với da khô không?",
-      "date": "2025-05-07"
+      "date": "2025-05-07",
+      "replied": false,
+      "replyMessage": ""
     },
     {
       "id": 2,
       "name": "Thanh Hà",
       "email": "thanhha@example.com",
       "message": "Shop có sản phẩm nào dành cho da thường không? Mình cần tư vấn thêm.",
-      "date": "2025-05-08"
+      "date": "2025-05-08",
+      "replied": false,
+      "replyMessage": ""
     },
     {
       "id": 3,
       "name": "Minh Tuấn",
       "email": "minhtuan@example.com",
       "message": "Da mình bị dầu nhiều, có toner nào giúp kiềm dầu tốt không?",
-      "date": "2025-05-08"
+      "date": "2025-05-08",
+      "replied": false,
+      "replyMessage": ""
     },
     {
       "id": 4,
       "name": "Nguyễn Ngọc Hồng Minh",
       "email": "nguyenngochongminh@gmail.com",
       "message": "Mình muốn đặt lịch tư vấn chăm sóc da mặt, da mình bị khô và bong tróc nhiều.",
-      "date": "2025-05-07"
+      "date": "2025-05-07",
+      "replied": false,
+      "replyMessage": ""
     },
     {
       "id": 5,
       "name": "Nhiên",
       "email": "nhien@gmail.com",
       "message": "Shop có kem dưỡng nào dành cho da khô và nhạy cảm không?",
-      "date": "2025-05-06"
+      "date": "2025-05-06",
+      "replied": false,
+      "replyMessage": ""
     }
   ]
 }
