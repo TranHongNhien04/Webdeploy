@@ -90,6 +90,29 @@ export default function Header() {
                                 Hồ sơ người dùng
                             </Link>
 
+                            {user.role === 'admin' && (
+                                <Link
+                                    to="/admin"
+                                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-[#EDF6F9] hover:text-[#006D77]"
+                                    onClick={() => setIsDropdownOpen(false)}>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="mr-2">
+                                        <path d="M3 3h18v18H3z" />
+                                        <path d="M7 7h10v10H7z" />
+                                    </svg>
+                                    Quản lý cửa hàng
+                                </Link>
+                            )}
+
                             <button
                                 className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-[#EDF6F9] hover:text-[#006D77]"
                                 onClick={handleLogout}>
