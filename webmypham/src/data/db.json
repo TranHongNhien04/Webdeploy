@@ -67,7 +67,7 @@
           "subtotal": 200000,
           "shippingFee": 35000,
           "totalAmount": 235000,
-          "status": "Đang giao",
+          "status": "Đã giao",
           "items": [
             {
               "productId": "1",
@@ -186,7 +186,7 @@
             "note": "wwwwwwwwwwwwwwwwwwwwww"
           },
           "totalAmount": 200000,
-          "status": "Chưa giao",
+          "status": "Đang giao",
           "items": [
             {
               "productId": "1",
@@ -212,7 +212,7 @@
           "subtotal": 150000,
           "shippingFee": 35000,
           "totalAmount": 185000,
-          "status": "Đang giao",
+          "status": "Đã giao",
           "items": [
             {
               "productId": "2",

@@ -18,6 +18,9 @@ const Dashboard = () => {
     const [selectedOrders, setSelectedOrders] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
+    const [prevRevenue, setPrevRevenue] = useState(0);
+    const [prevProfit, setPrevProfit] = useState(0);
+    const [prevCustomers, setPrevCustomers] = useState(0);
 
     const formatDate = (dateStr) => {
         if (!dateStr || typeof dateStr !== 'string') {
@@ -112,6 +115,11 @@ const Dashboard = () => {
         }
     };
 
+    const calculatePercentChange = (current, previous) => {
+        if (previous === 0) return 0;
+        return ((current - previous) / previous * 100).toFixed(2);
+    };
+
     useEffect(() => {
         fetch('http://localhost:3001/users')
             .then((response) => response.json())
@@ -137,6 +145,7 @@ const Dashboard = () => {
                 setReportData(orders);
                 setFilteredData(orders);
 
+                // Current period data (all orders)
                 const totalRevenue = users
                     .flatMap((user) => user.orders)
                     .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
@@ -155,6 +164,32 @@ const Dashboard = () => {
                         .map((user) => user.id)
                 );
                 setNewCustomers(uniqueUsers.size);
+
+                // Previous period data (orders before current month)
+                const currentDate = new Date();
+                const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+
+                const previousOrders = users
+                    .flatMap((user) => user.orders)
+                    .filter(order => parseDate(order.date) < firstDayOfMonth);
+
+                const prevTotalRevenue = previousOrders
+                    .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+                setPrevRevenue(prevTotalRevenue);
+                setPrevProfit(prevTotalRevenue * profitMargin);
+
+                const prevUniqueUsers = new Set(
+                    users
+                        .filter((user) =>
+                            user.orders.some(
+                                (o) =>
+                                    parseDate(o.date) >= new Date('2025-04-01') &&
+                                    parseDate(o.date) < new Date('2025-05-01')
+                            )
+                        )
+                        .map((user) => user.id)
+                );
+                setPrevCustomers(prevUniqueUsers.size);
             })
             .catch((error) => console.error('Error fetching orders:', error));
     }, []);
@@ -473,19 +508,28 @@ const Dashboard = () => {
                     <p className="text-3xl font-bold">
                         {formatCurrency(revenue)}
                     </p>
-                    <p className="text-green-500">+5.39% so với kỳ trước</p>
+                    <p className={`${calculatePercentChange(revenue, prevRevenue) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        {calculatePercentChange(revenue, prevRevenue) >= 0 ? '+' : ''}
+                        {calculatePercentChange(revenue, prevRevenue)}% so với kỳ trước
+                    </p>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow">
                     <h2 className="text-lg font-semibold">Lợi nhuận</h2>
                     <p className="text-3xl font-bold">
                         {formatCurrency(profit)}
                     </p>
-                    <p className="text-green-500">+5.39% so với kỳ trước</p>
+                    <p className={`${calculatePercentChange(profit, prevProfit) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        {calculatePercentChange(profit, prevProfit) >= 0 ? '+' : ''}
+                        {calculatePercentChange(profit, prevProfit)}% so với kỳ trước
+                    </p>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow">
                     <h2 className="text-lg font-semibold">Khách hàng mới</h2>
                     <p className="text-3xl font-bold">{newCustomers}</p>
-                    <p className="text-green-500">+6.84% so với kỳ trước</p>
+                    <p className={`${calculatePercentChange(newCustomers, prevCustomers) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        {calculatePercentChange(newCustomers, prevCustomers) >= 0 ? '+' : ''}
+                        {calculatePercentChange(newCustomers, prevCustomers)}% so với kỳ trước
+                    </p>
                 </div>
             </div>
             <div className="bg-white p-6 rounded-lg shadow">
@@ -539,11 +583,10 @@ const Dashboard = () => {
                         <button
                             onClick={handlePrepareAndDeliver}
                             disabled={selectedOrders.length === 0}
-                            className={`px-4 py-2 rounded font-semibold ${
-                                selectedOrders.length === 0
+                            className={`px-4 py-2 rounded font-semibold ${selectedOrders.length === 0
                                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                     : 'bg-green-500 text-white'
-                            }`}>
+                                }`}>
                             Chuẩn bị và giao
                         </button>
                         <label className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer">
@@ -587,7 +630,7 @@ const Dashboard = () => {
                                         type="checkbox"
                                         checked={selectedOrders.includes(
                                             (currentPage - 1) * rowsPerPage +
-                                                index
+                                            index
                                         )}
                                         onChange={() => handleRowSelect(index)}
                                     />
@@ -671,11 +714,10 @@ const Dashboard = () => {
                                 <button
                                     key={page}
                                     onClick={() => handlePageChange(page)}
-                                    className={`px-3 py-1 rounded ${
-                                        currentPage === page
+                                    className={`px-3 py-1 rounded ${currentPage === page
                                             ? 'bg-blue-500 text-white'
                                             : 'border'
-                                    }`}>
+                                        }`}>
                                     {page}
                                 </button>
                             ))}
