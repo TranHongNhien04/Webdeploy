@@ -1,32 +1,27 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Footer() {
     return (
         <footer className="bg-[#83C5BE] text-black py-8">
-            <div className="container px-6 flex flex-col md:flex-row gap-x-48">
-                <div className="w-full md:w-1/3">
-                    <h3 className="text-xl mb-2">
-                        <span className="text-black font-bold ">FRUVIA</span>
-                        <span className="text-black">BEAUTY</span>
-                    </h3>
-                    <h4 className="font-semibold text-black mt-4 mb-2">
-                        Đăng ký nhận bản tin
-                    </h4>
-                    <p className="text-black text-sm mb-2">
-                        Để nhận thông báo sản phẩm và thông tin độc quyền
-                    </p>
-                    <div className="flex items-center space-x-2">
-                        <input
-                            type="email"
-                            placeholder="Nhập email của bạn"
-                            className="border px-3 py-2 text-sm text-black focus:outline-none"
-                        />
-                        <button className="bg-[#48978F] text-white font-semibold py-2 px-6 hover:bg-[#006D77] rounded-md transition">
-                            Đăng ký
-                        </button>
+            <div className="px-6 flex flex-col md:flex-row justify-between gap-y-8 md:gap-x-12">
+                {/* Phần thương hiệu bên trái */}
+                <div className="w-full md:w-1/3 max-w-2xl">
+                    <div className="flex items-baseline justify-center md:justify-start space-x-1 mb-2">
+                        <span className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-wide uppercase">
+                            FRUVIA
+                        </span>
+                        <span className="text-2xl md:text-3xl font-medium text-gray-900 tracking-widest uppercase">
+                            BEAUTY
+                        </span>
                     </div>
+                    <span className="text-black mt-4">
+                        Chúng tôi mang đến sản phẩm làm đẹp an toàn, tinh tế và
+                        được tuyển chọn kỹ lưỡng từ các thương hiệu uy tín toàn
+                        cầu.
+                    </span>
                 </div>
+
+                {/* Các liên kết bên phải */}
                 <div className="w-full md:w-2/3 grid grid-cols-1 sm:grid-cols-4 gap-8">
                     <div>
                         <h4 className="font-semibold text-black mb-2">
@@ -109,6 +104,8 @@ export default function Footer() {
                     </div>
                 </div>
             </div>
+
+            {/* Footer dưới */}
             <div className="container mx-auto px-6 mt-8 border-t border-black pt-4 flex flex-col md:flex-row justify-between items-center text-sm text-black">
                 <p className="text-center md:text-left">
                     © 2025 Fruvia Beauty, Inc. ·{' '}

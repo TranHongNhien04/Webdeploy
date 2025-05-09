@@ -74,7 +74,7 @@ export default function Header() {
             return (
                 <div className="relative" ref={dropdownRef}>
                     <button
-                        className={`flex items-center gap-2 text-xs font-medium hover:underline ${
+                        className={`flex items-center gap-2 text-base font-medium hover:underline ${
                             isDropdownOpen ? 'text-[#006D77]' : 'text-white'
                         }`}
                         onClick={toggleDropdown}>
@@ -168,7 +168,7 @@ export default function Header() {
                     </button>
 
                     {/* Desktop Navigation */}
-                    <nav className="hidden md:flex space-x-5 text-xs text-white font-semibold">
+                    <nav className="hidden md:flex space-x-5 text-base text-white font-semibold">
                         <Link
                             to="/"
                             className={`hover:text-[#005F69] transition-colors ${
