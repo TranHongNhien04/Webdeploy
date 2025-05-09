@@ -122,9 +122,10 @@ export default function EditProfileModal({
                 type: 'success',
             });
 
+            // Đóng modal sau 1 giây
             setTimeout(() => {
                 onClose();
-                navigate('/ho-so');
+                // Bỏ navigate('/ho-so');
             }, 1000);
         } catch (error) {
             console.error('Update error:', error);

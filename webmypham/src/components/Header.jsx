@@ -277,7 +277,7 @@ export default function Header() {
                     <div className="flex items-center space-x-4 text-xs ">
                         <Link
                             to="/gio-hang"
-                            className={`hidden md:flex font-semibold items-center gap-1 text-white ${
+                            className={`hidden md:flex font-semibold items-center gap-1 text-white hover:text-[#0f4d53]  ${
                                 isActive('/gio-hang') ? 'text-[#0f4d53]' : ''
                             }`}>
                             <ShoppingBasket size={30} />

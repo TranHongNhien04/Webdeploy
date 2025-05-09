@@ -40,9 +40,9 @@
     },
     {
       "id": "user1746807278381",
-      "name": "Ngọc Linh",
+      "name": "Ngọc minh",
       "email": "ngoclinh@gmail.com",
-      "password": "000000",
+      "password": "123456",
       "skinType": "combination",
       "wishlist": [],
       "orders": [
@@ -112,6 +112,32 @@
               "quantity": 1
             }
           ]
+        },
+        {
+          "id": "order-1746809145397",
+          "date": "9/5/2025",
+          "time": "23:45:45",
+          "createdAt": "2025-05-09T16:45:45.397Z",
+          "customerInfo": {
+            "fullName": "Ngọc Linh",
+            "phone": "0912345678",
+            "address": "24/6t, đông lân 1",
+            "city": "Tp.Hồ Chí Minh",
+            "district": "xuân thới thượng",
+            "ward": "đông lân 1",
+            "note": ""
+          },
+          "subtotal": 1000000,
+          "shippingFee": 0,
+          "totalAmount": 1000000,
+          "status": "Đã giao",
+          "items": [
+            {
+              "productId": "6",
+              "price": 1000000,
+              "quantity": 1
+            }
+          ]
         }
       ],
       "cart": [
@@ -122,6 +148,44 @@
           "quantity": 20
         }
       ],
+      "role": "user"
+    },
+    {
+      "id": "user1746809542945",
+      "name": "Nhiên",
+      "email": "nhien@gmail.com",
+      "password": "123456",
+      "skinType": "dry",
+      "wishlist": [],
+      "orders": [
+        {
+          "id": "order-1746809722582",
+          "date": "9/5/2025",
+          "time": "23:55:22",
+          "createdAt": "2025-05-09T16:55:22.582Z",
+          "customerInfo": {
+            "fullName": "Nhiên",
+            "phone": "0831234567",
+            "address": "24/6t, đông lân 1",
+            "city": "Tp.Hồ Chí Minh",
+            "district": "xuân thới thượng",
+            "ward": "đông lân 1",
+            "note": ""
+          },
+          "subtotal": 1300000,
+          "shippingFee": 0,
+          "totalAmount": 1300000,
+          "status": "Đã giao",
+          "items": [
+            {
+              "productId": "9",
+              "price": 1300000,
+              "quantity": 1
+            }
+          ]
+        }
+      ],
+      "cart": [],
       "role": "user"
     }
   ],

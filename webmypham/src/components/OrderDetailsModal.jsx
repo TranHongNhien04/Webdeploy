@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,14 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
     const [loading, setLoading] = useState(true);
     const { user } = useAuth();
     const navigate = useNavigate();
+    const modalRef = useRef(null);
+
+    // Xử lý click ra ngoài để đóng modal
+    const handleOutsideClick = (e) => {
+        if (modalRef.current && !modalRef.current.contains(e.target)) {
+            onClose();
+        }
+    };
 
     // Format tiền VND
     const formatVND = (amount) => {
@@ -55,6 +63,19 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
             fetchProductDetails();
         }
     }, [isOpen, order]);
+
+    // Thêm event listener cho click ra ngoài
+    useEffect(() => {
+        if (isOpen) {
+            document.addEventListener('mousedown', handleOutsideClick);
+        } else {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, [isOpen, onClose]);
 
     // Xử lý khi người dùng xác nhận đã nhận hàng
     const handleConfirmReceived = async () => {
@@ -188,9 +209,13 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-                <div className="flex justify-between items-center p-6 border-b">
+        <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+            onClick={handleOutsideClick}>
+            <div
+                className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] flex flex-col"
+                ref={modalRef}>
+                <div className="flex justify-between items-center p-6 border-b sticky top-0 bg-white z-10">
                     <h2 className="text-xl font-bold">
                         Chi tiết đơn hàng #{order.id}
                     </h2>
@@ -201,7 +226,7 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
                     </button>
                 </div>
 
-                <div className="p-6">
+                <div className="p-6 overflow-y-auto">
                     {loading ? (
                         <p className="text-center py-4">
                             Đang tải thông tin...
@@ -392,7 +417,7 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
                     )}
                 </div>
 
-                <div className="flex justify-end p-6 border-t">
+                <div className="flex justify-end p-6 border-t sticky bottom-0 bg-white">
                     {order.status === 'Đang giao' && (
                         <button
                             onClick={handleConfirmReceived}
@@ -407,11 +432,6 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
                             Hủy đơn hàng
                         </button>
                     )}
-                    <button
-                        onClick={onClose}
-                        className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
-                        Đóng
-                    </button>
                 </div>
             </div>
         </div>

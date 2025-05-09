@@ -433,7 +433,10 @@ export default function UserProfileDetails() {
                         isOpen={isEditModalOpen}
                         onClose={() => setIsEditModalOpen(false)}
                         user={displayUser}
-                        onUserUpdate={handleUserUpdate}
+                        onUserUpdate={(updatedUser) => {
+                            setUserDetails(updatedUser);
+                            refreshUserData(); // Gọi hàm refreshUserData để làm mới toàn bộ dữ liệu
+                        }}
                     />
 
                     <OrderDetailsModal
