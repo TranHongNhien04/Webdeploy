@@ -5,6 +5,7 @@ const Products = () => {
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [skinTypes, setSkinTypes] = useState([]);
+    const [subcategories, setSubcategories] = useState([]);
     const [brands, setBrands] = useState([]);
     const [filters, setFilters] = useState({
         category: '',
@@ -21,9 +22,9 @@ const Products = () => {
         onSale: false,
         category: '',
         subcategory: '',
-        skinType: [],
+        skinType: '',
         benefit: [],
-        brandId: '',
+        // brandId removed
     });
     const [isAdding, setIsAdding] = useState(false);
     const [editingProduct, setEditingProduct] = useState(null);
@@ -36,6 +37,13 @@ const Products = () => {
             .then((data) => {
                 setProducts(data);
                 setFilteredProducts(data);
+
+                // Set the next product ID based on the count of existing products
+                const nextId = (data.length + 1).toString();
+                setNewProduct(prev => ({
+                    ...prev,
+                    productId: nextId
+                }));
             })
             .catch((error) => console.error('Error fetching products:', error));
 
@@ -50,6 +58,12 @@ const Products = () => {
             .then((response) => response.json())
             .then((data) => setSkinTypes(data))
             .catch((error) => console.error('Error fetching skin types:', error));
+
+        // Fetch subcategories
+        fetch('http://localhost:3001/subcategories')
+            .then((response) => response.json())
+            .then((data) => setSubcategories(data))
+            .catch((error) => console.error('Error fetching subcategories:', error));
 
         // Fetch brands
         fetch('http://localhost:3001/brands')
@@ -96,15 +110,31 @@ const Products = () => {
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
         if (editingProduct) {
-            setEditingProduct({
-                ...editingProduct,
-                [name]: type === 'checkbox' ? checked : value,
-            });
+            if (name === 'category') {
+                setEditingProduct({
+                    ...editingProduct,
+                    [name]: value,
+                    subcategory: '', // Reset subcategory when category changes
+                });
+            } else {
+                setEditingProduct({
+                    ...editingProduct,
+                    [name]: type === 'checkbox' ? checked : value,
+                });
+            }
         } else {
-            setNewProduct({
-                ...newProduct,
-                [name]: type === 'checkbox' ? checked : value,
-            });
+            if (name === 'category') {
+                setNewProduct({
+                    ...newProduct,
+                    [name]: value,
+                    subcategory: '', // Reset subcategory when category changes
+                });
+            } else {
+                setNewProduct({
+                    ...newProduct,
+                    [name]: type === 'checkbox' ? checked : value,
+                });
+            }
         }
     };
 
@@ -117,16 +147,20 @@ const Products = () => {
                 ...newProduct,
                 price: parseInt(newProduct.price),
                 originalPrice: newProduct.originalPrice ? parseInt(newProduct.originalPrice) : null,
-                skinType: newProduct.skinType.split(',').map((s) => s.trim()).filter((s) => s),
+                skinType: [newProduct.skinType], // Convert to array for storage
                 benefit: newProduct.benefit.split(',').map((b) => b.trim()).filter((b) => b),
             }),
         })
             .then((response) => response.json())
             .then((data) => {
-                setProducts([...products, data]);
-                setFilteredProducts([...products, data]); // Update filtered products
+                const updatedProducts = [...products, data];
+                setProducts(updatedProducts);
+                setFilteredProducts(updatedProducts);
+
+                // Set the next product ID for a new product
+                const nextId = (updatedProducts.length + 1).toString();
                 setNewProduct({
-                    productId: '',
+                    productId: nextId,
                     title: '',
                     description: '',
                     price: '',
@@ -135,9 +169,8 @@ const Products = () => {
                     onSale: false,
                     category: '',
                     subcategory: '',
-                    skinType: [],
+                    skinType: '',
                     benefit: [],
-                    brandId: '',
                 });
                 setIsAdding(false);
             })
@@ -153,7 +186,7 @@ const Products = () => {
                 ...editingProduct,
                 price: parseInt(editingProduct.price),
                 originalPrice: editingProduct.originalPrice ? parseInt(editingProduct.originalPrice) : null,
-                skinType: editingProduct.skinType.split(',').map((s) => s.trim()).filter((s) => s),
+                skinType: editingProduct.skinType,
                 benefit: editingProduct.benefit.split(',').map((b) => b.trim()).filter((b) => b),
             }),
         })
@@ -162,7 +195,7 @@ const Products = () => {
                     p.id === editingProduct.id ? editingProduct : p
                 );
                 setProducts(updatedProducts);
-                setFilteredProducts(updatedProducts); // Update filtered products
+                setFilteredProducts(updatedProducts);
                 setEditingProduct(null);
             })
             .catch((error) => console.error('Error updating product:', error));
@@ -176,9 +209,15 @@ const Products = () => {
             .then(() => {
                 const updatedProducts = products.filter((p) => p.id !== id);
                 setProducts(updatedProducts);
-                setFilteredProducts(updatedProducts); // Update filtered products
+                setFilteredProducts(updatedProducts);
             })
             .catch((error) => console.error('Error deleting product:', error));
+    };
+
+    // Filter subcategories based on selected category
+    const getFilteredSubcategories = () => {
+        const selectedCategory = editingProduct ? editingProduct.category : newProduct.category;
+        return subcategories.filter((subcategory) => subcategory.categoryId === selectedCategory);
     };
 
     return (
@@ -226,7 +265,15 @@ const Products = () => {
 
                 <div className="flex justify-end mb-4">
                     <button
-                        onClick={() => setIsAdding(true)}
+                        onClick={() => {
+                            // Calculate next ID based on current products length
+                            const nextId = (products.length + 1).toString();
+                            setNewProduct(prev => ({
+                                ...prev,
+                                productId: nextId
+                            }));
+                            setIsAdding(true);
+                        }}
                         className="bg-green-500 text-white px-4 py-2 rounded"
                     >
                         Thêm sản phẩm mới
@@ -245,8 +292,8 @@ const Products = () => {
                                 name="productId"
                                 placeholder="Product ID"
                                 value={editingProduct ? editingProduct.productId : newProduct.productId}
-                                onChange={handleInputChange}
-                                className="p-2 border rounded"
+                                readOnly
+                                className="p-2 border rounded bg-gray-100"
                             />
                             <input
                                 type="text"
@@ -264,70 +311,16 @@ const Products = () => {
                                 onChange={handleInputChange}
                                 className="p-2 border rounded"
                             />
+                            {/* Regular price field (always visible) */}
                             <input
                                 type="number"
                                 name="price"
-                                placeholder="Giá"
+                                placeholder="Giá sản phẩm"
                                 value={editingProduct ? editingProduct.price : newProduct.price}
                                 onChange={handleInputChange}
                                 className="p-2 border rounded"
                             />
-                            <input
-                                type="number"
-                                name="originalPrice"
-                                placeholder="Giá gốc (nếu có)"
-                                value={editingProduct ? editingProduct.originalPrice : newProduct.originalPrice}
-                                onChange={handleInputChange}
-                                className="p-2 border rounded"
-                            />
-                            <input
-                                type="text"
-                                name="image"
-                                placeholder="URL hình ảnh"
-                                value={editingProduct ? editingProduct.image : newProduct.image}
-                                onChange={handleInputChange}
-                                className="p-2 border rounded"
-                            />
-                            <input
-                                type="text"
-                                name="category"
-                                placeholder="Danh mục"
-                                value={editingProduct ? editingProduct.category : newProduct.category}
-                                onChange={handleInputChange}
-                                className="p-2 border rounded"
-                            />
-                            <input
-                                type="text"
-                                name="subcategory"
-                                placeholder="Danh mục phụ"
-                                value={editingProduct ? editingProduct.subcategory : newProduct.subcategory}
-                                onChange={handleInputChange}
-                                className="p-2 border rounded"
-                            />
-                            <input
-                                type="text"
-                                name="skinType"
-                                placeholder="Loại da (phân cách bằng dấu phẩy)"
-                                value={editingProduct ? editingProduct.skinType : newProduct.skinType}
-                                onChange={handleInputChange}
-                                className="p-2 border rounded"
-                            />
-                            <input
-                                type="text"
-                                name="benefit"
-                                placeholder="Lợi ích (phân cách bằng dấu phẩy)"
-                                value={editingProduct ? editingProduct.benefit : newProduct.benefit}
-                                onChange={handleInputChange}
-                                className="p-2 border rounded"
-                            />
-                            <input
-                                type="text"
-                                name="brandId"
-                                placeholder="ID thương hiệu"
-                                value={editingProduct ? editingProduct.brandId : newProduct.brandId}
-                                onChange={handleInputChange}
-                                className="p-2 border rounded"
-                            />
+                            {/* Sale checkbox */}
                             <label className="flex items-center">
                                 <input
                                     type="checkbox"
@@ -338,6 +331,82 @@ const Products = () => {
                                 />
                                 Đang giảm giá
                             </label>
+                            {/* Original price field - only visible when onSale is true */}
+                            {(editingProduct ? editingProduct.onSale : newProduct.onSale) && (
+                                <input
+                                    type="number"
+                                    name="originalPrice"
+                                    placeholder="Giá gốc (trước khi giảm)"
+                                    value={editingProduct ? editingProduct.originalPrice : newProduct.originalPrice}
+                                    onChange={handleInputChange}
+                                    className="p-2 border rounded bg-yellow-50"
+                                />
+                            )}
+                            <input
+                                type="text"
+                                name="image"
+                                placeholder="URL hình ảnh"
+                                value={editingProduct ? editingProduct.image : newProduct.image}
+                                onChange={handleInputChange}
+                                className="p-2 border rounded"
+                            />
+                            <div>
+                                <label className="block mb-1">Danh mục</label>
+                                <select
+                                    name="category"
+                                    value={editingProduct ? editingProduct.category : newProduct.category}
+                                    onChange={handleInputChange}
+                                    className="w-full p-2 border rounded"
+                                >
+                                    <option value="">Chọn danh mục</option>
+                                    {categories.map((category) => (
+                                        <option key={category.id} value={category.id}>
+                                            {category.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block mb-1">Danh mục phụ</label>
+                                <select
+                                    name="subcategory"
+                                    value={editingProduct ? editingProduct.subcategory : newProduct.subcategory}
+                                    onChange={handleInputChange}
+                                    className="w-full p-2 border rounded"
+                                    disabled={!(editingProduct ? editingProduct.category : newProduct.category)}
+                                >
+                                    <option value="">Chọn danh mục phụ</option>
+                                    {getFilteredSubcategories().map((subcategory) => (
+                                        <option key={subcategory.id} value={subcategory.id}>
+                                            {subcategory.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block mb-1">Loại da</label>
+                                <select
+                                    name="skinType"
+                                    value={editingProduct ? editingProduct.skinType : newProduct.skinType}
+                                    onChange={handleInputChange}
+                                    className="w-full p-2 border rounded"
+                                >
+                                    <option value="">Chọn loại da</option>
+                                    {skinTypes.map((skinType) => (
+                                        <option key={skinType.id} value={skinType.id}>
+                                            {skinType.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <input
+                                type="text"
+                                name="benefit"
+                                placeholder="Mô tả (phân cách bằng dấu phẩy)"
+                                value={editingProduct ? editingProduct.benefit : newProduct.benefit}
+                                onChange={handleInputChange}
+                                className="p-2 border rounded"
+                            />
                         </div>
                         <div className="mt-4 flex space-x-2">
                             <button
