@@ -79,9 +79,9 @@ const ProductDetail = ({ product, brand, benefits }) => {
                 <h1 className="text-2xl font-bold text-gray-800">
                     {product.title}
                 </h1>
-                <p className="text-lg text-gray-600 mt-1">
+                {/* <p className="text-lg text-gray-600 mt-1">
                     Thương hiệu: {brand?.name || 'Không xác định'}
-                </p>
+                </p> */}
                 <p className="text-3xl font-semibold text-gray-800 mt-2">
                     {formatVND(product.price)}
                 </p>
@@ -100,9 +100,9 @@ const ProductDetail = ({ product, brand, benefits }) => {
                 </p>
                 <div className="mt-4 flex gap-4">
                     <button
-                        className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700"
+                        className="bg-[#006D77] text-white px-6 py-2 rounded-lg hover:bg-[#004349]"
                         onClick={handleAddToCart}>
-                        Thêm vào Giỏ
+                        Thêm vào giỏ
                     </button>
                 </div>
             </div>

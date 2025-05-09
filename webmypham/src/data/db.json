@@ -77,7 +77,14 @@
           ]
         }
       ],
-      "cart": [],
+      "cart": [
+        {
+          "productId": "2",
+          "title": "Serum Vitamin C",
+          "price": 150000,
+          "quantity": 1
+        }
+      ],
       "role": "user"
     },
     {
@@ -1024,69 +1031,17 @@
   ],
   "bookings": [
     {
-      "id": "booking-1746370090956",
-      "userId": "user1746197734020",
-      "name": "Nguyễn Ngọc Hồng Minh",
-      "phone": "0971770425",
-      "email": "nguyenngochongminh@gmail.com",
-      "date": "2025-05-22",
-      "service": "skincare",
-      "skinType": "combination",
-      "message": "da khô bong tróc chảy máu cần chữa trị",
-      "status": "completed",
-      "createdAt": "2025-05-04T14:48:10.956Z"
-    },
-    {
-      "id": "booking-1746370131668",
-      "userId": "user1746197734020",
-      "name": "Nguyễn Ngọc Hồng Minh",
-      "phone": "0971770425",
-      "email": "nguyenngochongminh@gmail.com",
-      "date": "2025-05-04",
+      "id": "booking-1746781427577",
+      "userId": "user123",
+      "name": "Ngọc Linh",
+      "phone": "0923456781",
+      "email": "ngoclinh@example.com",
+      "date": "2025-05-23",
       "service": "makeup",
-      "skinType": "combination",
-      "message": "gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",
-      "status": "pending",
-      "createdAt": "2025-05-04T14:48:51.668Z"
-    },
-    {
-      "id": "booking-1746370941113",
-      "userId": "user123",
-      "name": "Ngọc Linh",
-      "phone": "0971770425",
-      "email": "ngoclinh@example.com",
-      "date": "2025-05-15",
-      "service": "skincare",
-      "skinType": "sensitive",
-      "message": "hfffffffffffffffffffffffffff",
-      "status": "pending",
-      "createdAt": "2025-05-04T15:02:21.113Z"
-    },
-    {
-      "id": "booking-1746371565526",
-      "userId": "user123",
-      "name": "Ngọc Linh",
-      "phone": "0971770425",
-      "email": "ngoclinh@example.com",
-      "date": "2025-05-10",
-      "service": "skincare",
       "skinType": "dry",
-      "message": "ádddddddddddddddd",
-      "status": "pending",
-      "createdAt": "2025-05-04T15:12:45.526Z"
-    },
-    {
-      "id": "booking-1746371586271",
-      "userId": "user123",
-      "name": "Ngọc Linh",
-      "phone": "0971770425",
-      "email": "ngoclinh@example.com",
-      "date": "2025-05-27",
-      "service": "hair",
-      "skinType": "combination",
-      "message": "áccccccccccccccccc",
-      "status": "pending",
-      "createdAt": "2025-05-04T15:13:06.271Z"
+      "message": "không có gì cả",
+      "status": "completed",
+      "createdAt": "2025-05-09T09:03:47.577Z"
     }
   ],
   "contacts": [
@@ -1136,7 +1091,7 @@
       "replyMessage": ""
     },
     {
-      "id": 1746769515376,
+      "id": "1746769515376",
       "name": "Nguyễn Ngọc Hồng Minh",
       "email": "ngoclinh@example.com",
       "message": "q",

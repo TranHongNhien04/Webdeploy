@@ -284,8 +284,34 @@ export default function UserProfileDetails() {
                                                     </p>
                                                 </div>
                                                 <span
-                                                    className={`px-2 py-1 rounded-full text-xs font-medium ${booking.status}`}>
-                                                    {booking.status}
+                                                    className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                                        booking.status ===
+                                                        'pending'
+                                                            ? 'bg-yellow-100 text-yellow-800'
+                                                            : booking.status ===
+                                                              'confirmed'
+                                                            ? 'bg-green-100 text-green-800'
+                                                            : booking.status ===
+                                                              'completed'
+                                                            ? 'bg-blue-100 text-blue-800'
+                                                            : booking.status ===
+                                                              'canceled'
+                                                            ? 'bg-red-100 text-red-800'
+                                                            : 'bg-gray-100 text-gray-800'
+                                                    }`}>
+                                                    {booking.status ===
+                                                    'pending'
+                                                        ? 'Chờ xác nhận'
+                                                        : booking.status ===
+                                                          'confirmed'
+                                                        ? 'Đã xác nhận'
+                                                        : booking.status ===
+                                                          'completed'
+                                                        ? 'Hoàn thành'
+                                                        : booking.status ===
+                                                          'canceled'
+                                                        ? 'Đã hủy'
+                                                        : booking.status}
                                                 </span>
                                             </div>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm mb-2">

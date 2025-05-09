@@ -319,7 +319,7 @@ const BookingFormSection = ({ bookingRef }) => {
                 service: data.service,
                 skinType: data.skinType,
                 message: data.message,
-                status: 'pending', // Trạng thái mặc định: chờ xử lý
+                status: 'Chờ xác nhận',
                 createdAt: new Date().toISOString(),
             };
 
