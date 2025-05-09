@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -15,15 +15,38 @@ export default function LoginModal({ isOpen, onClose }) {
         formState: { errors },
         reset,
     } = useForm();
-    const { login, register: registerUser, error: authError } = useAuth();
+    const {
+        login,
+        register: registerUser,
+        error: authError,
+        setError: setAuthError,
+    } = useAuth();
     const { syncCart } = useCart();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [toast, setToast] = useState(null);
     const [loginError, setLoginError] = useState(null);
     const navigate = useNavigate();
+
+    // Làm sạch form và lỗi khi mở modal
+    useEffect(() => {
+        if (isOpen) {
+            reset();
+            setLoginError(null);
+            // Nếu có hàm setError trong AuthContext, sử dụng nó để xóa lỗi
+            if (setAuthError) {
+                setAuthError(null);
+            }
+        }
+    }, [isOpen, reset, setAuthError]);
+
     const onSubmit = async (data) => {
         setIsSubmitting(true);
         setLoginError(null);
+
+        // Nếu có hàm setError trong AuthContext, sử dụng nó để xóa lỗi
+        if (setAuthError) {
+            setAuthError(null);
+        }
 
         try {
             let success;
@@ -44,6 +67,9 @@ export default function LoginModal({ isOpen, onClose }) {
                         type: 'success',
                     });
 
+                    // Làm sạch form trước khi đóng
+                    reset();
+                    setLoginError(null);
                     onClose();
                     navigate('/');
                     window.scrollTo(0, 0);
@@ -68,6 +94,10 @@ export default function LoginModal({ isOpen, onClose }) {
                         type: 'success',
                     });
 
+                    // Làm sạch form và lỗi
+                    reset();
+                    setLoginError(null);
+
                     navigate('/');
                     window.scrollTo(0, 0);
 
@@ -89,7 +119,22 @@ export default function LoginModal({ isOpen, onClose }) {
     const switchForm = () => {
         setIsLoginForm(!isLoginForm);
         setLoginError(null);
+        // Nếu có hàm setError trong AuthContext, sử dụng nó để xóa lỗi
+        if (setAuthError) {
+            setAuthError(null);
+        }
         reset();
+    };
+
+    // Hàm đóng modal và làm sạch form
+    const handleClose = () => {
+        reset();
+        setLoginError(null);
+        // Nếu có hàm setError trong AuthContext, sử dụng nó để xóa lỗi
+        if (setAuthError) {
+            setAuthError(null);
+        }
+        onClose();
     };
 
     if (!isOpen) return null;
@@ -98,7 +143,7 @@ export default function LoginModal({ isOpen, onClose }) {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative">
                 <button
-                    onClick={onClose}
+                    onClick={handleClose}
                     className="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
                     <X size={24} />
                 </button>
@@ -150,6 +195,10 @@ export default function LoginModal({ isOpen, onClose }) {
                             })}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
                             placeholder="Nhập email của bạn"
+                            onChange={() => {
+                                setLoginError(null);
+                                if (setAuthError) setAuthError(null);
+                            }}
                         />
                         {errors.email && (
                             <p className="text-red-500 text-sm mt-1">
@@ -173,6 +222,10 @@ export default function LoginModal({ isOpen, onClose }) {
                             })}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
                             placeholder="Nhập mật khẩu của bạn"
+                            onChange={() => {
+                                setLoginError(null);
+                                if (setAuthError) setAuthError(null);
+                            }}
                         />
                         {errors.password && (
                             <p className="text-red-500 text-sm mt-1">

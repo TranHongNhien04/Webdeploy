@@ -39,207 +39,42 @@
       "role": "admin"
     },
     {
-      "id": "user123",
+      "id": "user1746807278381",
       "name": "Ngọc Linh",
-      "email": "ngoclinh@example.com",
-      "password": "123456",
-      "skinType": "dry",
-      "wishlist": [
-        1,
-        13,
-        17
-      ],
+      "email": "ngoclinh@gmail.com",
+      "password": "000000",
+      "skinType": "combination",
+      "wishlist": [],
       "orders": [
         {
-          "id": "order-1746766703153",
+          "id": "order-1746807339676",
           "date": "9/5/2025",
-          "time": "11:58:23",
-          "createdAt": "2025-05-09T04:58:23.153Z",
+          "time": "23:15:39",
+          "createdAt": "2025-05-09T16:15:39.676Z",
           "customerInfo": {
             "fullName": "Ngọc Linh",
-            "phone": "0971770425",
+            "phone": "0912345678",
             "address": "24/6t, đông lân 1",
             "city": "Tp.Hồ Chí Minh",
-            "district": "Hóc môn",
-            "ward": "ssssssssssss",
+            "district": "xuân thới thượng",
+            "ward": "đông lân 1",
             "note": ""
           },
-          "subtotal": 200000,
-          "shippingFee": 35000,
-          "totalAmount": 235000,
-          "status": "Chưa giao",
+          "subtotal": 680000,
+          "shippingFee": 0,
+          "totalAmount": 680000,
+          "status": "Đã giao",
           "items": [
+            {
+              "productId": "2",
+              "price": 150000,
+              "quantity": 1
+            },
             {
               "productId": "1",
               "price": 200000,
               "quantity": 1
-            }
-          ]
-        }
-      ],
-      "cart": [
-        {
-          "productId": "2",
-          "title": "Serum Vitamin C",
-          "price": 150000,
-          "quantity": 1
-        }
-      ],
-      "role": "user"
-    },
-    {
-      "id": "user456",
-      "name": "Thanh Hà",
-      "email": "thanhha@example.com",
-      "password": "123456",
-      "skinType": "normal",
-      "wishlist": [
-        5,
-        8
-      ],
-      "orders": [],
-      "cart": [],
-      "role": "user"
-    },
-    {
-      "id": "user789",
-      "name": "Minh Tuấn",
-      "email": "minhtuan@example.com",
-      "password": "000000",
-      "skinType": "oily",
-      "wishlist": [],
-      "orders": [],
-      "cart": [],
-      "role": "user"
-    },
-    {
-      "id": "user1746197734020",
-      "name": "Nguyễn Ngọc Hồng Minh",
-      "email": "nguyenngochongminh@gmail.com",
-      "password": "123789",
-      "skinType": "combination",
-      "wishlist": [],
-      "orders": [],
-      "cart": [],
-      "role": "user"
-    },
-    {
-      "id": "user1746198473972",
-      "name": "Nhiên",
-      "email": "nhien@gmail.com",
-      "password": "000000",
-      "skinType": "dry",
-      "wishlist": [],
-      "orders": [],
-      "cart": [],
-      "role": "user"
-    },
-    {
-      "id": "user1746421471332",
-      "name": "Nguyễn Minh",
-      "email": "azamidevilnguyen@gmail.com",
-      "password": "456789",
-      "skinType": "normal",
-      "wishlist": [],
-      "orders": [
-        {
-          "id": "order-1746541296701",
-          "date": "6/5/2025",
-          "time": "21:21:36",
-          "createdAt": "2025-05-06T14:21:36.701Z",
-          "customerInfo": {
-            "fullName": "Nguyễn Minh",
-            "phone": "0971770425",
-            "address": "Hóc Môn",
-            "city": "Tp.Hồ Chí Minh",
-            "district": "Hóc môn",
-            "ward": "Bà điểm",
-            "note": ""
-          },
-          "totalAmount": 1450000,
-          "status": "Chưa giao",
-          "items": [
-            {
-              "productId": "9",
-              "price": 1300000,
-              "quantity": 1
             },
-            {
-              "productId": "2",
-              "price": 150000,
-              "quantity": 1
-            }
-          ]
-        },
-        {
-          "id": "order-1746542082378",
-          "date": "6/5/2025",
-          "time": "21:34:42",
-          "createdAt": "2025-05-06T14:34:42.378Z",
-          "customerInfo": {
-            "fullName": "Nguyễn Minh",
-            "phone": "0971770425",
-            "address": "Hóc Môn",
-            "city": "Tp.Hồ Chí Minh",
-            "district": "Hóc môn",
-            "ward": "Bà điểm",
-            "note": "wwwwwwwwwwwwwwwwwwwwww"
-          },
-          "totalAmount": 200000,
-          "status": "Chưa giao",
-          "items": [
-            {
-              "productId": "1",
-              "price": "200000",
-              "quantity": 1
-            }
-          ]
-        },
-        {
-          "id": "order-1746542554956",
-          "date": "6/5/2025",
-          "time": "21:42:34",
-          "createdAt": "2025-05-06T14:42:34.956Z",
-          "customerInfo": {
-            "fullName": "Nguyễn Minh",
-            "phone": "0971770425",
-            "address": "Hóc Môn",
-            "city": "Tp.Hồ Chí Minh",
-            "district": "Hóc môn",
-            "ward": "Bà điểm",
-            "note": ""
-          },
-          "subtotal": 150000,
-          "shippingFee": 35000,
-          "totalAmount": 185000,
-          "status": "Đang giao",
-          "items": [
-            {
-              "productId": "2",
-              "price": 150000,
-              "quantity": 1
-            }
-          ]
-        },
-        {
-          "id": "order-1746543164928",
-          "date": "6/5/2025",
-          "time": "21:52:44",
-          "createdAt": "2025-05-06T14:52:44.928Z",
-          "customerInfo": {
-            "fullName": "Nguyễn Minh",
-            "phone": "0971770425",
-            "address": "Hóc Môn",
-            "city": "Tp.Hồ Chí Minh",
-            "district": "Hóc môn",
-            "ward": "ssssssssssss",
-            "note": ""
-          },
-          "subtotal": 570000,
-          "shippingFee": 0,
-          "totalAmount": 570000,
-          "status": "Đang giao",
-          "items": [
             {
               "productId": "3",
               "price": 210000,
@@ -248,193 +83,32 @@
             {
               "productId": "4",
               "price": 120000,
-              "quantity": 3
-            }
-          ]
-        },
-        {
-          "id": "order-1746543197215",
-          "date": "6/5/2025",
-          "time": "21:53:17",
-          "createdAt": "2025-05-06T14:53:17.215Z",
-          "customerInfo": {
-            "fullName": "Nguyễn Minh",
-            "phone": "0971770425",
-            "address": "Hóc Môn",
-            "city": "Tp.Hồ Chí Minh",
-            "district": "Hóc môn",
-            "ward": "ssssssssssss",
-            "note": ""
-          },
-          "subtotal": 200000,
-          "shippingFee": 35000,
-          "totalAmount": 235000,
-          "status": "Đã giao",
-          "items": [
-            {
-              "productId": "1",
-              "price": 200000,
               "quantity": 1
             }
           ]
         },
         {
-          "id": "order-1746543216608",
-          "date": "6/5/2025",
-          "time": "21:53:36",
-          "createdAt": "2025-05-06T14:53:36.608Z",
+          "id": "order-1746807636900",
+          "date": "9/5/2025",
+          "time": "23:20:36",
+          "createdAt": "2025-05-09T16:20:36.900Z",
           "customerInfo": {
-            "fullName": "Nguyễn Minh",
-            "phone": "0971770425",
-            "address": "Hóc Môn",
+            "fullName": "Ngọc Linh",
+            "phone": "09789456",
+            "address": "24/6t, đông lân 1",
             "city": "Tp.Hồ Chí Minh",
-            "district": "Hóc môn",
-            "ward": "ssssssssssss",
+            "district": "xuân thới thượng",
+            "ward": "đông lân 1",
             "note": ""
           },
           "subtotal": 210000,
           "shippingFee": 35000,
           "totalAmount": 245000,
-          "status": "Đang giao",
-          "items": [
-            {
-              "productId": "3",
-              "price": 210000,
-              "quantity": 1
-            }
-          ]
-        },
-        {
-          "id": "order-1746543236227",
-          "date": "6/5/2025",
-          "time": "21:53:56",
-          "createdAt": "2025-05-06T14:53:56.227Z",
-          "customerInfo": {
-            "fullName": "Nguyễn Minh",
-            "phone": "0971770425",
-            "address": "Hóc Môn",
-            "city": "Tp.Hồ Chí Minh",
-            "district": "Hóc môn",
-            "ward": "ssssssssssss",
-            "note": ""
-          },
-          "subtotal": 1890000,
-          "shippingFee": 0,
-          "totalAmount": 1890000,
-          "status": "Chưa giao",
-          "items": [
-            {
-              "productId": "3",
-              "price": 210000,
-              "quantity": 9
-            }
-          ]
-        },
-        {
-          "id": "order-1746543440310",
-          "date": "6/5/2025",
-          "time": "21:57:20",
-          "createdAt": "2025-05-06T14:57:20.310Z",
-          "customerInfo": {
-            "fullName": "Nguyễn Minh",
-            "phone": "0971770425",
-            "address": "Hóc Môn",
-            "city": "Tp.Hồ Chí Minh",
-            "district": "Hóc môn",
-            "ward": "ssssssssssss",
-            "note": ""
-          },
-          "subtotal": 350000,
-          "shippingFee": 0,
-          "totalAmount": 350000,
-          "status": "Chưa giao",
-          "items": [
-            {
-              "productId": "1",
-              "price": 200000,
-              "quantity": 1
-            },
-            {
-              "productId": "2",
-              "price": 150000,
-              "quantity": 1
-            }
-          ]
-        },
-        {
-          "id": "order-1746543725228",
-          "date": "6/5/2025",
-          "time": "22:02:05",
-          "createdAt": "2025-05-06T15:02:05.227Z",
-          "customerInfo": {
-            "fullName": "Nguyễn Minh",
-            "phone": "0971770425",
-            "address": "Hóc Môn",
-            "city": "Tp.Hồ Chí Minh",
-            "district": "Hóc môn",
-            "ward": "ssssssssssss",
-            "note": ""
-          },
-          "subtotal": 150000,
-          "shippingFee": 35000,
-          "totalAmount": 185000,
-          "status": "Đang giao",
-          "items": [
-            {
-              "productId": "2",
-              "price": 150000,
-              "quantity": 1
-            }
-          ]
-        },
-        {
-          "id": "order-1746543894476",
-          "date": "6/5/2025",
-          "time": "22:04:54",
-          "createdAt": "2025-05-06T15:04:54.476Z",
-          "customerInfo": {
-            "fullName": "Nguyễn Minh",
-            "phone": "0971770425",
-            "address": "Hóc Môn",
-            "city": "Tp.Hồ Chí Minh",
-            "district": "Hóc môn",
-            "ward": "ssssssssssss",
-            "note": ""
-          },
-          "subtotal": 200000,
-          "shippingFee": 35000,
-          "totalAmount": 235000,
-          "status": "Chưa giao",
-          "items": [
-            {
-              "productId": "1",
-              "price": 200000,
-              "quantity": 1
-            }
-          ]
-        },
-        {
-          "id": "order-1746544258111",
-          "date": "6/5/2025",
-          "time": "22:10:58",
-          "createdAt": "2025-05-06T15:10:58.111Z",
-          "customerInfo": {
-            "fullName": "Nguyễn Ngọc Hồng Minh",
-            "phone": "0971770425",
-            "address": "Hóc Môn",
-            "city": "Tp.Hồ Chí Minh",
-            "district": "Hóc môn",
-            "ward": "ssssssssssss",
-            "note": ""
-          },
-          "subtotal": 200000,
-          "shippingFee": 35000,
-          "totalAmount": 235000,
           "status": "Đã hủy",
           "items": [
             {
-              "productId": "1",
-              "price": 200000,
+              "productId": "3",
+              "price": 210000,
               "quantity": 1
             }
           ]
@@ -442,28 +116,10 @@
       ],
       "cart": [
         {
-          "productId": "7",
-          "title": "Dầu gội dưỡng tóc",
-          "price": 650000,
-          "quantity": 1
-        },
-        {
-          "productId": "11",
-          "title": "Dầu xả dưỡng tóc",
-          "price": 1100000,
-          "quantity": 1
-        },
-        {
           "productId": "4",
           "title": "Kem dưỡng ẩm sâu",
           "price": 120000,
-          "quantity": 3
-        },
-        {
-          "productId": "2",
-          "title": "Serum Vitamin C",
-          "price": 150000,
-          "quantity": 1
+          "quantity": 20
         }
       ],
       "role": "user"
@@ -1031,17 +687,17 @@
   ],
   "bookings": [
     {
-      "id": "booking-1746781427577",
-      "userId": "user123",
+      "id": "booking-1746807501429",
+      "userId": "user1746807278381",
       "name": "Ngọc Linh",
-      "phone": "0923456781",
+      "phone": "0972345678",
       "email": "ngoclinh@example.com",
-      "date": "2025-05-23",
-      "service": "makeup",
+      "date": "2025-05-09",
+      "service": "body",
       "skinType": "dry",
-      "message": "không có gì cả",
-      "status": "completed",
-      "createdAt": "2025-05-09T09:03:47.577Z"
+      "message": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "status": "confirmed",
+      "createdAt": "2025-05-09T16:18:21.429Z"
     }
   ],
   "contacts": [

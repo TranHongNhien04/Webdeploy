@@ -26,6 +26,7 @@ export default function UserProfileDetails() {
     const closeOrderDetails = () => {
         setIsOrderDetailsModalOpen(false);
         setSelectedOrder(null);
+        refreshUserData(); // Refresh data when modal closes
     };
     // VND formatter
     const formatVND = (amount) => {
@@ -163,6 +164,25 @@ export default function UserProfileDetails() {
         } catch (error) {
             console.error('Error formatting date:', error, dateString);
             return dateString;
+        }
+    };
+
+    const refreshUserData = async () => {
+        if (user && user.id) {
+            try {
+                setLoading(true);
+                const response = await fetch(
+                    `http://localhost:3001/users/${user.id}`
+                );
+                if (response.ok) {
+                    const data = await response.json();
+                    setUserDetails(data);
+                }
+            } catch (error) {
+                console.error('Error refreshing user data:', error);
+            } finally {
+                setLoading(false);
+            }
         }
     };
 

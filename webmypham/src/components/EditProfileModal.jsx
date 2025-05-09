@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { X } from 'lucide-react';
 import Toast from './Toast';
-
+import { useNavigate } from 'react-router-dom';
 export default function EditProfileModal({
     isOpen,
     onClose,
     user,
     onUserUpdate,
 }) {
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -34,8 +35,11 @@ export default function EditProfileModal({
             setValue('name', user.name || '');
             setValue('email', user.email || '');
             setValue('skinType', user.skinType || 'normal');
+            // Luôn xóa trường mật khẩu khi modal mở hoặc user thay đổi
+            setValue('password', '');
+            setValue('confirmPassword', '');
         }
-    }, [user, setValue]);
+    }, [user, setValue, isOpen]);
 
     const onSubmit = async (data) => {
         setIsSubmitting(true);
@@ -75,12 +79,10 @@ export default function EditProfileModal({
                 skinType: data.skinType,
             };
 
-            // Chỉ cập nhật mật khẩu nếu người dùng nhập mật khẩu mới
             if (data.password) {
                 updatedUser.password = data.password;
             }
 
-            // Gọi API cập nhật thông tin
             const updateResponse = await fetch(
                 `http://localhost:3001/users/${user.id}`,
                 {
@@ -96,7 +98,6 @@ export default function EditProfileModal({
                 throw new Error('Không thể cập nhật thông tin');
             }
 
-            // Cập nhật thông tin trong localStorage
             const userToStore = {
                 id: updatedUser.id,
                 name: updatedUser.name,
@@ -107,10 +108,13 @@ export default function EditProfileModal({
 
             localStorage.setItem('user', JSON.stringify(userToStore));
 
-            // Gọi callback để cập nhật state ở component cha
             if (onUserUpdate) {
                 onUserUpdate(userToStore);
             }
+
+            // Xóa giá trị mật khẩu
+            setValue('password', '');
+            setValue('confirmPassword', '');
 
             // Hiển thị thông báo thành công
             setToast({
@@ -118,12 +122,9 @@ export default function EditProfileModal({
                 type: 'success',
             });
 
-            // Đóng modal sau 1 giây
             setTimeout(() => {
                 onClose();
-                // Lưu đường dẫn hiện tại và tải lại trang
-                const currentPath = window.location.pathname;
-                window.location.href = currentPath;
+                navigate('/ho-so');
             }, 1000);
         } catch (error) {
             console.error('Update error:', error);

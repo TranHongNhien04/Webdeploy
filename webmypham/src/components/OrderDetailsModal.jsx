@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const OrderDetailsModal = ({ isOpen, onClose, order }) => {
     const [products, setProducts] = useState({});
     const [loading, setLoading] = useState(true);
+    const { user } = useAuth();
+    const navigate = useNavigate();
 
     // Format tiền VND
     const formatVND = (amount) => {
@@ -51,6 +55,130 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
             fetchProductDetails();
         }
     }, [isOpen, order]);
+
+    // Xử lý khi người dùng xác nhận đã nhận hàng
+    const handleConfirmReceived = async () => {
+        if (!user || !user.id) {
+            alert('Bạn cần đăng nhập để thực hiện thao tác này');
+            return;
+        }
+
+        try {
+            // Hiển thị thông báo xác nhận
+            if (
+                window.confirm(
+                    'Vui lòng chỉ xác nhận khi bạn đã nhận được hàng. Bạn đã nhận được hàng chưa?'
+                )
+            ) {
+                // Lấy thông tin user hiện tại
+                const response = await fetch(
+                    `http://localhost:3001/users/${user.id}`
+                );
+                if (!response.ok)
+                    throw new Error('Không thể lấy thông tin người dùng');
+
+                const userData = await response.json();
+
+                // Tìm và cập nhật đơn hàng
+                const updatedOrders = userData.orders.map((o) => {
+                    if (o.id === order.id) {
+                        console.log(
+                            `Cập nhật đơn hàng ${o.id} từ ${o.status} thành Đã giao`
+                        );
+                        return { ...o, status: 'Đã giao' };
+                    }
+                    return o;
+                });
+
+                // Cập nhật lên server
+                const updateResponse = await fetch(
+                    `http://localhost:3001/users/${user.id}`,
+                    {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            orders: updatedOrders,
+                        }),
+                    }
+                );
+
+                if (!updateResponse.ok)
+                    throw new Error('Không thể cập nhật trạng thái đơn hàng');
+
+                alert('Cảm ơn bạn đã xác nhận!');
+                onClose();
+
+                // Sử dụng navigate để chuyển đến trang hồ sơ
+                navigate('/ho-so');
+            }
+        } catch (error) {
+            console.error('Lỗi khi cập nhật trạng thái đơn hàng:', error);
+            alert('Đã xảy ra lỗi khi cập nhật trạng thái đơn hàng');
+        }
+    };
+
+    // Xử lý khi người dùng hủy đơn hàng
+    const handleCancelOrder = async () => {
+        if (!user || !user.id) {
+            alert('Bạn cần đăng nhập để thực hiện thao tác này');
+            return;
+        }
+
+        try {
+            // Hiển thị thông báo xác nhận
+            if (
+                window.confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?')
+            ) {
+                // Lấy thông tin user hiện tại
+                const response = await fetch(
+                    `http://localhost:3001/users/${user.id}`
+                );
+                if (!response.ok)
+                    throw new Error('Không thể lấy thông tin người dùng');
+
+                const userData = await response.json();
+
+                // Tìm và cập nhật đơn hàng
+                const updatedOrders = userData.orders.map((o) => {
+                    if (o.id === order.id) {
+                        console.log(
+                            `Cập nhật đơn hàng ${o.id} từ ${o.status} thành Đã hủy`
+                        );
+                        return { ...o, status: 'Đã hủy' };
+                    }
+                    return o;
+                });
+
+                // Cập nhật lên server
+                const updateResponse = await fetch(
+                    `http://localhost:3001/users/${user.id}`,
+                    {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            orders: updatedOrders,
+                        }),
+                    }
+                );
+
+                if (!updateResponse.ok)
+                    throw new Error('Không thể cập nhật trạng thái đơn hàng');
+
+                alert('Đơn hàng đã được hủy thành công!');
+                onClose();
+
+                // Sử dụng navigate để chuyển đến trang hồ sơ
+                navigate('/ho-so');
+            }
+        } catch (error) {
+            console.error('Lỗi khi hủy đơn hàng:', error);
+            alert('Đã xảy ra lỗi khi hủy đơn hàng');
+        }
+    };
 
     if (!isOpen || !order) return null;
 
@@ -265,6 +393,20 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
                 </div>
 
                 <div className="flex justify-end p-6 border-t">
+                    {order.status === 'Đang giao' && (
+                        <button
+                            onClick={handleConfirmReceived}
+                            className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 mr-2">
+                            Đã nhận hàng
+                        </button>
+                    )}
+                    {order.status === 'Chưa giao' && (
+                        <button
+                            onClick={handleCancelOrder}
+                            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 mr-2">
+                            Hủy đơn hàng
+                        </button>
+                    )}
                     <button
                         onClick={onClose}
                         className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">

@@ -73,7 +73,7 @@ export function AuthProvider({ children }) {
                     email: foundUser.email,
                     skinType: foundUser.skinType,
                     wishlist: foundUser.wishlist || [],
-                    role: foundUser.role || 'user', // Sửa 'User' thành 'user'
+                    role: foundUser.role || 'user',
                 };
 
                 console.log('Login successful, storing user:', userToStore);
@@ -166,10 +166,17 @@ export function AuthProvider({ children }) {
         localStorage.removeItem('cart');
     };
 
+    // Hàm xóa lỗi
+    const clearError = () => {
+        setError(null);
+    };
+
     const value = {
         user,
         loading,
         error,
+        setError, // Thêm hàm setError để có thể xóa lỗi từ bên ngoài
+        clearError, // Thêm hàm clearError để xóa lỗi
         login,
         register,
         logout,
