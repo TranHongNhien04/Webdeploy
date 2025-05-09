@@ -1031,7 +1031,7 @@
   ],
   "contacts": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Ngọc Linh",
       "email": "ngoclinh@example.com",
       "message": "Mình muốn hỏi thêm về sản phẩm Serum Vitamin C, có phù hợp với da khô không?",
@@ -1040,7 +1040,7 @@
       "replyMessage": ""
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Thanh Hà",
       "email": "thanhha@example.com",
       "message": "Shop có sản phẩm nào dành cho da thường không? Mình cần tư vấn thêm.",
@@ -1049,7 +1049,7 @@
       "replyMessage": ""
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Minh Tuấn",
       "email": "minhtuan@example.com",
       "message": "Da mình bị dầu nhiều, có toner nào giúp kiềm dầu tốt không?",
@@ -1058,7 +1058,7 @@
       "replyMessage": ""
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Nguyễn Ngọc Hồng Minh",
       "email": "nguyenngochongminh@gmail.com",
       "message": "Mình muốn đặt lịch tư vấn chăm sóc da mặt, da mình bị khô và bong tróc nhiều.",
@@ -1067,7 +1067,7 @@
       "replyMessage": ""
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Nhiên",
       "email": "nhien@gmail.com",
       "message": "Shop có kem dưỡng nào dành cho da khô và nhạy cảm không?",

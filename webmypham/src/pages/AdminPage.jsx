@@ -16,14 +16,14 @@ const AdminPage = () => {
             <div className="flex-1 p-6 ml-64">
                 <Header />
                 <Routes>
-                    <Route path="/admin/orders" element={<Dashboard />} />
-                    <Route path="/admin/products" element={<Products />} />
-                    <Route path="/admin/services" element={<Services />} />
-                    <Route path="/admin/contact" element={<Contact />} />
-                    <Route path="/admin/users" element={<Users />} />
-                    <Route path="/admin/reports" element={<Reports />} />
-                    <Route path="/admin/settings" element={<Settings />} />
-                    <Route path="*" element={<Dashboard />} /> {/* Default to Dashboard for unmatched routes */}
+                    <Route path="/orders" element={<Dashboard />} />
+                    <Route path="/products" element={<Products />} />
+                    <Route path="/services" element={<Services />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/users" element={<Users />} />
+                    <Route path="/reports" element={<Reports />} />
+                    <Route path="/settings" element={<Settings />} />
+                    <Route path="*" element={<Dashboard />} />
                 </Routes>
             </div>
         </div>
