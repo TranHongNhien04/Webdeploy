@@ -9,6 +9,13 @@ const Reports = () => {
         startDate: '',
         endDate: '',
     });
+    // Thêm state cho dữ liệu tháng trước
+    const [prevMonthMetrics, setPrevMonthMetrics] = useState({
+        totalRevenue: 0,
+        sold: 0,
+        unsold: 0,
+        overdue: 0,
+    });
 
     const productPrices = {
         skincare: 500000,
@@ -65,6 +72,41 @@ const Reports = () => {
                 console.log('Bookings:', data);
                 setBookings(data);
                 setFilteredBookings(data);
+
+                // Tính toán dữ liệu tháng trước
+                const today = new Date();
+                const firstDayOfCurrentMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+                const lastDayOfPrevMonth = new Date(firstDayOfCurrentMonth);
+                lastDayOfPrevMonth.setDate(lastDayOfPrevMonth.getDate() - 1);
+                const firstDayOfPrevMonth = new Date(lastDayOfPrevMonth.getFullYear(), lastDayOfPrevMonth.getMonth(), 1);
+
+                const prevMonthBookings = data.filter(booking => {
+                    const bookingDate = new Date(booking.date);
+                    return bookingDate >= firstDayOfPrevMonth && bookingDate <= lastDayOfPrevMonth;
+                });
+
+                const prevSold = prevMonthBookings.filter(b => b.status === 'completed').length;
+                const prevUnsold = prevMonthBookings.filter(b => b.status !== 'completed').length;
+                const prevOverdue = prevMonthBookings.filter(b => {
+                    const bookingDate = parseDate(b.date);
+                    return (
+                        bookingDate.year < lastDayOfPrevMonth.getFullYear() ||
+                        (bookingDate.year === lastDayOfPrevMonth.getFullYear() &&
+                            bookingDate.month < lastDayOfPrevMonth.getMonth() + 1 &&
+                            b.status !== 'completed')
+                    );
+                }).length;
+
+                const prevTotalRevenue = prevMonthBookings
+                    .filter(b => b.status === 'completed')
+                    .reduce((sum, b) => sum + (productPrices[b.service] || 0), 0);
+
+                setPrevMonthMetrics({
+                    totalRevenue: prevTotalRevenue,
+                    sold: prevSold,
+                    unsold: prevUnsold,
+                    overdue: prevOverdue
+                });
             })
             .catch((error) => {
                 console.error('Error fetching data:', error);
@@ -200,7 +242,7 @@ const Reports = () => {
             const x = 40 + index * (barWidth + barSpacing);
             const height =
                 (metrics.salesByProduct[product] / maxQuantity) *
-                    (canvas.height - 60) || 0;
+                (canvas.height - 60) || 0;
             ctx.fillStyle = '#4B5EFC';
             ctx.fillRect(x, canvas.height - 30 - height, barWidth, height);
 
@@ -260,6 +302,12 @@ const Reports = () => {
         drawPieChart();
     }, [metrics.salesByProduct]);
 
+    // Thêm hàm tính phần trăm thay đổi
+    const calculatePercentChange = (current, previous) => {
+        if (previous === 0) return current > 0 ? 100 : 0;
+        return Math.round(((current - previous) / previous) * 100);
+    };
+
     return (
         <div className="p-4">
             <h2 className="text-2xl font-bold mb-6 text-gray-800">
@@ -314,8 +362,9 @@ const Reports = () => {
                                 <p className="text-2xl font-semibold text-green-600">
                                     {metrics.sold}
                                 </p>
-                                <p className="text-xs text-gray-400">
-                                    Tăng 6 tuần
+                                <p className={`text-sm ${calculatePercentChange(metrics.sold, prevMonthMetrics.sold) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                    {calculatePercentChange(metrics.sold, prevMonthMetrics.sold) >= 0 ? '+' : ''}
+                                    {calculatePercentChange(metrics.sold, prevMonthMetrics.sold)}% so với tháng trước
                                 </p>
                             </div>
                             <div className="p-4 border border-gray-200 rounded-lg bg-yellow-50">
@@ -325,8 +374,9 @@ const Reports = () => {
                                 <p className="text-2xl font-semibold text-yellow-600">
                                     {metrics.unsold}
                                 </p>
-                                <p className="text-xs text-gray-400">
-                                    Giảm 5 tuần
+                                <p className={`text-sm ${calculatePercentChange(metrics.unsold, prevMonthMetrics.unsold) >= 0 ? 'text-yellow-500' : 'text-green-500'}`}>
+                                    {calculatePercentChange(metrics.unsold, prevMonthMetrics.unsold) >= 0 ? '+' : ''}
+                                    {calculatePercentChange(metrics.unsold, prevMonthMetrics.unsold)}% so với tháng trước
                                 </p>
                             </div>
                             <div className="p-4 border border-gray-200 rounded-lg bg-red-50">
@@ -334,8 +384,9 @@ const Reports = () => {
                                 <p className="text-2xl font-semibold text-red-600">
                                     {metrics.overdue}
                                 </p>
-                                <p className="text-xs text-gray-400">
-                                    Tăng 3 tuần
+                                <p className={`text-sm ${calculatePercentChange(metrics.overdue, prevMonthMetrics.overdue) >= 0 ? 'text-red-500' : 'text-green-500'}`}>
+                                    {calculatePercentChange(metrics.overdue, prevMonthMetrics.overdue) >= 0 ? '+' : ''}
+                                    {calculatePercentChange(metrics.overdue, prevMonthMetrics.overdue)}% so với tháng trước
                                 </p>
                             </div>
                             <div className="p-4 border border-gray-200 rounded-lg bg-blue-50">
@@ -386,6 +437,38 @@ const Reports = () => {
                                     <p className="text-2xl font-semibold text-green-600">
                                         {formatCurrency(metrics.totalRevenue)}
                                     </p>
+                                    <p className={`text-sm ${calculatePercentChange(metrics.totalRevenue, prevMonthMetrics.totalRevenue) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                        {calculatePercentChange(metrics.totalRevenue, prevMonthMetrics.totalRevenue) >= 0 ? '+' : ''}
+                                        {calculatePercentChange(metrics.totalRevenue, prevMonthMetrics.totalRevenue)}% so với tháng trước
+                                    </p>
+                                    <div className="mt-4">
+                                        <div className="w-full bg-gray-200 rounded-full h-2">
+                                            <div
+                                                className="bg-green-600 h-2 rounded-full"
+                                                style={{ width: `${Math.min(100, (metrics.totalRevenue / (prevMonthMetrics.totalRevenue || 1)) * 100)}%` }}
+                                            ></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="p-4 border border-gray-200 rounded-lg bg-blue-50">
+                                    <p className="text-sm text-gray-500">
+                                        Lợi nhuận ước tính
+                                    </p>
+                                    <p className="text-2xl font-semibold text-blue-600">
+                                        {formatCurrency(metrics.totalRevenue * 0.35)}
+                                    </p>
+                                    <p className={`text-sm ${calculatePercentChange(metrics.totalRevenue * 0.35, prevMonthMetrics.totalRevenue * 0.35) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                        {calculatePercentChange(metrics.totalRevenue * 0.35, prevMonthMetrics.totalRevenue * 0.35) >= 0 ? '+' : ''}
+                                        {calculatePercentChange(metrics.totalRevenue * 0.35, prevMonthMetrics.totalRevenue * 0.35)}% so với tháng trước
+                                    </p>
+                                    <div className="mt-4">
+                                        <div className="w-full bg-gray-200 rounded-full h-2">
+                                            <div
+                                                className="bg-blue-600 h-2 rounded-full"
+                                                style={{ width: `${Math.min(100, (metrics.totalRevenue / (prevMonthMetrics.totalRevenue || 1)) * 100)}%` }}
+                                            ></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

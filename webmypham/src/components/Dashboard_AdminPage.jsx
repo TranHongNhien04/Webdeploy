@@ -22,6 +22,20 @@ const Dashboard = () => {
     const [prevProfit, setPrevProfit] = useState(0);
     const [prevCustomers, setPrevCustomers] = useState(0);
 
+    // Thêm state cho thống kê đơn hàng
+    const [orderStats, setOrderStats] = useState({
+        total: 0,
+        completed: 0,
+        canceled: 0,
+        shipping: 0,
+        pending: 0,
+        prevTotal: 0,
+        prevCompleted: 0,
+        prevCanceled: 0,
+        prevShipping: 0,
+        prevPending: 0
+    });
+
     const formatDate = (dateStr) => {
         if (!dateStr || typeof dateStr !== 'string') {
             return 'N/A';
@@ -168,12 +182,54 @@ const Dashboard = () => {
                 // Previous period data (orders before current month)
                 const currentDate = new Date();
                 const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                const firstDayOfPrevMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+                const lastDayOfPrevMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
 
-                const previousOrders = users
+                // Lọc đơn hàng tháng hiện tại
+                const currentMonthOrders = users
                     .flatMap((user) => user.orders)
-                    .filter(order => parseDate(order.date) < firstDayOfMonth);
+                    .filter(order => {
+                        const orderDate = parseDate(order.date);
+                        return orderDate >= firstDayOfMonth && orderDate <= currentDate;
+                    });
 
-                const prevTotalRevenue = previousOrders
+                // Lọc đơn hàng tháng trước
+                const prevMonthOrders = users
+                    .flatMap((user) => user.orders)
+                    .filter(order => {
+                        const orderDate = parseDate(order.date);
+                        return orderDate >= firstDayOfPrevMonth && orderDate <= lastDayOfPrevMonth;
+                    });
+
+                // Tính toán thống kê đơn hàng tháng hiện tại
+                const totalOrders = currentMonthOrders.length;
+                const completedOrders = currentMonthOrders.filter(order => order.status === 'Đã giao').length;
+                const canceledOrders = currentMonthOrders.filter(order => order.status === 'Đã hủy').length;
+                const shippingOrders = currentMonthOrders.filter(order => order.status === 'Đang giao').length;
+                const pendingOrders = currentMonthOrders.filter(order => order.status === 'Chưa giao').length;
+
+                // Tính toán thống kê đơn hàng tháng trước
+                const prevTotalOrders = prevMonthOrders.length;
+                const prevCompletedOrders = prevMonthOrders.filter(order => order.status === 'Đã giao').length;
+                const prevCanceledOrders = prevMonthOrders.filter(order => order.status === 'Đã hủy').length;
+                const prevShippingOrders = prevMonthOrders.filter(order => order.status === 'Đang giao').length;
+                const prevPendingOrders = prevMonthOrders.filter(order => order.status === 'Chưa giao').length;
+
+                // Cập nhật state thống kê đơn hàng
+                setOrderStats({
+                    total: totalOrders,
+                    completed: completedOrders,
+                    canceled: canceledOrders,
+                    shipping: shippingOrders,
+                    pending: pendingOrders,
+                    prevTotal: prevTotalOrders,
+                    prevCompleted: prevCompletedOrders,
+                    prevCanceled: prevCanceledOrders,
+                    prevShipping: prevShippingOrders,
+                    prevPending: prevPendingOrders
+                });
+
+                const prevTotalRevenue = prevMonthOrders
                     .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
                 setPrevRevenue(prevTotalRevenue);
                 setPrevProfit(prevTotalRevenue * profitMargin);
@@ -183,8 +239,8 @@ const Dashboard = () => {
                         .filter((user) =>
                             user.orders.some(
                                 (o) =>
-                                    parseDate(o.date) >= new Date('2025-04-01') &&
-                                    parseDate(o.date) < new Date('2025-05-01')
+                                    parseDate(o.date) >= firstDayOfPrevMonth &&
+                                    parseDate(o.date) <= lastDayOfPrevMonth
                             )
                         )
                         .map((user) => user.id)
@@ -502,34 +558,74 @@ const Dashboard = () => {
 
     return (
         <div>
-            <div className="grid grid-cols-3 gap-6 mb-6">
+            {/* Thêm thống kê đơn hàng */}
+            <div className="grid grid-cols-2 gap-6 mb-6">
                 <div className="bg-white p-6 rounded-lg shadow">
-                    <h2 className="text-lg font-semibold">Doanh thu</h2>
-                    <p className="text-3xl font-bold">
-                        {formatCurrency(revenue)}
-                    </p>
-                    <p className={`${calculatePercentChange(revenue, prevRevenue) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        {calculatePercentChange(revenue, prevRevenue) >= 0 ? '+' : ''}
-                        {calculatePercentChange(revenue, prevRevenue)}% so với kỳ trước
-                    </p>
+                    <h2 className="text-lg font-semibold mb-4">Thống kê đơn hàng tháng này</h2>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="p-3 bg-blue-50 rounded-lg">
+                            <p className="text-sm text-gray-600">Tổng đơn hàng</p>
+                            <p className="text-2xl font-bold text-blue-600">{orderStats.total}</p>
+                            <p className={`text-sm ${calculatePercentChange(orderStats.total, orderStats.prevTotal) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                {calculatePercentChange(orderStats.total, orderStats.prevTotal) >= 0 ? '+' : ''}
+                                {calculatePercentChange(orderStats.total, orderStats.prevTotal)}% so với tháng trước
+                            </p>
+                        </div>
+                        <div className="p-3 bg-green-50 rounded-lg">
+                            <p className="text-sm text-gray-600">Đơn thành công</p>
+                            <p className="text-2xl font-bold text-green-600">{orderStats.completed}</p>
+                            <p className={`text-sm ${calculatePercentChange(orderStats.completed, orderStats.prevCompleted) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                {calculatePercentChange(orderStats.completed, orderStats.prevCompleted) >= 0 ? '+' : ''}
+                                {calculatePercentChange(orderStats.completed, orderStats.prevCompleted)}% so với tháng trước
+                            </p>
+                        </div>
+                        <div className="p-3 bg-yellow-50 rounded-lg">
+                            <p className="text-sm text-gray-600">Đơn đang giao</p>
+                            <p className="text-2xl font-bold text-yellow-600">{orderStats.shipping}</p>
+                            <p className={`text-sm ${calculatePercentChange(orderStats.shipping, orderStats.prevShipping) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                {calculatePercentChange(orderStats.shipping, orderStats.prevShipping) >= 0 ? '+' : ''}
+                                {calculatePercentChange(orderStats.shipping, orderStats.prevShipping)}% so với tháng trước
+                            </p>
+                        </div>
+                        <div className="p-3 bg-red-50 rounded-lg">
+                            <p className="text-sm text-gray-600">Đơn đã hủy</p>
+                            <p className="text-2xl font-bold text-red-600">{orderStats.canceled}</p>
+                            <p className={`text-sm ${calculatePercentChange(orderStats.canceled, orderStats.prevCanceled) >= 0 ? 'text-red-500' : 'text-green-500'}`}>
+                                {calculatePercentChange(orderStats.canceled, orderStats.prevCanceled) >= 0 ? '+' : ''}
+                                {calculatePercentChange(orderStats.canceled, orderStats.prevCanceled)}% so với tháng trước
+                            </p>
+                        </div>
+                    </div>
                 </div>
+
                 <div className="bg-white p-6 rounded-lg shadow">
-                    <h2 className="text-lg font-semibold">Lợi nhuận</h2>
-                    <p className="text-3xl font-bold">
-                        {formatCurrency(profit)}
-                    </p>
-                    <p className={`${calculatePercentChange(profit, prevProfit) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        {calculatePercentChange(profit, prevProfit) >= 0 ? '+' : ''}
-                        {calculatePercentChange(profit, prevProfit)}% so với kỳ trước
-                    </p>
-                </div>
-                <div className="bg-white p-6 rounded-lg shadow">
-                    <h2 className="text-lg font-semibold">Khách hàng mới</h2>
-                    <p className="text-3xl font-bold">{newCustomers}</p>
-                    <p className={`${calculatePercentChange(newCustomers, prevCustomers) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        {calculatePercentChange(newCustomers, prevCustomers) >= 0 ? '+' : ''}
-                        {calculatePercentChange(newCustomers, prevCustomers)}% so với kỳ trước
-                    </p>
+                    <h2 className="text-lg font-semibold mb-4">Thống kê tài chính tháng này</h2>
+                    <div className="grid grid-cols-3 gap-4">
+                        <div className="p-3 bg-blue-50 rounded-lg">
+                            <p className="text-sm text-gray-600">Doanh thu</p>
+                            <p className="text-2xl font-bold text-blue-600">{formatCurrency(revenue)}</p>
+                            <p className={`text-sm ${calculatePercentChange(revenue, prevRevenue) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                {calculatePercentChange(revenue, prevRevenue) >= 0 ? '+' : ''}
+                                {calculatePercentChange(revenue, prevRevenue)}% so với tháng trước
+                            </p>
+                        </div>
+                        <div className="p-3 bg-green-50 rounded-lg">
+                            <p className="text-sm text-gray-600">Lợi nhuận</p>
+                            <p className="text-2xl font-bold text-green-600">{formatCurrency(profit)}</p>
+                            <p className={`text-sm ${calculatePercentChange(profit, prevProfit) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                {calculatePercentChange(profit, prevProfit) >= 0 ? '+' : ''}
+                                {calculatePercentChange(profit, prevProfit)}% so với tháng trước
+                            </p>
+                        </div>
+                        <div className="p-3 bg-purple-50 rounded-lg">
+                            <p className="text-sm text-gray-600">Khách hàng mới</p>
+                            <p className="text-2xl font-bold text-purple-600">{newCustomers}</p>
+                            <p className={`text-sm ${calculatePercentChange(newCustomers, prevCustomers) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                {calculatePercentChange(newCustomers, prevCustomers) >= 0 ? '+' : ''}
+                                {calculatePercentChange(newCustomers, prevCustomers)}% so với tháng trước
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div className="bg-white p-6 rounded-lg shadow">
@@ -584,8 +680,8 @@ const Dashboard = () => {
                             onClick={handlePrepareAndDeliver}
                             disabled={selectedOrders.length === 0}
                             className={`px-4 py-2 rounded font-semibold ${selectedOrders.length === 0
-                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                    : 'bg-green-500 text-white'
+                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                : 'bg-green-500 text-white'
                                 }`}>
                             Chuẩn bị và giao
                         </button>
@@ -715,8 +811,8 @@ const Dashboard = () => {
                                     key={page}
                                     onClick={() => handlePageChange(page)}
                                     className={`px-3 py-1 rounded ${currentPage === page
-                                            ? 'bg-blue-500 text-white'
-                                            : 'border'
+                                        ? 'bg-blue-500 text-white'
+                                        : 'border'
                                         }`}>
                                     {page}
                                 </button>
