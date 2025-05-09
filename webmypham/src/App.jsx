@@ -97,14 +97,14 @@ function App() {
                                 </MainLayout>
                             }
                         />
-                        <Route
+                        {/* <Route
                             path="/lien-he"
                             element={
                                 <MainLayout>
                                     <Contact />
                                 </MainLayout>
                             }
-                        />
+                        /> */}
                         <Route
                             path="/ho-so"
                             element={

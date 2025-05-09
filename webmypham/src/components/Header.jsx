@@ -205,7 +205,7 @@ export default function Header() {
                             }`}>
                             Giới thiệu
                         </Link>
-                        <Link
+                        {/* <Link
                             to="/lien-he"
                             className={`hover:text-[#005F69] transition-colors ${
                                 isActive('/lien-he')
@@ -213,7 +213,7 @@ export default function Header() {
                                     : ''
                             }`}>
                             Liên hệ
-                        </Link>
+                        </Link> */}
                     </nav>
 
                     {/* Mobile Navigation */}
@@ -254,14 +254,14 @@ export default function Header() {
                                     onClick={() => setIsMobileMenuOpen(false)}>
                                     Giới thiệu
                                 </Link>
-                                <Link
+                                {/* <Link
                                     to="/lien-he"
                                     className={`text-white py-2 ${
                                         isActive('/lien-he') ? 'font-bold' : ''
                                     }`}
                                     onClick={() => setIsMobileMenuOpen(false)}>
                                     Liên hệ
-                                </Link>
+                                </Link> */}
                                 <Link
                                     to="/gio-hang"
                                     className={`text-white py-2 flex items-center gap-2 ${

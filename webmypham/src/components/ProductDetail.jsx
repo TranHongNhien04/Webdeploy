@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
 import Toast from './Toast';
-const ProductDetail = ({ product, brand, benefits }) => {
+const ProductDetail = ({ product }) => {
     const { addToCart } = useCart();
     const [skinTypes, setSkinTypes] = useState([]);
     const [toast, setToast] = useState(null);
@@ -44,13 +44,6 @@ const ProductDetail = ({ product, brand, benefits }) => {
         });
     };
 
-    const getBenefitNames = (benefitIds) => {
-        return benefitIds
-            .map((id) => benefits.find((b) => b.id === id)?.name)
-            .filter(Boolean)
-            .join(', ');
-    };
-
     const getSkinTypeNames = (skinTypeIds) => {
         if (!skinTypeIds || skinTypeIds.length === 0) return 'Tất cả loại da';
 
@@ -91,9 +84,7 @@ const ProductDetail = ({ product, brand, benefits }) => {
                     </p>
                 )}
                 <p className="text-gray-600 mt-4">{product.description}</p>
-                <p className="text-gray-600 mt-2">
-                    Công dụng: {getBenefitNames(product.benefit) || 'Không có'}
-                </p>
+
                 <p className="text-gray-600 mt-2">
                     Phù hợp với:{' '}
                     {getSkinTypeNames(product.skinType) || 'Tất cả loại da'}

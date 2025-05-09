@@ -224,10 +224,15 @@ const ProductGrid = () => {
     };
 
     const getBenefitNames = (benefitIds) => {
-        return benefitIds
-            .map((id) => benefits.find((b) => b.id === id)?.name)
-            .filter(Boolean)
-            .join(', ');
+        if (
+            !benefitIds ||
+            !Array.isArray(benefitIds) ||
+            benefitIds.length === 0
+        ) {
+            return '';
+        }
+
+        return benefitIds.join(', ');
     };
 
     if (loading) {
@@ -376,10 +381,8 @@ const ProductGrid = () => {
                         </div>
                     </div>
 
-                    <div>
-                        <h3 className="font-semibold text-lg mb-3">
-                            Công dụng
-                        </h3>
+                    <div className="mb-6">
+                        <h3 className="font-medium mb-2">Công dụng</h3>
                         <div className="space-y-2">
                             {benefits.map((benefit) => (
                                 <div
@@ -394,11 +397,9 @@ const ProductGrid = () => {
                                         onChange={() =>
                                             toggleBenefit(benefit.id)
                                         }
-                                        className="mr-2 h-4 w-4 rounded border-gray-300 text-gray-800 focus:ring-gray-500"
+                                        className="mr-2"
                                     />
-                                    <label
-                                        htmlFor={`benefit-${benefit.id}`}
-                                        className="text-sm text-gray-700 cursor-pointer hover:text-gray-900">
+                                    <label htmlFor={`benefit-${benefit.id}`}>
                                         {benefit.name}
                                     </label>
                                 </div>

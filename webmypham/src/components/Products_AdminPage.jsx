@@ -23,8 +23,6 @@ const Products = () => {
         category: '',
         subcategory: '',
         skinType: '',
-        benefit: [],
-        // brandId removed
     });
     const [isAdding, setIsAdding] = useState(false);
     const [editingProduct, setEditingProduct] = useState(null);
@@ -40,9 +38,9 @@ const Products = () => {
 
                 // Set the next product ID based on the count of existing products
                 const nextId = (data.length + 1).toString();
-                setNewProduct(prev => ({
+                setNewProduct((prev) => ({
                     ...prev,
-                    productId: nextId
+                    productId: nextId,
                 }));
             })
             .catch((error) => console.error('Error fetching products:', error));
@@ -51,19 +49,25 @@ const Products = () => {
         fetch('http://localhost:3001/categories')
             .then((response) => response.json())
             .then((data) => setCategories(data))
-            .catch((error) => console.error('Error fetching categories:', error));
+            .catch((error) =>
+                console.error('Error fetching categories:', error)
+            );
 
         // Fetch skin types
         fetch('http://localhost:3001/skinTypes')
             .then((response) => response.json())
             .then((data) => setSkinTypes(data))
-            .catch((error) => console.error('Error fetching skin types:', error));
+            .catch((error) =>
+                console.error('Error fetching skin types:', error)
+            );
 
         // Fetch subcategories
         fetch('http://localhost:3001/subcategories')
             .then((response) => response.json())
             .then((data) => setSubcategories(data))
-            .catch((error) => console.error('Error fetching subcategories:', error));
+            .catch((error) =>
+                console.error('Error fetching subcategories:', error)
+            );
 
         // Fetch brands
         fetch('http://localhost:3001/brands')
@@ -146,9 +150,10 @@ const Products = () => {
             body: JSON.stringify({
                 ...newProduct,
                 price: parseInt(newProduct.price),
-                originalPrice: newProduct.originalPrice ? parseInt(newProduct.originalPrice) : null,
+                originalPrice: newProduct.originalPrice
+                    ? parseInt(newProduct.originalPrice)
+                    : null,
                 skinType: [newProduct.skinType], // Convert to array for storage
-                benefit: newProduct.benefit.split(',').map((b) => b.trim()).filter((b) => b),
             }),
         })
             .then((response) => response.json())
@@ -157,7 +162,7 @@ const Products = () => {
                 setProducts(updatedProducts);
                 setFilteredProducts(updatedProducts);
 
-                // Set the next product ID for a new product
+                // Reset form
                 const nextId = (updatedProducts.length + 1).toString();
                 setNewProduct({
                     productId: nextId,
@@ -170,7 +175,6 @@ const Products = () => {
                     category: '',
                     subcategory: '',
                     skinType: '',
-                    benefit: [],
                 });
                 setIsAdding(false);
             })
@@ -185,9 +189,12 @@ const Products = () => {
             body: JSON.stringify({
                 ...editingProduct,
                 price: parseInt(editingProduct.price),
-                originalPrice: editingProduct.originalPrice ? parseInt(editingProduct.originalPrice) : null,
-                skinType: editingProduct.skinType,
-                benefit: editingProduct.benefit.split(',').map((b) => b.trim()).filter((b) => b),
+                originalPrice: editingProduct.originalPrice
+                    ? parseInt(editingProduct.originalPrice)
+                    : null,
+                skinType: Array.isArray(editingProduct.skinType)
+                    ? editingProduct.skinType
+                    : [editingProduct.skinType].filter(Boolean),
             }),
         })
             .then(() => {
@@ -216,8 +223,12 @@ const Products = () => {
 
     // Filter subcategories based on selected category
     const getFilteredSubcategories = () => {
-        const selectedCategory = editingProduct ? editingProduct.category : newProduct.category;
-        return subcategories.filter((subcategory) => subcategory.categoryId === selectedCategory);
+        const selectedCategory = editingProduct
+            ? editingProduct.category
+            : newProduct.category;
+        return subcategories.filter(
+            (subcategory) => subcategory.categoryId === selectedCategory
+        );
     };
 
     return (
@@ -226,7 +237,9 @@ const Products = () => {
             <div className="bg-white p-6 rounded-lg shadow">
                 {/* Filter Section */}
                 <div className="mb-6 p-4 border rounded">
-                    <h3 className="text-lg font-semibold mb-2">Bộ lọc sản phẩm</h3>
+                    <h3 className="text-lg font-semibold mb-2">
+                        Bộ lọc sản phẩm
+                    </h3>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block mb-1">Danh mục</label>
@@ -234,11 +247,12 @@ const Products = () => {
                                 name="category"
                                 value={filters.category}
                                 onChange={handleFilterChange}
-                                className="w-full p-2 border rounded"
-                            >
+                                className="w-full p-2 border rounded">
                                 <option value="">Tất cả danh mục</option>
                                 {categories.map((category) => (
-                                    <option key={category.id} value={category.id}>
+                                    <option
+                                        key={category.id}
+                                        value={category.id}>
                                         {category.name}
                                     </option>
                                 ))}
@@ -250,11 +264,12 @@ const Products = () => {
                                 name="skinType"
                                 value={filters.skinType}
                                 onChange={handleFilterChange}
-                                className="w-full p-2 border rounded"
-                            >
+                                className="w-full p-2 border rounded">
                                 <option value="">Tất cả loại da</option>
                                 {skinTypes.map((skinType) => (
-                                    <option key={skinType.id} value={skinType.id}>
+                                    <option
+                                        key={skinType.id}
+                                        value={skinType.id}>
                                         {skinType.name}
                                     </option>
                                 ))}
@@ -268,14 +283,13 @@ const Products = () => {
                         onClick={() => {
                             // Calculate next ID based on current products length
                             const nextId = (products.length + 1).toString();
-                            setNewProduct(prev => ({
+                            setNewProduct((prev) => ({
                                 ...prev,
-                                productId: nextId
+                                productId: nextId,
                             }));
                             setIsAdding(true);
                         }}
-                        className="bg-green-500 text-white px-4 py-2 rounded"
-                    >
+                        className="bg-green-500 text-white px-4 py-2 rounded">
                         Thêm sản phẩm mới
                     </button>
                 </div>
@@ -284,14 +298,20 @@ const Products = () => {
                 {(isAdding || editingProduct) && (
                     <div className="mb-6 p-4 border rounded">
                         <h3 className="text-lg font-semibold mb-2">
-                            {editingProduct ? 'Sửa sản phẩm' : 'Thêm sản phẩm mới'}
+                            {editingProduct
+                                ? 'Sửa sản phẩm'
+                                : 'Thêm sản phẩm mới'}
                         </h3>
                         <div className="grid grid-cols-2 gap-4">
                             <input
                                 type="text"
                                 name="productId"
                                 placeholder="Product ID"
-                                value={editingProduct ? editingProduct.productId : newProduct.productId}
+                                value={
+                                    editingProduct
+                                        ? editingProduct.productId
+                                        : newProduct.productId
+                                }
                                 readOnly
                                 className="p-2 border rounded bg-gray-100"
                             />
@@ -299,7 +319,11 @@ const Products = () => {
                                 type="text"
                                 name="title"
                                 placeholder="Tên sản phẩm"
-                                value={editingProduct ? editingProduct.title : newProduct.title}
+                                value={
+                                    editingProduct
+                                        ? editingProduct.title
+                                        : newProduct.title
+                                }
                                 onChange={handleInputChange}
                                 className="p-2 border rounded"
                             />
@@ -307,7 +331,11 @@ const Products = () => {
                                 type="text"
                                 name="description"
                                 placeholder="Mô tả"
-                                value={editingProduct ? editingProduct.description : newProduct.description}
+                                value={
+                                    editingProduct
+                                        ? editingProduct.description
+                                        : newProduct.description
+                                }
                                 onChange={handleInputChange}
                                 className="p-2 border rounded"
                             />
@@ -316,7 +344,11 @@ const Products = () => {
                                 type="number"
                                 name="price"
                                 placeholder="Giá sản phẩm"
-                                value={editingProduct ? editingProduct.price : newProduct.price}
+                                value={
+                                    editingProduct
+                                        ? editingProduct.price
+                                        : newProduct.price
+                                }
                                 onChange={handleInputChange}
                                 className="p-2 border rounded"
                             />
@@ -325,19 +357,29 @@ const Products = () => {
                                 <input
                                     type="checkbox"
                                     name="onSale"
-                                    checked={editingProduct ? editingProduct.onSale : newProduct.onSale}
+                                    checked={
+                                        editingProduct
+                                            ? editingProduct.onSale
+                                            : newProduct.onSale
+                                    }
                                     onChange={handleInputChange}
                                     className="mr-2"
                                 />
                                 Đang giảm giá
                             </label>
                             {/* Original price field - only visible when onSale is true */}
-                            {(editingProduct ? editingProduct.onSale : newProduct.onSale) && (
+                            {(editingProduct
+                                ? editingProduct.onSale
+                                : newProduct.onSale) && (
                                 <input
                                     type="number"
                                     name="originalPrice"
                                     placeholder="Giá gốc (trước khi giảm)"
-                                    value={editingProduct ? editingProduct.originalPrice : newProduct.originalPrice}
+                                    value={
+                                        editingProduct
+                                            ? editingProduct.originalPrice
+                                            : newProduct.originalPrice
+                                    }
                                     onChange={handleInputChange}
                                     className="p-2 border rounded bg-yellow-50"
                                 />
@@ -346,7 +388,11 @@ const Products = () => {
                                 type="text"
                                 name="image"
                                 placeholder="URL hình ảnh"
-                                value={editingProduct ? editingProduct.image : newProduct.image}
+                                value={
+                                    editingProduct
+                                        ? editingProduct.image
+                                        : newProduct.image
+                                }
                                 onChange={handleInputChange}
                                 className="p-2 border rounded"
                             />
@@ -354,65 +400,83 @@ const Products = () => {
                                 <label className="block mb-1">Danh mục</label>
                                 <select
                                     name="category"
-                                    value={editingProduct ? editingProduct.category : newProduct.category}
+                                    value={
+                                        editingProduct
+                                            ? editingProduct.category
+                                            : newProduct.category
+                                    }
                                     onChange={handleInputChange}
-                                    className="w-full p-2 border rounded"
-                                >
+                                    className="w-full p-2 border rounded">
                                     <option value="">Chọn danh mục</option>
                                     {categories.map((category) => (
-                                        <option key={category.id} value={category.id}>
+                                        <option
+                                            key={category.id}
+                                            value={category.id}>
                                             {category.name}
                                         </option>
                                     ))}
                                 </select>
                             </div>
                             <div>
-                                <label className="block mb-1">Danh mục phụ</label>
+                                <label className="block mb-1">
+                                    Danh mục phụ
+                                </label>
                                 <select
                                     name="subcategory"
-                                    value={editingProduct ? editingProduct.subcategory : newProduct.subcategory}
+                                    value={
+                                        editingProduct
+                                            ? editingProduct.subcategory
+                                            : newProduct.subcategory
+                                    }
                                     onChange={handleInputChange}
                                     className="w-full p-2 border rounded"
-                                    disabled={!(editingProduct ? editingProduct.category : newProduct.category)}
-                                >
+                                    disabled={
+                                        !(editingProduct
+                                            ? editingProduct.category
+                                            : newProduct.category)
+                                    }>
                                     <option value="">Chọn danh mục phụ</option>
-                                    {getFilteredSubcategories().map((subcategory) => (
-                                        <option key={subcategory.id} value={subcategory.id}>
-                                            {subcategory.name}
-                                        </option>
-                                    ))}
+                                    {getFilteredSubcategories().map(
+                                        (subcategory) => (
+                                            <option
+                                                key={subcategory.id}
+                                                value={subcategory.id}>
+                                                {subcategory.name}
+                                            </option>
+                                        )
+                                    )}
                                 </select>
                             </div>
                             <div>
                                 <label className="block mb-1">Loại da</label>
                                 <select
                                     name="skinType"
-                                    value={editingProduct ? editingProduct.skinType : newProduct.skinType}
+                                    value={
+                                        editingProduct
+                                            ? editingProduct.skinType
+                                            : newProduct.skinType
+                                    }
                                     onChange={handleInputChange}
-                                    className="w-full p-2 border rounded"
-                                >
+                                    className="w-full p-2 border rounded">
                                     <option value="">Chọn loại da</option>
                                     {skinTypes.map((skinType) => (
-                                        <option key={skinType.id} value={skinType.id}>
+                                        <option
+                                            key={skinType.id}
+                                            value={skinType.id}>
                                             {skinType.name}
                                         </option>
                                     ))}
                                 </select>
                             </div>
-                            <input
-                                type="text"
-                                name="benefit"
-                                placeholder="Mô tả (phân cách bằng dấu phẩy)"
-                                value={editingProduct ? editingProduct.benefit : newProduct.benefit}
-                                onChange={handleInputChange}
-                                className="p-2 border rounded"
-                            />
                         </div>
                         <div className="mt-4 flex space-x-2">
                             <button
-                                onClick={editingProduct ? handleUpdateProduct : handleAddProduct}
-                                className="bg-blue-500 text-white px-4 py-2 rounded"
-                            >
+                                onClick={
+                                    editingProduct
+                                        ? handleUpdateProduct
+                                        : handleAddProduct
+                                }
+                                className="bg-blue-500 text-white px-4 py-2 rounded">
                                 {editingProduct ? 'Cập nhật' : 'Thêm'}
                             </button>
                             <button
@@ -420,8 +484,7 @@ const Products = () => {
                                     setIsAdding(false);
                                     setEditingProduct(null);
                                 }}
-                                className="bg-gray-500 text-white px-4 py-2 rounded"
-                            >
+                                className="bg-gray-500 text-white px-4 py-2 rounded">
                                 Hủy
                             </button>
                         </div>
@@ -446,19 +509,23 @@ const Products = () => {
                                 <td className="p-2">{product.productId}</td>
                                 <td className="p-2">{product.title}</td>
                                 <td className="p-2">{product.description}</td>
-                                <td className="p-2">{formatPrice(product.price)}</td>
+                                <td className="p-2">
+                                    {formatPrice(product.price)}
+                                </td>
                                 <td className="p-2">{product.category}</td>
                                 <td className="p-2 flex space-x-2">
                                     <button
-                                        onClick={() => setEditingProduct(product)}
-                                        className="text-blue-500"
-                                    >
+                                        onClick={() =>
+                                            setEditingProduct(product)
+                                        }
+                                        className="text-blue-500">
                                         Sửa
                                     </button>
                                     <button
-                                        onClick={() => handleDeleteProduct(product.id)}
-                                        className="text-red-500"
-                                    >
+                                        onClick={() =>
+                                            handleDeleteProduct(product.id)
+                                        }
+                                        className="text-red-500">
                                         Xóa
                                     </button>
                                 </td>
