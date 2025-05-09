@@ -193,9 +193,9 @@ const Users = () => {
                                         className="text-blue-500 hover:underline">
                                         Xem
                                     </button>
-                                    <button className="text-red-500 hover:underline">
+                                    {/* <button className="text-red-500 hover:underline">
                                         Xóa
-                                    </button>
+                                    </button> */}
                                 </td>
                             </tr>
                         ))}

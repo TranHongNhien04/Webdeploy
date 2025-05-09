@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
+import AdminOrderDetailsModal from './AdminOrderDetailsModal';
+import { RefreshCw } from 'lucide-react';
 
 const Dashboard = () => {
     const [reportData, setReportData] = useState([]);
@@ -21,6 +23,7 @@ const Dashboard = () => {
     const [prevRevenue, setPrevRevenue] = useState(0);
     const [prevProfit, setPrevProfit] = useState(0);
     const [prevCustomers, setPrevCustomers] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
 
     // Thêm state cho thống kê đơn hàng
     const [orderStats, setOrderStats] = useState({
@@ -33,8 +36,173 @@ const Dashboard = () => {
         prevCompleted: 0,
         prevCanceled: 0,
         prevShipping: 0,
-        prevPending: 0
+        prevPending: 0,
     });
+
+    // Hàm tải lại dữ liệu
+    const refreshData = () => {
+        setIsLoading(true);
+        fetchOrderData()
+            .then(() => {
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                console.error('Lỗi khi tải lại dữ liệu:', error);
+                setIsLoading(false);
+            });
+    };
+
+    // Tách hàm fetch data để có thể gọi lại khi cần
+    const fetchOrderData = async () => {
+        try {
+            const response = await fetch('http://localhost:3001/users');
+            const users = await response.json();
+
+            const orders = users
+                .flatMap((user) =>
+                    user.orders.map((order) => ({
+                        ...order,
+                        customerName: user.name,
+                        userId: user.id,
+                        rawDate: order.date,
+                    }))
+                )
+                .map((order) => ({
+                    orderId: order.id,
+                    name: order.customerName,
+                    value: formatCurrency(order.totalAmount),
+                    date: formatDate(order.date),
+                    rawDate: order.date,
+                    status: order.status,
+                    statusColor: getStatusColor(order.status),
+                }));
+            setReportData(orders);
+            setFilteredData(orders);
+
+            const totalRevenue = users
+                .flatMap((user) => user.orders)
+                .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+            setRevenue(totalRevenue);
+            const profitMargin = 0.35;
+            setProfit(totalRevenue * profitMargin);
+
+            const uniqueUsers = new Set(
+                users
+                    .filter((user) =>
+                        user.orders.some(
+                            (o) => parseDate(o.date) >= new Date('2025-05-01')
+                        )
+                    )
+                    .map((user) => user.id)
+            );
+            setNewCustomers(uniqueUsers.size);
+
+            const currentDate = new Date();
+            const firstDayOfMonth = new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth(),
+                1
+            );
+            const firstDayOfPrevMonth = new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth() - 1,
+                1
+            );
+            const lastDayOfPrevMonth = new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth(),
+                0
+            );
+
+            // Lọc đơn hàng tháng hiện tại
+            const currentMonthOrders = users
+                .flatMap((user) => user.orders)
+                .filter((order) => {
+                    const orderDate = parseDate(order.date);
+                    return (
+                        orderDate >= firstDayOfMonth && orderDate <= currentDate
+                    );
+                });
+
+            // Lọc đơn hàng tháng trước
+            const prevMonthOrders = users
+                .flatMap((user) => user.orders)
+                .filter((order) => {
+                    const orderDate = parseDate(order.date);
+                    return (
+                        orderDate >= firstDayOfPrevMonth &&
+                        orderDate <= lastDayOfPrevMonth
+                    );
+                });
+
+            // Tính toán thống kê đơn hàng tháng hiện tại
+            const totalOrders = currentMonthOrders.length;
+            const completedOrders = currentMonthOrders.filter(
+                (order) => order.status === 'Đã giao'
+            ).length;
+            const canceledOrders = currentMonthOrders.filter(
+                (order) => order.status === 'Đã hủy'
+            ).length;
+            const shippingOrders = currentMonthOrders.filter(
+                (order) => order.status === 'Đang giao'
+            ).length;
+            const pendingOrders = currentMonthOrders.filter(
+                (order) => order.status === 'Chưa giao'
+            ).length;
+
+            // Tính toán thống kê đơn hàng tháng trước
+            const prevTotalOrders = prevMonthOrders.length;
+            const prevCompletedOrders = prevMonthOrders.filter(
+                (order) => order.status === 'Đã giao'
+            ).length;
+            const prevCanceledOrders = prevMonthOrders.filter(
+                (order) => order.status === 'Đã hủy'
+            ).length;
+            const prevShippingOrders = prevMonthOrders.filter(
+                (order) => order.status === 'Đang giao'
+            ).length;
+            const prevPendingOrders = prevMonthOrders.filter(
+                (order) => order.status === 'Chưa giao'
+            ).length;
+
+            // Cập nhật state thống kê đơn hàng
+            setOrderStats({
+                total: totalOrders,
+                completed: completedOrders,
+                canceled: canceledOrders,
+                shipping: shippingOrders,
+                pending: pendingOrders,
+                prevTotal: prevTotalOrders,
+                prevCompleted: prevCompletedOrders,
+                prevCanceled: prevCanceledOrders,
+                prevShipping: prevShippingOrders,
+                prevPending: prevPendingOrders,
+            });
+
+            const prevTotalRevenue = prevMonthOrders.reduce(
+                (sum, order) => sum + (order.totalAmount || 0),
+                0
+            );
+            setPrevRevenue(prevTotalRevenue);
+            setPrevProfit(prevTotalRevenue * profitMargin);
+
+            const prevUniqueUsers = new Set(
+                users
+                    .filter((user) =>
+                        user.orders.some(
+                            (o) =>
+                                parseDate(o.date) >= firstDayOfPrevMonth &&
+                                parseDate(o.date) <= lastDayOfPrevMonth
+                        )
+                    )
+                    .map((user) => user.id)
+            );
+            setPrevCustomers(prevUniqueUsers.size);
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+            throw error;
+        }
+    };
 
     const formatDate = (dateStr) => {
         if (!dateStr || typeof dateStr !== 'string') {
@@ -131,123 +299,14 @@ const Dashboard = () => {
 
     const calculatePercentChange = (current, previous) => {
         if (previous === 0) return 0;
-        return ((current - previous) / previous * 100).toFixed(2);
+        return (((current - previous) / previous) * 100).toFixed(2);
     };
 
     useEffect(() => {
-        fetch('http://localhost:3001/users')
-            .then((response) => response.json())
-            .then((users) => {
-                const orders = users
-                    .flatMap((user) =>
-                        user.orders.map((order) => ({
-                            ...order,
-                            customerName: user.name,
-                            userId: user.id,
-                            rawDate: order.date,
-                        }))
-                    )
-                    .map((order) => ({
-                        orderId: order.id,
-                        name: order.customerName,
-                        value: formatCurrency(order.totalAmount),
-                        date: formatDate(order.date),
-                        rawDate: order.date,
-                        status: order.status,
-                        statusColor: getStatusColor(order.status),
-                    }));
-                setReportData(orders);
-                setFilteredData(orders);
-
-                // Current period data (all orders)
-                const totalRevenue = users
-                    .flatMap((user) => user.orders)
-                    .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
-                setRevenue(totalRevenue);
-                const profitMargin = 0.35;
-                setProfit(totalRevenue * profitMargin);
-
-                const uniqueUsers = new Set(
-                    users
-                        .filter((user) =>
-                            user.orders.some(
-                                (o) =>
-                                    parseDate(o.date) >= new Date('2025-05-01')
-                            )
-                        )
-                        .map((user) => user.id)
-                );
-                setNewCustomers(uniqueUsers.size);
-
-                // Previous period data (orders before current month)
-                const currentDate = new Date();
-                const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-                const firstDayOfPrevMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
-                const lastDayOfPrevMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
-
-                // Lọc đơn hàng tháng hiện tại
-                const currentMonthOrders = users
-                    .flatMap((user) => user.orders)
-                    .filter(order => {
-                        const orderDate = parseDate(order.date);
-                        return orderDate >= firstDayOfMonth && orderDate <= currentDate;
-                    });
-
-                // Lọc đơn hàng tháng trước
-                const prevMonthOrders = users
-                    .flatMap((user) => user.orders)
-                    .filter(order => {
-                        const orderDate = parseDate(order.date);
-                        return orderDate >= firstDayOfPrevMonth && orderDate <= lastDayOfPrevMonth;
-                    });
-
-                // Tính toán thống kê đơn hàng tháng hiện tại
-                const totalOrders = currentMonthOrders.length;
-                const completedOrders = currentMonthOrders.filter(order => order.status === 'Đã giao').length;
-                const canceledOrders = currentMonthOrders.filter(order => order.status === 'Đã hủy').length;
-                const shippingOrders = currentMonthOrders.filter(order => order.status === 'Đang giao').length;
-                const pendingOrders = currentMonthOrders.filter(order => order.status === 'Chưa giao').length;
-
-                // Tính toán thống kê đơn hàng tháng trước
-                const prevTotalOrders = prevMonthOrders.length;
-                const prevCompletedOrders = prevMonthOrders.filter(order => order.status === 'Đã giao').length;
-                const prevCanceledOrders = prevMonthOrders.filter(order => order.status === 'Đã hủy').length;
-                const prevShippingOrders = prevMonthOrders.filter(order => order.status === 'Đang giao').length;
-                const prevPendingOrders = prevMonthOrders.filter(order => order.status === 'Chưa giao').length;
-
-                // Cập nhật state thống kê đơn hàng
-                setOrderStats({
-                    total: totalOrders,
-                    completed: completedOrders,
-                    canceled: canceledOrders,
-                    shipping: shippingOrders,
-                    pending: pendingOrders,
-                    prevTotal: prevTotalOrders,
-                    prevCompleted: prevCompletedOrders,
-                    prevCanceled: prevCanceledOrders,
-                    prevShipping: prevShippingOrders,
-                    prevPending: prevPendingOrders
-                });
-
-                const prevTotalRevenue = prevMonthOrders
-                    .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
-                setPrevRevenue(prevTotalRevenue);
-                setPrevProfit(prevTotalRevenue * profitMargin);
-
-                const prevUniqueUsers = new Set(
-                    users
-                        .filter((user) =>
-                            user.orders.some(
-                                (o) =>
-                                    parseDate(o.date) >= firstDayOfPrevMonth &&
-                                    parseDate(o.date) <= lastDayOfPrevMonth
-                            )
-                        )
-                        .map((user) => user.id)
-                );
-                setPrevCustomers(prevUniqueUsers.size);
-            })
-            .catch((error) => console.error('Error fetching orders:', error));
+        setIsLoading(true);
+        fetchOrderData()
+            .then(() => setIsLoading(false))
+            .catch(() => setIsLoading(false));
     }, []);
 
     useEffect(() => {
@@ -318,14 +377,35 @@ const Dashboard = () => {
 
     const handleRowSelect = (index) => {
         const globalIndex = (currentPage - 1) * rowsPerPage + index;
+        const order = reportData[globalIndex];
+
+        // Không cho phép chọn đơn hàng đã giao hoặc đã hủy
+        if (order.status === 'Đã giao' || order.status === 'Đã hủy') {
+            return;
+        }
+
         setSelectedOrders((prev) => {
             if (prev.includes(globalIndex)) {
                 const newSelected = prev.filter((i) => i !== globalIndex);
-                setSelectAll(newSelected.length === paginatedData.length);
+                setSelectAll(
+                    newSelected.length ===
+                        paginatedData.filter(
+                            (row) =>
+                                row.status !== 'Đã giao' &&
+                                row.status !== 'Đã hủy'
+                        ).length
+                );
                 return newSelected;
             } else {
                 const newSelected = [...prev, globalIndex];
-                setSelectAll(newSelected.length === paginatedData.length);
+                setSelectAll(
+                    newSelected.length ===
+                        paginatedData.filter(
+                            (row) =>
+                                row.status !== 'Đã giao' &&
+                                row.status !== 'Đã hủy'
+                        ).length
+                );
                 return newSelected;
             }
         });
@@ -337,16 +417,84 @@ const Dashboard = () => {
 
         selectedOrders.forEach((globalIndex) => {
             const order = updatedData[globalIndex];
-            if (order) {
-                if (order.status === 'Chưa giao') {
-                    order.status = 'Đang giao';
-                    order.statusColor = 'text-yellow-500';
-                    changesMade = true;
-                } else if (order.status === 'Đang giao') {
-                    order.status = 'Đã giao';
-                    order.statusColor = 'text-green-500';
-                    changesMade = true;
-                }
+            if (order && order.status === 'Chưa giao') {
+                order.status = 'Đang giao';
+                order.statusColor = 'text-yellow-500';
+                changesMade = true;
+            }
+        });
+
+        if (changesMade) {
+            setReportData(updatedData);
+            setFilteredData(updatedData);
+            setSelectedOrders([]);
+            setSelectAll(false);
+
+            fetch('http://localhost:3001/users')
+                .then((response) => response.json())
+                .then((users) => {
+                    users.forEach((user) => {
+                        let userUpdated = false;
+
+                        user.orders.forEach((order) => {
+                            const matchingOrder = updatedData.find(
+                                (o) => o.orderId === order.id
+                            );
+                            if (
+                                matchingOrder &&
+                                order.status !== matchingOrder.status
+                            ) {
+                                order.status = matchingOrder.status;
+                                userUpdated = true;
+                            }
+                        });
+
+                        if (userUpdated) {
+                            fetch(`http://localhost:3001/users/${user.id}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(user),
+                            })
+                                .then((response) => {
+                                    if (response.ok) {
+                                        console.log(
+                                            `User ${user.id} updated successfully.`
+                                        );
+                                    } else {
+                                        console.error(
+                                            `Failed to update user ${user.id}`
+                                        );
+                                    }
+                                })
+                                .catch((error) =>
+                                    console.error(
+                                        `Error updating user ${user.id}:`,
+                                        error
+                                    )
+                                );
+                        }
+                    });
+                })
+                .catch((error) =>
+                    console.error('Error fetching users:', error)
+                );
+        }
+    };
+
+    // Thêm hàm xử lý hủy đơn hàng
+    const handleCancelOrders = () => {
+        const updatedData = [...reportData];
+        let changesMade = false;
+
+        selectedOrders.forEach((globalIndex) => {
+            const order = updatedData[globalIndex];
+            if (
+                order &&
+                (order.status === 'Chưa giao' || order.status === 'Đang giao')
+            ) {
+                order.status = 'Đã hủy';
+                order.statusColor = 'text-red-500';
+                changesMade = true;
             }
         });
 
@@ -474,54 +622,8 @@ const Dashboard = () => {
                     }
                 })
                 .then(() => {
-                    fetch('http://localhost:3001/users')
-                        .then((response) => response.json())
-                        .then((users) => {
-                            const orders = users
-                                .flatMap((user) =>
-                                    user.orders.map((order) => ({
-                                        ...order,
-                                        customerName: user.name,
-                                        userId: user.id,
-                                        rawDate: order.date,
-                                    }))
-                                )
-                                .map((order) => ({
-                                    orderId: order.id,
-                                    name: order.customerName,
-                                    value: formatCurrency(order.totalAmount),
-                                    date: formatDate(order.date),
-                                    rawDate: order.date,
-                                    status: order.status,
-                                    statusColor: getStatusColor(order.status),
-                                }));
-                            setReportData(orders);
-                            setFilteredData(orders);
-
-                            const totalRevenue = users
-                                .flatMap((user) => user.orders)
-                                .reduce(
-                                    (sum, order) =>
-                                        sum + (order.totalAmount || 0),
-                                    0
-                                );
-                            setRevenue(totalRevenue);
-                            const profitMargin = 0.35;
-                            setProfit(totalRevenue * profitMargin);
-
-                            const uniqueUsers = new Set(
-                                users
-                                    .filter((user) =>
-                                        user.orders.some(
-                                            (o) =>
-                                                parseDate(o.date) >=
-                                                new Date('2025-05-01')
-                                        )
-                                    )
-                                    .map((user) => user.id)
-                            );
-                            setNewCustomers(uniqueUsers.size);
-                        });
+                    // Tải lại dữ liệu sau khi nhập
+                    refreshData();
                 })
                 .catch((error) =>
                     console.error('Error importing orders:', error)
@@ -561,68 +663,202 @@ const Dashboard = () => {
             {/* Thêm thống kê đơn hàng */}
             <div className="grid grid-cols-2 gap-6 mb-6">
                 <div className="bg-white p-6 rounded-lg shadow">
-                    <h2 className="text-lg font-semibold mb-4">Thống kê đơn hàng tháng này</h2>
+                    <h2 className="text-lg font-semibold mb-4">
+                        Thống kê đơn hàng tháng này
+                    </h2>
                     <div className="grid grid-cols-2 gap-4">
                         <div className="p-3 bg-blue-50 rounded-lg">
-                            <p className="text-sm text-gray-600">Tổng đơn hàng</p>
-                            <p className="text-2xl font-bold text-blue-600">{orderStats.total}</p>
-                            <p className={`text-sm ${calculatePercentChange(orderStats.total, orderStats.prevTotal) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                {calculatePercentChange(orderStats.total, orderStats.prevTotal) >= 0 ? '+' : ''}
-                                {calculatePercentChange(orderStats.total, orderStats.prevTotal)}% so với tháng trước
+                            <p className="text-sm text-gray-600">
+                                Tổng đơn hàng
+                            </p>
+                            <p className="text-2xl font-bold text-blue-600">
+                                {orderStats.total}
+                            </p>
+                            <p
+                                className={`text-sm ${
+                                    calculatePercentChange(
+                                        orderStats.total,
+                                        orderStats.prevTotal
+                                    ) >= 0
+                                        ? 'text-green-500'
+                                        : 'text-red-500'
+                                }`}>
+                                {calculatePercentChange(
+                                    orderStats.total,
+                                    orderStats.prevTotal
+                                ) >= 0
+                                    ? '+'
+                                    : ''}
+                                {calculatePercentChange(
+                                    orderStats.total,
+                                    orderStats.prevTotal
+                                )}
+                                % so với tháng trước
                             </p>
                         </div>
                         <div className="p-3 bg-green-50 rounded-lg">
-                            <p className="text-sm text-gray-600">Đơn thành công</p>
-                            <p className="text-2xl font-bold text-green-600">{orderStats.completed}</p>
-                            <p className={`text-sm ${calculatePercentChange(orderStats.completed, orderStats.prevCompleted) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                {calculatePercentChange(orderStats.completed, orderStats.prevCompleted) >= 0 ? '+' : ''}
-                                {calculatePercentChange(orderStats.completed, orderStats.prevCompleted)}% so với tháng trước
+                            <p className="text-sm text-gray-600">
+                                Đơn thành công
+                            </p>
+                            <p className="text-2xl font-bold text-green-600">
+                                {orderStats.completed}
+                            </p>
+                            <p
+                                className={`text-sm ${
+                                    calculatePercentChange(
+                                        orderStats.completed,
+                                        orderStats.prevCompleted
+                                    ) >= 0
+                                        ? 'text-green-500'
+                                        : 'text-red-500'
+                                }`}>
+                                {calculatePercentChange(
+                                    orderStats.completed,
+                                    orderStats.prevCompleted
+                                ) >= 0
+                                    ? '+'
+                                    : ''}
+                                {calculatePercentChange(
+                                    orderStats.completed,
+                                    orderStats.prevCompleted
+                                )}
+                                % so với tháng trước
                             </p>
                         </div>
                         <div className="p-3 bg-yellow-50 rounded-lg">
-                            <p className="text-sm text-gray-600">Đơn đang giao</p>
-                            <p className="text-2xl font-bold text-yellow-600">{orderStats.shipping}</p>
-                            <p className={`text-sm ${calculatePercentChange(orderStats.shipping, orderStats.prevShipping) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                {calculatePercentChange(orderStats.shipping, orderStats.prevShipping) >= 0 ? '+' : ''}
-                                {calculatePercentChange(orderStats.shipping, orderStats.prevShipping)}% so với tháng trước
+                            <p className="text-sm text-gray-600">
+                                Đơn đang giao
+                            </p>
+                            <p className="text-2xl font-bold text-yellow-600">
+                                {orderStats.shipping}
+                            </p>
+                            <p
+                                className={`text-sm ${
+                                    calculatePercentChange(
+                                        orderStats.shipping,
+                                        orderStats.prevShipping
+                                    ) >= 0
+                                        ? 'text-green-500'
+                                        : 'text-red-500'
+                                }`}>
+                                {calculatePercentChange(
+                                    orderStats.shipping,
+                                    orderStats.prevShipping
+                                ) >= 0
+                                    ? '+'
+                                    : ''}
+                                {calculatePercentChange(
+                                    orderStats.shipping,
+                                    orderStats.prevShipping
+                                )}
+                                % so với tháng trước
                             </p>
                         </div>
                         <div className="p-3 bg-red-50 rounded-lg">
                             <p className="text-sm text-gray-600">Đơn đã hủy</p>
-                            <p className="text-2xl font-bold text-red-600">{orderStats.canceled}</p>
-                            <p className={`text-sm ${calculatePercentChange(orderStats.canceled, orderStats.prevCanceled) >= 0 ? 'text-red-500' : 'text-green-500'}`}>
-                                {calculatePercentChange(orderStats.canceled, orderStats.prevCanceled) >= 0 ? '+' : ''}
-                                {calculatePercentChange(orderStats.canceled, orderStats.prevCanceled)}% so với tháng trước
+                            <p className="text-2xl font-bold text-red-600">
+                                {orderStats.canceled}
+                            </p>
+                            <p
+                                className={`text-sm ${
+                                    calculatePercentChange(
+                                        orderStats.canceled,
+                                        orderStats.prevCanceled
+                                    ) >= 0
+                                        ? 'text-red-500'
+                                        : 'text-green-500'
+                                }`}>
+                                {calculatePercentChange(
+                                    orderStats.canceled,
+                                    orderStats.prevCanceled
+                                ) >= 0
+                                    ? '+'
+                                    : ''}
+                                {calculatePercentChange(
+                                    orderStats.canceled,
+                                    orderStats.prevCanceled
+                                )}
+                                % so với tháng trước
                             </p>
                         </div>
                     </div>
                 </div>
 
                 <div className="bg-white p-6 rounded-lg shadow">
-                    <h2 className="text-lg font-semibold mb-4">Thống kê tài chính tháng này</h2>
+                    <h2 className="text-lg font-semibold mb-4">
+                        Thống kê tài chính tháng này
+                    </h2>
                     <div className="grid grid-cols-3 gap-4">
                         <div className="p-3 bg-blue-50 rounded-lg">
                             <p className="text-sm text-gray-600">Doanh thu</p>
-                            <p className="text-2xl font-bold text-blue-600">{formatCurrency(revenue)}</p>
-                            <p className={`text-sm ${calculatePercentChange(revenue, prevRevenue) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                {calculatePercentChange(revenue, prevRevenue) >= 0 ? '+' : ''}
-                                {calculatePercentChange(revenue, prevRevenue)}% so với tháng trước
+                            <p className="text-2xl font-bold text-blue-600">
+                                {formatCurrency(revenue)}
+                            </p>
+                            <p
+                                className={`text-sm ${
+                                    calculatePercentChange(
+                                        revenue,
+                                        prevRevenue
+                                    ) >= 0
+                                        ? 'text-green-500'
+                                        : 'text-red-500'
+                                }`}>
+                                {calculatePercentChange(revenue, prevRevenue) >=
+                                0
+                                    ? '+'
+                                    : ''}
+                                {calculatePercentChange(revenue, prevRevenue)}%
+                                so với tháng trước
                             </p>
                         </div>
                         <div className="p-3 bg-green-50 rounded-lg">
                             <p className="text-sm text-gray-600">Lợi nhuận</p>
-                            <p className="text-2xl font-bold text-green-600">{formatCurrency(profit)}</p>
-                            <p className={`text-sm ${calculatePercentChange(profit, prevProfit) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                {calculatePercentChange(profit, prevProfit) >= 0 ? '+' : ''}
-                                {calculatePercentChange(profit, prevProfit)}% so với tháng trước
+                            <p className="text-2xl font-bold text-green-600">
+                                {formatCurrency(profit)}
+                            </p>
+                            <p
+                                className={`text-sm ${
+                                    calculatePercentChange(
+                                        profit,
+                                        prevProfit
+                                    ) >= 0
+                                        ? 'text-green-500'
+                                        : 'text-red-500'
+                                }`}>
+                                {calculatePercentChange(profit, prevProfit) >= 0
+                                    ? '+'
+                                    : ''}
+                                {calculatePercentChange(profit, prevProfit)}% so
+                                với tháng trước
                             </p>
                         </div>
                         <div className="p-3 bg-purple-50 rounded-lg">
-                            <p className="text-sm text-gray-600">Khách hàng mới</p>
-                            <p className="text-2xl font-bold text-purple-600">{newCustomers}</p>
-                            <p className={`text-sm ${calculatePercentChange(newCustomers, prevCustomers) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                                {calculatePercentChange(newCustomers, prevCustomers) >= 0 ? '+' : ''}
-                                {calculatePercentChange(newCustomers, prevCustomers)}% so với tháng trước
+                            <p className="text-sm text-gray-600">
+                                Khách hàng mới
+                            </p>
+                            <p className="text-2xl font-bold text-purple-600">
+                                {newCustomers}
+                            </p>
+                            <p
+                                className={`text-sm ${
+                                    calculatePercentChange(
+                                        newCustomers,
+                                        prevCustomers
+                                    ) >= 0
+                                        ? 'text-green-500'
+                                        : 'text-red-500'
+                                }`}>
+                                {calculatePercentChange(
+                                    newCustomers,
+                                    prevCustomers
+                                ) >= 0
+                                    ? '+'
+                                    : ''}
+                                {calculatePercentChange(
+                                    newCustomers,
+                                    prevCustomers
+                                )}
+                                % so với tháng trước
                             </p>
                         </div>
                     </div>
@@ -678,12 +914,35 @@ const Dashboard = () => {
                     <div className="flex items-center space-x-2">
                         <button
                             onClick={handlePrepareAndDeliver}
+                            disabled={
+                                selectedOrders.length === 0 ||
+                                !selectedOrders.some(
+                                    (index) =>
+                                        reportData[index]?.status ===
+                                        'Chưa giao'
+                                )
+                            }
+                            className={`px-4 py-2 rounded font-semibold ${
+                                selectedOrders.length === 0 ||
+                                !selectedOrders.some(
+                                    (index) =>
+                                        reportData[index]?.status ===
+                                        'Chưa giao'
+                                )
+                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                    : 'bg-green-500 text-white'
+                            }`}>
+                            Chuẩn bị giao hàng
+                        </button>
+                        <button
+                            onClick={handleCancelOrders}
                             disabled={selectedOrders.length === 0}
-                            className={`px-4 py-2 rounded font-semibold ${selectedOrders.length === 0
-                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                : 'bg-green-500 text-white'
-                                }`}>
-                            Chuẩn bị và giao
+                            className={`px-4 py-2 rounded font-semibold ${
+                                selectedOrders.length === 0
+                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                    : 'bg-red-500 text-white'
+                            }`}>
+                            Hủy đơn hàng
                         </button>
                         <label className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer">
                             Nhập
@@ -700,6 +959,21 @@ const Dashboard = () => {
                             Xuất
                         </button>
                     </div>
+                </div>
+                <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-lg font-semibold">
+                        Danh sách đơn hàng gần đây
+                    </h3>
+                    <button
+                        onClick={refreshData}
+                        className="flex items-center gap-2 px-3 py-2 bg-[#E29578] text-white rounded hover:bg-[#eca78e] transition-colors"
+                        disabled={isLoading}>
+                        <RefreshCw
+                            size={16}
+                            className={isLoading ? 'animate-spin' : ''}
+                        />
+                        {isLoading ? 'Đang tải...' : 'Tải lại dữ liệu'}
+                    </button>
                 </div>
                 <table className="w-full text-left">
                     <thead>
@@ -726,9 +1000,13 @@ const Dashboard = () => {
                                         type="checkbox"
                                         checked={selectedOrders.includes(
                                             (currentPage - 1) * rowsPerPage +
-                                            index
+                                                index
                                         )}
                                         onChange={() => handleRowSelect(index)}
+                                        disabled={
+                                            row.status === 'Đã giao' ||
+                                            row.status === 'Đã hủy'
+                                        }
                                     />
                                 </td>
                                 <td className="p-2 flex items-center">
@@ -753,42 +1031,11 @@ const Dashboard = () => {
                 </table>
 
                 {showModal && selectedOrder && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                            <h3 className="text-lg font-semibold mb-4">
-                                Chi tiết đơn hàng
-                            </h3>
-                            <div className="space-y-2">
-                                <p>
-                                    <strong>Mã đơn hàng:</strong>{' '}
-                                    {selectedOrder.orderId}
-                                </p>
-                                <p>
-                                    <strong>Tên khách hàng:</strong>{' '}
-                                    {selectedOrder.name}
-                                </p>
-                                <p>
-                                    <strong>Giá trị đơn hàng:</strong>{' '}
-                                    {selectedOrder.value}
-                                </p>
-                                <p>
-                                    <strong>Ngày đặt hàng:</strong>{' '}
-                                    {selectedOrder.date}
-                                </p>
-                                <p>
-                                    <strong>Trạng thái:</strong>{' '}
-                                    {selectedOrder.status}
-                                </p>
-                            </div>
-                            <div className="mt-6 text-right">
-                                <button
-                                    onClick={handleCloseModal}
-                                    className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400">
-                                    Đóng
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <AdminOrderDetailsModal
+                        isOpen={showModal}
+                        onClose={handleCloseModal}
+                        order={selectedOrder}
+                    />
                 )}
 
                 <div className="flex justify-between items-center mt-4">
@@ -810,10 +1057,11 @@ const Dashboard = () => {
                                 <button
                                     key={page}
                                     onClick={() => handlePageChange(page)}
-                                    className={`px-3 py-1 rounded ${currentPage === page
-                                        ? 'bg-blue-500 text-white'
-                                        : 'border'
-                                        }`}>
+                                    className={`px-3 py-1 rounded ${
+                                        currentPage === page
+                                            ? 'bg-blue-500 text-white'
+                                            : 'border'
+                                    }`}>
                                     {page}
                                 </button>
                             ))}

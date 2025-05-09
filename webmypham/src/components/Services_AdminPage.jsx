@@ -25,7 +25,7 @@ const Services = () => {
         service: '',
         skinType: '',
         message: '',
-        status: 'pending'
+        status: 'pending',
     });
 
     const serviceMap = {
@@ -222,10 +222,10 @@ const Services = () => {
                         newStatus === 'Chờ xử lý'
                             ? 'pending'
                             : newStatus === 'Xác nhận'
-                                ? 'confirmed'
-                                : newStatus === 'Hoàn thành'
-                                    ? 'completed'
-                                    : 'canceled',
+                            ? 'confirmed'
+                            : newStatus === 'Hoàn thành'
+                            ? 'completed'
+                            : 'canceled',
                 }),
             })
         );
@@ -265,16 +265,23 @@ const Services = () => {
 
     const handleAppointmentInputChange = (e) => {
         const { name, value } = e.target;
-        setNewAppointment(prev => ({
+        setNewAppointment((prev) => ({
             ...prev,
-            [name]: value
+            [name]: value,
         }));
     };
 
     const handleAddAppointment = () => {
         // Validate required fields
-        if (!newAppointment.name || !newAppointment.phone || !newAppointment.date || !newAppointment.service) {
-            alert('Vui lòng điền đầy đủ thông tin bắt buộc: Tên, Số điện thoại, Ngày hẹn, Dịch vụ');
+        if (
+            !newAppointment.name ||
+            !newAppointment.phone ||
+            !newAppointment.date ||
+            !newAppointment.service
+        ) {
+            alert(
+                'Vui lòng điền đầy đủ thông tin bắt buộc: Tên, Số điện thoại, Ngày hẹn, Dịch vụ'
+            );
             return;
         }
 
@@ -288,19 +295,19 @@ const Services = () => {
             skinType: newAppointment.skinType,
             message: newAppointment.message,
             status: newAppointment.status,
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
         };
 
         fetch('http://localhost:3001/bookings', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(appointment)
+            body: JSON.stringify(appointment),
         })
-            .then(response => {
+            .then((response) => {
                 if (!response.ok) throw new Error('Failed to add appointment');
                 return response.json();
             })
-            .then(data => {
+            .then((data) => {
                 // Format the new appointment to match the existing format
                 const formattedAppointment = {
                     id: data.id,
@@ -312,18 +319,22 @@ const Services = () => {
                     service: serviceMap[data.service] || data.service,
                     skinType: skinTypeMap[data.skinType] || data.skinType,
                     message: data.message,
-                    status: {
-                        pending: 'Chờ xử lý',
-                        confirmed: 'Xác nhận',
-                        completed: 'Hoàn thành',
-                        canceled: 'Đã hủy',
-                    }[data.status] || data.status,
+                    status:
+                        {
+                            pending: 'Chờ xử lý',
+                            confirmed: 'Xác nhận',
+                            completed: 'Hoàn thành',
+                            canceled: 'Đã hủy',
+                        }[data.status] || data.status,
                     createdAt: data.createdAt,
                 };
 
                 // Add to appointments list
                 setAppointments([formattedAppointment, ...appointments]);
-                setFilteredAppointments([formattedAppointment, ...filteredAppointments]);
+                setFilteredAppointments([
+                    formattedAppointment,
+                    ...filteredAppointments,
+                ]);
 
                 // Reset form and close modal
                 setNewAppointment({
@@ -334,11 +345,11 @@ const Services = () => {
                     service: '',
                     skinType: '',
                     message: '',
-                    status: 'pending'
+                    status: 'pending',
                 });
                 setIsAddingAppointment(false);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Error adding appointment:', error);
                 alert('Có lỗi xảy ra khi thêm lịch hẹn. Vui lòng thử lại.');
             });
@@ -389,7 +400,9 @@ const Services = () => {
                             </select>
                         </div>
                         <div>
-                            <label className="block mb-1">Sản phẩm tư vấn</label>
+                            <label className="block mb-1">
+                                Sản phẩm tư vấn
+                            </label>
                             <select
                                 name="service"
                                 value={filters.service}
@@ -436,6 +449,22 @@ const Services = () => {
                             </select>
                         </div>
                     </div>
+                    <div className="mt-4 flex justify-end">
+                        <button
+                            onClick={() => {
+                                setFilters({
+                                    startDate: '',
+                                    endDate: '',
+                                    status: '',
+                                    service: '',
+                                    skinType: '',
+                                });
+                                setSortOrder('desc');
+                            }}
+                            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                            Xóa bộ lọc
+                        </button>
+                    </div>
                 </div>
 
                 <div className="flex justify-end mb-4 space-x-2">
@@ -468,7 +497,9 @@ const Services = () => {
                 {isAddingAppointment && (
                     <div className="mb-6 p-4 border rounded bg-gray-50">
                         <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-lg font-semibold">Thêm lịch hẹn mới</h3>
+                            <h3 className="text-lg font-semibold">
+                                Thêm lịch hẹn mới
+                            </h3>
                             <button
                                 onClick={() => setIsAddingAppointment(false)}
                                 className="text-gray-500 hover:text-gray-700">
@@ -478,7 +509,10 @@ const Services = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
-                                <label className="block mb-1">Tên khách hàng <span className="text-red-500">*</span></label>
+                                <label className="block mb-1">
+                                    Tên khách hàng{' '}
+                                    <span className="text-red-500">*</span>
+                                </label>
                                 <input
                                     type="text"
                                     name="name"
@@ -489,7 +523,10 @@ const Services = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block mb-1">Số điện thoại <span className="text-red-500">*</span></label>
+                                <label className="block mb-1">
+                                    Số điện thoại{' '}
+                                    <span className="text-red-500">*</span>
+                                </label>
                                 <input
                                     type="text"
                                     name="phone"
@@ -510,7 +547,10 @@ const Services = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block mb-1">Ngày hẹn <span className="text-red-500">*</span></label>
+                                <label className="block mb-1">
+                                    Ngày hẹn{' '}
+                                    <span className="text-red-500">*</span>
+                                </label>
                                 <input
                                     type="date"
                                     name="date"
@@ -521,19 +561,29 @@ const Services = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block mb-1">Dịch vụ tư vấn sản phẩm <span className="text-red-500">*</span></label>
+                                <label className="block mb-1">
+                                    Dịch vụ tư vấn sản phẩm{' '}
+                                    <span className="text-red-500">*</span>
+                                </label>
                                 <select
                                     name="service"
                                     value={newAppointment.service}
                                     onChange={handleAppointmentInputChange}
                                     className="w-full p-2 border rounded"
-                                    required
-                                >
-                                    <option value="">Chọn sản phẩm tư vấn</option>
-                                    <option value="skincare">Chăm sóc da mặt</option>
+                                    required>
+                                    <option value="">
+                                        Chọn sản phẩm tư vấn
+                                    </option>
+                                    <option value="skincare">
+                                        Chăm sóc da mặt
+                                    </option>
                                     <option value="makeup">Trang điểm</option>
-                                    <option value="haircare">Chăm sóc tóc</option>
-                                    <option value="bodycare">Chăm sóc cơ thể</option>
+                                    <option value="haircare">
+                                        Chăm sóc tóc
+                                    </option>
+                                    <option value="bodycare">
+                                        Chăm sóc cơ thể
+                                    </option>
                                 </select>
                             </div>
                             <div>
@@ -542,13 +592,16 @@ const Services = () => {
                                     name="skinType"
                                     value={newAppointment.skinType}
                                     onChange={handleAppointmentInputChange}
-                                    className="w-full p-2 border rounded"
-                                >
+                                    className="w-full p-2 border rounded">
                                     <option value="">Chọn loại da</option>
                                     <option value="oily">Da dầu</option>
                                     <option value="dry">Da khô</option>
-                                    <option value="sensitive">Da nhạy cảm</option>
-                                    <option value="combination">Da hỗn hợp</option>
+                                    <option value="sensitive">
+                                        Da nhạy cảm
+                                    </option>
+                                    <option value="combination">
+                                        Da hỗn hợp
+                                    </option>
                                     <option value="normal">Da thường</option>
                                 </select>
                             </div>
@@ -558,11 +611,12 @@ const Services = () => {
                                     name="status"
                                     value={newAppointment.status}
                                     onChange={handleAppointmentInputChange}
-                                    className="w-full p-2 border rounded"
-                                >
+                                    className="w-full p-2 border rounded">
                                     <option value="pending">Chờ xử lý</option>
                                     <option value="confirmed">Xác nhận</option>
-                                    <option value="completed">Hoàn thành</option>
+                                    <option value="completed">
+                                        Hoàn thành
+                                    </option>
                                     <option value="canceled">Đã hủy</option>
                                 </select>
                             </div>
@@ -573,22 +627,19 @@ const Services = () => {
                                     value={newAppointment.message}
                                     onChange={handleAppointmentInputChange}
                                     className="w-full p-2 border rounded"
-                                    rows="3"
-                                ></textarea>
+                                    rows="3"></textarea>
                             </div>
                         </div>
 
                         <div className="mt-4 flex justify-end space-x-2">
                             <button
                                 onClick={() => setIsAddingAppointment(false)}
-                                className="px-4 py-2 border rounded text-gray-600 hover:bg-gray-100"
-                            >
+                                className="px-4 py-2 border rounded text-gray-600 hover:bg-gray-100">
                                 Hủy
                             </button>
                             <button
                                 onClick={handleAddAppointment}
-                                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                            >
+                                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
                                 Thêm lịch hẹn
                             </button>
                         </div>
@@ -603,7 +654,7 @@ const Services = () => {
                                     type="checkbox"
                                     checked={
                                         selectedIds.size ===
-                                        paginatedAppointments.length &&
+                                            paginatedAppointments.length &&
                                         paginatedAppointments.length > 0
                                     }
                                     onChange={handleSelectAll}
@@ -677,10 +728,11 @@ const Services = () => {
                                 <button
                                     key={page}
                                     onClick={() => handlePageChange(page)}
-                                    className={`px-3 py-1 rounded ${currentPage === page
-                                        ? 'bg-blue-500 text-white'
-                                        : 'border'
-                                        }`}>
+                                    className={`px-3 py-1 rounded ${
+                                        currentPage === page
+                                            ? 'bg-blue-500 text-white'
+                                            : 'border'
+                                    }`}>
                                     {page}
                                 </button>
                             ))}

@@ -381,7 +381,7 @@ const ProductGrid = () => {
                         </div>
                     </div>
 
-                    <div className="mb-6">
+                    {/* <div className="mb-6">
                         <h3 className="font-medium mb-2">Công dụng</h3>
                         <div className="space-y-2">
                             {benefits.map((benefit) => (
@@ -405,7 +405,7 @@ const ProductGrid = () => {
                                 </div>
                             ))}
                         </div>
-                    </div>
+                    </div> */}
 
                     <div>
                         <h3 className="font-semibold text-lg mb-3">

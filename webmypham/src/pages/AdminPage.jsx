@@ -9,7 +9,6 @@ import Users from '../components/Users_AdminPage.jsx';
 import Reports from '../components/Reports_AdminPage.jsx';
 import Settings from '../components/Settings_AdminPage.jsx';
 
-
 const AdminPage = () => {
     return (
         <div className="flex h-screen bg-gray-100 font-sans">
@@ -22,7 +21,7 @@ const AdminPage = () => {
                     <Route path="orders" element={<Dashboard />} />
                     <Route path="products" element={<Products />} />
                     <Route path="services" element={<Services />} />
-                    <Route path="contact" element={<Contact />} />
+                    {/* <Route path="contact" element={<Contact />} /> */}
                     <Route path="users" element={<Users />} />
                     <Route path="reports" element={<Reports />} />
                     <Route path="settings" element={<Settings />} />

@@ -7,34 +7,7 @@
       "password": "admin123",
       "skinType": "normal",
       "wishlist": [],
-      "orders": [
-        {
-          "id": "order-1746765638681",
-          "date": "9/5/2025",
-          "time": "11:40:38",
-          "createdAt": "2025-05-09T04:40:38.681Z",
-          "customerInfo": {
-            "fullName": "Quản trị viên 1",
-            "phone": "0971770425",
-            "address": "Hóc Môn",
-            "city": "Tp.Hồ Chí Minh",
-            "district": "Hóc môn",
-            "ward": "ssssssssssss",
-            "note": "aaaaaaaaaaaaaa"
-          },
-          "subtotal": 200000,
-          "shippingFee": 35000,
-          "totalAmount": 235000,
-          "status": "Đã hủy",
-          "items": [
-            {
-              "productId": "1",
-              "price": 200000,
-              "quantity": 1
-            }
-          ]
-        }
-      ],
+      "orders": [],
       "cart": [],
       "role": "admin"
     },
@@ -47,165 +20,127 @@
       "wishlist": [],
       "orders": [
         {
-          "id": "order-1746807339676",
-          "date": "9/5/2025",
-          "time": "23:15:39",
-          "createdAt": "2025-05-09T16:15:39.676Z",
-          "customerInfo": {
-            "fullName": "Ngọc Linh",
-            "phone": "0912345678",
-            "address": "24/6t, đông lân 1",
-            "city": "Tp.Hồ Chí Minh",
-            "district": "xuân thới thượng",
-            "ward": "đông lân 1",
-            "note": ""
-          },
-          "subtotal": 680000,
-          "shippingFee": 0,
-          "totalAmount": 680000,
-          "status": "Đã giao",
-          "items": [
-            {
-              "productId": "2",
-              "price": 150000,
-              "quantity": 1
-            },
-            {
-              "productId": "1",
-              "price": 200000,
-              "quantity": 1
-            },
-            {
-              "productId": "3",
-              "price": 210000,
-              "quantity": 1
-            },
-            {
-              "productId": "4",
-              "price": 120000,
-              "quantity": 1
-            }
-          ]
-        },
-        {
-          "id": "order-1746807636900",
-          "date": "9/5/2025",
-          "time": "23:20:36",
-          "createdAt": "2025-05-09T16:20:36.900Z",
-          "customerInfo": {
-            "fullName": "Ngọc Linh",
-            "phone": "09789456",
-            "address": "24/6t, đông lân 1",
-            "city": "Tp.Hồ Chí Minh",
-            "district": "xuân thới thượng",
-            "ward": "đông lân 1",
-            "note": ""
-          },
-          "subtotal": 210000,
-          "shippingFee": 35000,
-          "totalAmount": 245000,
-          "status": "Đã hủy",
-          "items": [
-            {
-              "productId": "3",
-              "price": 210000,
-              "quantity": 1
-            }
-          ]
-        },
-        {
-          "id": "order-1746809145397",
-          "date": "9/5/2025",
-          "time": "23:45:45",
-          "createdAt": "2025-05-09T16:45:45.397Z",
-          "customerInfo": {
-            "fullName": "Ngọc Linh",
-            "phone": "0912345678",
-            "address": "24/6t, đông lân 1",
-            "city": "Tp.Hồ Chí Minh",
-            "district": "xuân thới thượng",
-            "ward": "đông lân 1",
-            "note": ""
-          },
-          "subtotal": 1000000,
-          "shippingFee": 0,
-          "totalAmount": 1000000,
-          "status": "Đã giao",
-          "items": [
-            {
-              "productId": "6",
-              "price": 1000000,
-              "quantity": 1
-            }
-          ]
-        },
-        {
-          "id": "order-1746810837795",
+          "id": "order-1746814836998",
           "date": "10/5/2025",
-          "time": "00:13:57",
-          "createdAt": "2025-05-09T17:13:57.795Z",
+          "time": "01:20:36",
+          "createdAt": "2025-05-09T18:20:36.997Z",
           "customerInfo": {
             "fullName": "Ngọc minh",
-            "phone": "0912345678",
-            "address": "Hóc Môn",
+            "phone": "097123456",
+            "address": "24/6t, đông lân 1",
             "city": "Tp.Hồ Chí Minh",
             "district": "xuân thới thượng",
-            "ward": "ssssssssssss",
-            "note": "không có gì"
+            "ward": "đông lân 1",
+            "note": ""
           },
-          "subtotal": 2400000,
+          "subtotal": 489000,
           "shippingFee": 0,
-          "totalAmount": 2400000,
-          "status": "Đang giao",
+          "totalAmount": 489000,
+          "status": "Đã giao",
           "items": [
             {
-              "productId": "4",
-              "price": 120000,
-              "quantity": 20
+              "productId": "7",
+              "price": 184000,
+              "quantity": 1
+            },
+            {
+              "productId": "14",
+              "price": 305000,
+              "quantity": 1
             }
           ]
         }
       ],
-      "cart": [
-        {
-          "productId": "6",
-          "title": "Kem nền mỏng nhẹ",
-          "price": 1000000,
-          "quantity": 1
-        }
-      ],
+      "cart": [],
       "role": "user"
     },
     {
-      "id": "user1746809542945",
-      "name": "Nhiên",
-      "email": "nhien@gmail.com",
+      "id": "user1746817859053",
+      "name": "Nghĩa",
+      "email": "nghiaTran@gmail.com",
       "password": "123456",
-      "skinType": "dry",
+      "skinType": "normal",
       "wishlist": [],
       "orders": [
         {
-          "id": "order-1746809722582",
-          "date": "9/5/2025",
-          "time": "23:55:22",
-          "createdAt": "2025-05-09T16:55:22.582Z",
+          "id": "order-1746817895325",
+          "date": "10/5/2025",
+          "time": "02:11:35",
+          "createdAt": "2025-05-09T19:11:35.325Z",
           "customerInfo": {
-            "fullName": "Nhiên",
-            "phone": "0831234567",
+            "fullName": "Nghĩa",
+            "phone": "0945126842",
             "address": "24/6t, đông lân 1",
             "city": "Tp.Hồ Chí Minh",
             "district": "xuân thới thượng",
             "ward": "đông lân 1",
             "note": ""
           },
-          "subtotal": 1300000,
+          "subtotal": 830000,
           "shippingFee": 0,
-          "totalAmount": 1300000,
-          "status": "Đã giao",
+          "totalAmount": 830000,
+          "status": "Đang giao",
           "items": [
             {
-              "productId": "9",
-              "price": 1300000,
+              "productId": "2",
+              "price": 169000,
+              "quantity": 1
+            },
+            {
+              "productId": "3",
+              "price": 661000,
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "id": "order-1746818408162",
+          "date": "10/5/2025",
+          "time": "02:20:08",
+          "createdAt": "2025-05-09T19:20:08.162Z",
+          "customerInfo": {
+            "fullName": "Nghĩa",
+            "phone": "09123456",
+            "address": "đông lân 1",
+            "city": "tphcm",
+            "district": "xuân thới thượng",
+            "ward": "hóc môn",
+            "note": ""
+          },
+          "subtotal": 169000,
+          "shippingFee": 35000,
+          "totalAmount": 204000,
+          "status": "Đã hủy",
+          "items": [
+            {
+              "productId": "2",
+              "price": 169000,
+              "quantity": 1
+            }
+          ]
+        },
+        {
+          "id": "order-1746818689263",
+          "date": "10/5/2025",
+          "time": "02:24:49",
+          "createdAt": "2025-05-09T19:24:49.263Z",
+          "customerInfo": {
+            "fullName": "Nghĩa",
+            "phone": "0945367125",
+            "address": "28/1A, đông lân 1",
+            "city": "thành phố HCM",
+            "district": "xuân thới thượng",
+            "ward": "đông lân 1",
+            "note": ""
+          },
+          "subtotal": 729000,
+          "shippingFee": 0,
+          "totalAmount": 729000,
+          "status": "Chưa giao",
+          "items": [
+            {
+              "productId": "5",
+              "price": 729000,
               "quantity": 1
             }
           ]
@@ -249,7 +184,6 @@
   ],
   "products": [
     {
-      "id": "48c4",
       "productId": "1",
       "title": "Son Tint Bóng SHEGLAM Mỹ Phẩm Dưỡng ẩm Và Sáng Bóng Môi Be My Baby",
       "description": "Nói \"Tôi làm\" với nước, màu có thể xây dựng và một chiếc nhẫn dễ thương không cầu vồng! Be My Baby Hydrating lipstick có lớp nền son có thể xây dựng với màu sắc từ trung bình đến cao bao bọc xung quanh trái tim dưỡng ẩm để mang lại đôi môi ngậm nước, dễ hôn với một màu sắc tuyệt đẹp.  ",
@@ -261,10 +195,10 @@
       "subcategory": "",
       "skinType": [
         ""
-      ]
+      ],
+      "id": "9a9e"
     },
     {
-      "id": "6fd1",
       "productId": "2",
       "title": "Son Bóng Lifter Gloss cho Đôi Môi Đầy Căng Mọng Kẹo cùng Hyaluronic Acid Maybelline New York 5.4ML",
       "description": "Mùa hè năm nay, Maybelline đặc biệt giới thiệu dòng son bóng mới có hiệu ứng giúp đôi môi căng đầy, mọng như kẹo cùng công thức chứa Hyaluronic Acid – Son Bóng Lifter Gloss Maybelline New York. Đây là dòng son bóng được rất nhiều KOLs, người dùng săn đón trong 2 năm qua.   Là một trong những sản phẩm lọt top bán chạy tại châu Âu, châu Mỹ và đặc biệt các nước châu Á như Trung Quốc và Thái Lan.​",
@@ -276,10 +210,10 @@
       "subcategory": "",
       "skinType": [
         ""
-      ]
+      ],
+      "id": "1901"
     },
     {
-      "id": "646d",
       "productId": "3",
       "title": "Bảng Che Khuyết Điểm TIMAGE Ba Màu Che Vết Nám, Thâm Mụn, Làm Sáng Vùng Mắt 5g",
       "description": "Chào mừng bạn đến với cửa hàng chính thức của TIMAGE✨  “Muốn có lớp nền mỏng nhẹ và hoàn hảo như các ngôi sao, bước che khuyết điểm là không thể thiếu dù da bạn có khuyết điểm hay không. Hộp che khuyết điểm 2 chất liệu này giúp làm mịn da, không gây nứt, lâu trôi mà không loang lổ. Chỉ cần một hộp là bạn đã có lớp nền tinh tế.”  —唐毅, Nhà sáng lập và chuyên gia trang điểm nổi tiếng của TIMAGE",
@@ -291,10 +225,10 @@
       "subcategory": "",
       "skinType": [
         ""
-      ]
+      ],
+      "id": "63ed"
     },
     {
-      "id": "acbf",
       "productId": "4",
       "title": "Bộ đôi dưỡng da Dung dịch Obagi Clenziderm M.D BHA Toner 148ml và Kem Chống Lão Hóa & Tái Tạo Da 360 Retinol 0.5 New 28g",
       "description": "*Toner Obagi Clenziderm MD Pore Therapy là sản phẩm đã quá quen thuộc và vô cùng nổi tiếng trong giới chăm sóc da đặc biệt là các nàng da mụn, được mệnh danh là khắc tinh của các loại mụn.    Công dụng  - Làm sạch sâu bã nhờn, bụi bẩn, tế bào chết  - Da mặt thông thoáng, giúp các sản phẩm skincare sau đó thẩm thấu vào da tốt hơn  - Giảm mụn ẩn, mụn trứng cá, mụn đầu đen  - Giảm mẫn cảm và sưng đỏ cho da mụn, ngăn ngừa mụn hình thành  - Giảm tiết dầu nhờn",
@@ -306,10 +240,10 @@
       "subcategory": "",
       "skinType": [
         "normal"
-      ]
+      ],
+      "id": "0850"
     },
     {
-      "id": "c6da",
       "productId": "5",
       "title": "Bộ 2 Serum Glycolic Melasyl 8% [Melasyl+Glycolic+Niacinamide] dưỡng sáng da, mờ thâm mụn & nám Loreal Paris (30ml x2)",
       "description": "Serum dưỡng sáng Glycolic-Bright MỚI với thành phần đột phá sáng da MelasylTM từ viện nghiên cứu L’oreal Paris – hiệu quả hơn 5 hoạt chất sáng da phổ biến, cùng phức hợp hoạt chất 8%[Melasyl+Glycolic+Niacinamide] giúp mang đến khả năng vượt trội GIẢM 77% THÂM MỤN & NÁM*.    Sản phẩm thích hợp cho mọi loại da, kể cả làn da nhạy cảm",
@@ -321,10 +255,10 @@
       "subcategory": "",
       "skinType": [
         ""
-      ]
+      ],
+      "id": "95f4"
     },
     {
-      "id": "7cb6",
       "productId": "6",
       "title": "Bộ đôi dầu gội xả ngăn ngừa & giảm gãy rụng tóc, giúp tóc chắc khỏe L’oreal Paris Elseve Full Resist 440ml",
       "description": "Dầu gội ngăn ngừa & giảm gãy rụng tóc L’oreal Paris Elseve Full Resist Anti Hair Fall Shampoo 440ml giúp tóc chắc khỏe hơn:  - Kích thích và cải thiện sức khỏe da đầu  - Giảm ngứa da đầu và giảm gàu  - Làm chắc khỏe và phục hồi tóc, ngăn ngừa & giảm gãy rụng tóc  Dầu xả ngăn ngừa & giảm gãy rụng tóc L’oreal Paris Elseve Full Resist Anti Hair Fall Conditioner 440ml dành cho tóc yếu, dễ gãy rụng giúp tóc chắc khỏe hơn:  - Gỡ rối tóc để giảm gãy  - Tóc chắc khỏe và phục hồi tóc  - Ngăn ngừa chẻ ngọn  - Cải thiện sức khỏe da đầu",
@@ -336,10 +270,10 @@
       "subcategory": "",
       "skinType": [
         "oily"
-      ]
+      ],
+      "id": "9931"
     },
     {
-      "id": "d9a7",
       "productId": "7",
       "title": "Nước dưỡng da đầu bồ kết Cocoon giảm gàu và chăm sóc da đầu nhạy cảm 140ml",
       "description": "Da đầu khoẻ mạnh là nền tảng cho một mái tóc chắc khoẻ. Vận dụng sức mạnh từ quả bồ kết truyền thống kết hợp cùng hoạt chất khoa học tiên tiến, Nước Dưỡng Da Đầu Bồ Kết được thiết kế chuyên biệt cho da đầu nhạy cảm, giúp giảm gàu, cân bằng hệ vi sinh và củng cố hàng rào bảo vệ trên da đầu. Sản phẩm không gây khô và bết tóc.",
@@ -351,10 +285,10 @@
       "subcategory": "",
       "skinType": [
         ""
-      ]
+      ],
+      "id": "22b7"
     },
     {
-      "id": "f23f",
       "productId": "8",
       "title": "Bigsize - Mặt nạ nghệ Hưng Yên Cocoon giúp da rạng rỡ & mịn màng 100ml",
       "description": "Công dụng  • Cải thiện bề mặt, giúp da trở nên mịn màng  • Dưỡng sáng và bổ sung độ ẩm cần thiết cho làn da.  • Ngừa oxy hóa và hạn chế việc sản sinh sắc tố melanin.  • Mang lại làn da sáng hồng, đều màu và rạng rỡ.  • Mặt nạ nghệ chứa hạt Walnuts xay nhuyễn có tác dụng mát-xa nhẹ nhàng trong lúc rửa giúp làm sạch da, mang lại làn da mịn màng, không làm vàng da sau khi sử dụng.",
@@ -366,10 +300,10 @@
       "subcategory": "",
       "skinType": [
         "sensitive"
-      ]
+      ],
+      "id": "fbbc"
     },
     {
-      "id": "1ae7",
       "productId": "9",
       "title": "Dầu gội bưởi Cocoon 500ml Tặng dầu xả bưởi 310ml",
       "description": "Từ tinh dầu vỏ bưởi Việt Nam truyền thống kết hợp với vitamin B5, hoạt chất dưỡng ẩm Xylishine™ cùng công thức dịu nhẹ không chứa sulfate, dầu gội bưởi giúp làm sạch tóc và giảm gãy rụng, mang lại mái tóc đen dày, chắc khoẻ và mượt mà",
@@ -381,10 +315,10 @@
       "subcategory": "",
       "skinType": [
         ""
-      ]
+      ],
+      "id": "af28"
     },
     {
-      "id": "513d",
       "productId": "10",
       "title": "Dầu gội bưởi Cocoon giúp giảm gãy rụng và làm mềm tóc 310ml",
       "description": "Từ tinh dầu vỏ bưởi Việt Nam truyền thống kết hợp với vitamin B5, hoạt chất dưỡng ẩm Xylishine™ cùng công thức dịu nhẹ không chứa sulfate, dầu gội bưởi giúp làm sạch tóc và giảm gãy rụng, mang lại mái tóc đen dày, chắc khoẻ và mượt mà    Công dụng  • Làm sạch tóc với công thức dịu nhẹ không sulfate, không làm tổn thương da đầu  • Giải pháp giảm gãy rụng và làm mềm mái tóc  • Hỗ trợ sự phát triển của tóc, mang lại mái tóc đen dày và mềm mại",
@@ -396,10 +330,10 @@
       "subcategory": "",
       "skinType": [
         ""
-      ]
+      ],
+      "id": "a126"
     },
     {
-      "id": "49fb",
       "productId": "11",
       "title": "Kem chống nắng nâng tông da Dive-In, 60ml, Sun Cream",
       "description": "Kem chống nắng tím nâng tông  DIVE IN Tone up Sun Cream Purple SPF 50+ PA++++  Kem chống nắng mỏng nhẹ giúp làm đều màu da, nâng tông, cho lớp nền mờ, tự nhiên với thành phần 10D Hyaluronic Acid",
@@ -411,10 +345,10 @@
       "subcategory": "",
       "skinType": [
         "dry"
-      ]
+      ],
+      "id": "8c3a"
     },
     {
-      "id": "a728",
       "productId": "12",
       "title": "Kem nền Mistine kem lót 30g 36H Kiềm dầu không trôi",
       "description": "Chào mừng bạn đến với cửa hàng Mistine chính thức, Ý tưởng cốt lõi của \"Mistine\" là \"sự lựa chọn của tôi, niềm đam mê của tôi\", hy vọng sẽ truyền cảm hứng cho tình yêu cuộc sống của phụ nữ với niềm đam mê làm đẹp của Mistine    Kem nền dạng lỏng của MISTINE có thể kéo dài trong 24 giờ. Nó chứa nhiều chiết xuất từ thực vật, không chỉ giữ nước cho da mà còn có chức năng chăm sóc da. Nó cũng sử dụng các thành phần tảo tự nhiên Địa Trung Hải để kiểm soát dầu bên ngoài, ức chế dầu bên trong, làm sáng lớp trang điểm và loại bỏ da nhờn, nuôi dưỡng làn da đồng thời trở nên đẹp!!!",
@@ -426,10 +360,10 @@
       "subcategory": "",
       "skinType": [
         "dry"
-      ]
+      ],
+      "id": "3e79"
     },
     {
-      "id": "7b55",
       "productId": "13",
       "title": "Nước sen Hậu Giang Cocoon 310ml TẶNG Nước tẩy trang bí đao 500ml",
       "description": "Khai thác sức mạnh từ những đoá sen tinh khiết từ vùng đất Hậu Giang kết hợp cùng các hoạt chất khoa học tiên tiến gồm Madecassoside, vitamin B5, B12, Beta-glucan (prebiotic) và Sweetone® (chiết xuất quả ngũ vị tử), nước sen Hậu Giang dịu lành giúp bảo vệ hàng rào độ ẩm của làn da nhạy cảm, giảm mẩn đỏ và ngứa do khô ráp, mang lại cho làn da một cảm giác nhẹ nhàng, êm ái như được vỗ về.",
@@ -441,10 +375,10 @@
       "subcategory": "",
       "skinType": [
         ""
-      ]
+      ],
+      "id": "6748"
     },
     {
-      "id": "4fc1",
       "productId": "14",
       "title": "Nước dưỡng tóc tinh dầu bưởi Cocoon ngăn ngừa gãy rụng và hỗ trợ mọc tóc 310ml",
       "description": "Nước dưỡng tóc tinh dầu bưởi là sản phẩm treatment dành cho tóc, phù hợp với tình trạng tóc rụng, tóc yếu, tóc thưa mỏng. Sản phẩm có thành phần từ tinh dầu bưởi Việt Nam truyền thống, Xylishine, Vitamin B5, Baicapil và Bisabolol. Nước dưỡng tóc tinh dầu bưởi giúp ngăn ngừa 60% nguyên nhân rụng tóc, làm gia tăng mật độ của tóc, từ đó giúp tóc dày lên trông thấy. Đồng thời, sản phẩm còn giúp nuôi dưỡng da đầu và cung cấp độ ẩm cho tóc.  Phiên bản cải tiến mới với công thức được điều chỉnh sẽ tăng sự mềm mượt cho tóc và giảm bết dính cho mái tóc trong quá trình sử dụng (so với phiên bản cũ).  Sản phẩm mang lại những công dụng chính:  • Ngăn ngừa 60% nguyên nhân rụng tóc.  • Gia tăng mật độ của tóc, giúp tóc dày lên trông thấy.  • Nuôi dưỡng da đầu và cung cấp độ ẩm cần thiết cho mái tóc.  • Cung cấp dưỡng chất giúp tóc mềm mượt.",
@@ -456,10 +390,10 @@
       "subcategory": "",
       "skinType": [
         ""
-      ]
+      ],
+      "id": "65ab"
     },
     {
-      "id": "f23f",
       "productId": "15",
       "title": "Sữa Tắm Và Dưỡng Thể Trắng Da Hương Nước Hoa Thư Giãn De Memoria 300ml/chai",
       "description": "CAM KẾT   - Không sulfate, paraben, không cồn   - Hương liệu an toàn từ Pháp, đã được chứng nhận và kiểm định an toàn cho da, kể cả da nhạy cảm ",
@@ -471,10 +405,10 @@
       "subcategory": "",
       "skinType": [
         ""
-      ]
+      ],
+      "id": "94a1"
     },
     {
-      "id": "58cb",
       "productId": "16",
       "title": "Sữa Tắm Lifebuoy 800gr Detox Và Sạch Sâu Khỏi Bụi Mịn Pm2.5 Detox 100% Từ Thiên Nhiên Diệt Khuẩn",
       "description": "SỮA TẮM LIFEBUOY DETOX MATCHA VÀ KHỔ QUA 800GR  Lifebuoy Detox được chiết xuất 100% từ Matcha thiên nhiên và khổ qua, mang lại cho gia đình một làn da được detox sạch sâu, loại bỏ vi khuẩn để từ đây có thể nói tạm biệt với bụi siêu mịn PM2.5 siêu đáng ghét và loại bỏ các nguyên nhân dẫn đến các vấn đề về da như ngứa, mụn và ửng đỏ.  ƯU ĐIỂM NỔI BẬT: Chiết xuất 100% từ Matcha từ thiên nhiên và Khổ qua, giúp bạn tự tin với làn da sạch khuẩn, sạch bụi mịn PM 2.5 và loại bỏ các tác nhân gây mụn cơ thể và các vấn đề về nha khác Sản phẩm sữa tắm của nhãn hàng sạch khuẩn chạy số số 1 thế giới.",
@@ -486,10 +420,10 @@
       "subcategory": "",
       "skinType": [
         ""
-      ]
+      ],
+      "id": "5a07"
     },
     {
-      "id": "d3bf",
       "productId": "17",
       "title": "Sữa tắm dưỡng thể thiên nhiên trắng sáng da Hazeline 1kg",
       "description": "",
@@ -501,10 +435,10 @@
       "subcategory": "",
       "skinType": [
         ""
-      ]
+      ],
+      "id": "8dec"
     },
     {
-      "id": "6dfb",
       "productId": "18",
       "title": "Smoothie Tẩy Tế Bào Chết Body Dove Chăm Da Sáng Mịn 298g",
       "description": "Smoothie tẩy da chết Dove mới với hạt siêu mịn giúp nhẹ nhàng tẩy sạch tế bào chết trên da, cho bạn làn da sáng mịn tức thì ngay sau lần đầu sử dụng mà không bào mòn tổn thương da.",
@@ -516,7 +450,8 @@
       "subcategory": "",
       "skinType": [
         ""
-      ]
+      ],
+      "id": "8a7d"
     }
   ],
   "categories": [
@@ -854,17 +789,16 @@
   ],
   "bookings": [
     {
-      "id": "booking-1746807501429",
-      "userId": "user1746807278381",
-      "name": "Ngọc Linh",
-      "phone": "0972345678",
-      "email": "ngoclinh@example.com",
+      "id": "booking-1746815446664",
+      "name": "Nguyễn Ngọc Hồng Minh",
+      "phone": "01234567",
+      "email": "nguyenngochongminh@gmail.com",
       "date": "2025-05-09",
-      "service": "body",
+      "service": "makeup",
       "skinType": "dry",
-      "message": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "status": "confirmed",
-      "createdAt": "2025-05-09T16:18:21.429Z"
+      "message": "",
+      "status": "canceled",
+      "createdAt": "2025-05-09T18:30:46.664Z"
     }
   ],
   "contacts": [

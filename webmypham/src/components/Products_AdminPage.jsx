@@ -5,7 +5,7 @@ const Products = () => {
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [skinTypes, setSkinTypes] = useState([]);
-    const [subcategories, setSubcategories] = useState([]);
+    // const [subcategories, setSubcategories] = useState([]);
     const [brands, setBrands] = useState([]);
     const [filters, setFilters] = useState({
         category: '',
@@ -62,12 +62,21 @@ const Products = () => {
             );
 
         // Fetch subcategories
-        fetch('http://localhost:3001/subcategories')
-            .then((response) => response.json())
-            .then((data) => setSubcategories(data))
-            .catch((error) =>
-                console.error('Error fetching subcategories:', error)
-            );
+        // fetch('http://localhost:3001/subcategories')
+        //     .then((response) => {
+        //         if (!response.ok) {
+        //             // Nếu không tìm thấy, khởi tạo mảng rỗng thay vì báo lỗi
+        //             setSubcategories([]);
+        //             throw new Error(`HTTP error! Status: ${response.status}`);
+        //         }
+        //         return response.json();
+        //     })
+        //     .then((data) => setSubcategories(data))
+        //     .catch((error) => {
+        //         console.error('Error fetching subcategories:', error);
+        //         // Đảm bảo subcategories là mảng rỗng nếu có lỗi
+        //         setSubcategories([]);
+        //     });
 
         // Fetch brands
         fetch('http://localhost:3001/brands')
@@ -222,14 +231,14 @@ const Products = () => {
     };
 
     // Filter subcategories based on selected category
-    const getFilteredSubcategories = () => {
-        const selectedCategory = editingProduct
-            ? editingProduct.category
-            : newProduct.category;
-        return subcategories.filter(
-            (subcategory) => subcategory.categoryId === selectedCategory
-        );
-    };
+    // const getFilteredSubcategories = () => {
+    //     const selectedCategory = editingProduct
+    //         ? editingProduct.category
+    //         : newProduct.category;
+    //     return subcategories.filter(
+    //         (subcategory) => subcategory.categoryId === selectedCategory
+    //     );
+    // };
 
     return (
         <div className="p-6">
@@ -417,7 +426,7 @@ const Products = () => {
                                     ))}
                                 </select>
                             </div>
-                            <div>
+                            {/* <div>
                                 <label className="block mb-1">
                                     Danh mục phụ
                                 </label>
@@ -446,14 +455,19 @@ const Products = () => {
                                         )
                                     )}
                                 </select>
-                            </div>
+                            </div> */}
                             <div>
                                 <label className="block mb-1">Loại da</label>
                                 <select
                                     name="skinType"
                                     value={
                                         editingProduct
-                                            ? editingProduct.skinType
+                                            ? Array.isArray(
+                                                  editingProduct.skinType
+                                              )
+                                                ? editingProduct.skinType[0] ||
+                                                  ''
+                                                : editingProduct.skinType || ''
                                             : newProduct.skinType
                                     }
                                     onChange={handleInputChange}
@@ -505,7 +519,9 @@ const Products = () => {
                     </thead>
                     <tbody>
                         {filteredProducts.map((product) => (
-                            <tr key={product.id} className="border-b">
+                            <tr
+                                key={product.id || product.productId}
+                                className="border-b">
                                 <td className="p-2">{product.productId}</td>
                                 <td className="p-2">{product.title}</td>
                                 <td className="p-2">{product.description}</td>
