@@ -74,14 +74,23 @@ export default function Header() {
             return (
                 <div className="relative" ref={dropdownRef}>
                     <button
-                        className="flex items-center gap-2 text-sm font-medium hover:underline text-white"
+                        className={`flex items-center gap-2 text-xs font-medium hover:underline ${
+                            isDropdownOpen ? 'text-[#006D77]' : 'text-white'
+                        }`}
                         onClick={toggleDropdown}>
                         <span>Xin chào, {user.name}</span>
-                        <ChevronDown size={16} />
+                        <ChevronDown
+                            size={16}
+                            className={
+                                isDropdownOpen
+                                    ? 'transform rotate-180 transition-transform '
+                                    : 'transition-transform'
+                            }
+                        />
                     </button>
 
                     {isDropdownOpen && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                        <div className="absolute right-0 mt-5 w-48 bg-white rounded-md shadow-lg py-1 z-10">
                             <Link
                                 to="/ho-so"
                                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-[#EDF6F9] hover:text-[#006D77]"
@@ -159,7 +168,7 @@ export default function Header() {
                     </button>
 
                     {/* Desktop Navigation */}
-                    <nav className="hidden md:flex space-x-10 text-base text-white font-semibold">
+                    <nav className="hidden md:flex space-x-5 text-xs text-white font-semibold">
                         <Link
                             to="/"
                             className={`hover:text-[#005F69] transition-colors ${
@@ -265,23 +274,13 @@ export default function Header() {
                         </div>
                     )}
 
-                    <div className="w-64 hidden md:flex items-center bg-white bg-opacity-70 rounded-full px-3 py-2 mx-6">
-                        <Search size={16} className="text-gray-500 mr-2" />
-                        <input
-                            type="text"
-                            placeholder="Tìm kiếm..."
-                            className="bg-transparent flex-1 focus:outline-none text-sm text-[#006D77]"
-                        />
-                    </div>
-
-                    <div className="flex items-center space-x-4 ">
+                    <div className="flex items-center space-x-4 text-xs ">
                         <Link
                             to="/gio-hang"
-                            className={`hidden md:flex text-base font-semibold items-center gap-1 text-[#006D77] ${
-                                isActive('/gio-hang') ? 'underline' : ''
+                            className={`hidden md:flex font-semibold items-center gap-1 text-white ${
+                                isActive('/gio-hang') ? 'text-[#0f4d53]' : ''
                             }`}>
                             <ShoppingBasket size={30} />
-                            <span>Giỏ hàng</span>
                         </Link>
 
                         {renderUserSection()}

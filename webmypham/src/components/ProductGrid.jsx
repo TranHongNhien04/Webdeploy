@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import Toast from './Toast';
 import { Link } from 'react-router-dom';
-
+import { Search } from 'lucide-react';
 const ProductGrid = () => {
     const { addToCart } = useCart();
     const [currentPage, setCurrentPage] = useState(1);
@@ -13,6 +13,7 @@ const ProductGrid = () => {
     const [benefits, setBenefits] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const [activeCategory, setActiveCategory] = useState('all');
     const [activeSubcategories, setActiveSubcategories] = useState([]);
@@ -112,6 +113,14 @@ const ProductGrid = () => {
     };
 
     const filteredProducts = products.filter((product) => {
+        // Filter by search term
+        if (
+            searchTerm &&
+            !product.title.toLowerCase().includes(searchTerm.toLowerCase())
+        ) {
+            return false;
+        }
+
         if (activeCategory !== 'all' && product.category !== activeCategory)
             return false;
         if (
@@ -435,7 +444,7 @@ const ProductGrid = () => {
 
                     <button
                         onClick={resetFilters}
-                        className="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-md text-gray-700 transition-colors">
+                        className="w-full py-2 px-4 bg-[#006D77] hover:bg-[#06494f] rounded-md text-white transition-colors">
                         Xóa bộ lọc
                     </button>
                 </div>
@@ -625,21 +634,47 @@ const ProductGrid = () => {
                                     )?.name
                                 }`}
                         </p>
-                        <select
-                            className="bg-[#CBD5D3] text-[#2F4F4F] border border-transparent rounded-xl px-4 py-2 font-medium shadow-sm
-             focus:outline-none focus:ring-2 focus:ring-[#94A3B8]
-             hover:bg-[#d8e0de] hover:shadow-md
-             transition-all duration-200 ease-in-out"
-                            value={sortBy}
-                            onChange={handleSortChange}>
-                            <option value="default">Sắp xếp theo</option>
-                            <option value="price-asc">Giá: Thấp đến cao</option>
-                            <option value="price-desc">
-                                Giá: Cao đến thấp
-                            </option>
-                            <option value="name-asc">Tên: A-Z</option>
-                            <option value="name-desc">Tên: Z-A</option>
-                        </select>
+
+                        <div className="flex items-center">
+                            {activeCategory === 'all' &&
+                                activeSubcategories.length === 0 &&
+                                activeSkinTypes.length === 0 &&
+                                activeBenefits.length === 0 && (
+                                    <div className="w-64 mr-4 flex items-center bg-white rounded-full px-3 py-2 shadow-md border border-[#006D77]">
+                                        <Search
+                                            size={16}
+                                            className="text-[#006D77] mr-2"
+                                        />
+                                        <input
+                                            type="text"
+                                            placeholder="Tìm kiếm tên sản phẩm..."
+                                            className="bg-transparent flex-1 focus:outline-none text-sm text-[#006D77] font-medium"
+                                            value={searchTerm}
+                                            onChange={(e) =>
+                                                setSearchTerm(e.target.value)
+                                            }
+                                        />
+                                    </div>
+                                )}
+
+                            <select
+                                className="bg-[#CBD5D3] text-[#2F4F4F] border border-transparent rounded-xl px-4 py-2 font-medium shadow-sm
+                 focus:outline-none focus:ring-2 focus:ring-[#94A3B8]
+                 hover:bg-[#d8e0de] hover:shadow-md
+                 transition-all duration-200 ease-in-out"
+                                value={sortBy}
+                                onChange={handleSortChange}>
+                                <option value="default">Sắp xếp theo</option>
+                                <option value="price-asc">
+                                    Giá: Thấp đến cao
+                                </option>
+                                <option value="price-desc">
+                                    Giá: Cao đến thấp
+                                </option>
+                                <option value="name-asc">Tên: A-Z</option>
+                                <option value="name-desc">Tên: Z-A</option>
+                            </select>
+                        </div>
                     </div>
 
                     {currentProducts.length === 0 ? (
@@ -655,88 +690,81 @@ const ProductGrid = () => {
                             </button>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {currentProducts.map((product) => (
-                                <Link
-                                    key={product.productId}
-                                    to={`/san-pham/${product.productId}`}
-                                    className="relative"
-                                    onClick={() =>
-                                        console.log(
-                                            `Navigating to /san-pham/${product.productId}`
-                                        )
-                                    }>
-                                    <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                                        <div className="relative">
-                                            <img
-                                                src={
-                                                    product.image ||
-                                                    '/placeholder.svg'
-                                                }
-                                                alt={product.title}
-                                                className="w-full h-64 object-cover"
-                                            />
-                                            {product.onSale && (
-                                                <span className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
-                                                    Giảm giá
-                                                </span>
-                                            )}
-                                        </div>
-                                        <div className="p-4">
-                                            <h3 className="font-medium text-gray-900">
-                                                {product.title}
-                                            </h3>
-                                            <p className="text-sm text-gray-500 mb-2">
-                                                {product.description}
-                                            </p>
-                                            <p className="text-sm text-gray-500 mb-2">
-                                                Công dụng:{' '}
-                                                {getBenefitNames(
-                                                    product.benefit
-                                                ) || 'Không có'}
-                                            </p>
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex items-center">
-                                                    <span className="font-bold text-lg">
-                                                        {formatVND(
-                                                            product.price
-                                                        )}
+                        <div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                                {currentProducts.map((product) => (
+                                    <Link
+                                        key={product.productId}
+                                        to={`/san-pham/${product.productId}`}
+                                        className="relative"
+                                        onClick={() =>
+                                            console.log(
+                                                `Navigating to /san-pham/${product.productId}`
+                                            )
+                                        }>
+                                        <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow min-w-[260px]">
+                                            <div className="relative">
+                                                <img
+                                                    src={
+                                                        product.image ||
+                                                        '/placeholder.svg'
+                                                    }
+                                                    alt={product.title}
+                                                    className="w-full h-64 "
+                                                />
+                                                {product.onSale && (
+                                                    <span className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+                                                        Giảm giá
                                                     </span>
-                                                    {product.originalPrice && (
-                                                        <span className="text-gray-400 line-through ml-2 text-sm">
+                                                )}
+                                            </div>
+                                            <div className="p-4">
+                                                <h3 className="font-medium text-gray-900 truncate">
+                                                    {product.title}
+                                                </h3>
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center">
+                                                        <span className="font-bold text-lg">
                                                             {formatVND(
-                                                                product.originalPrice
+                                                                product.price
                                                             )}
                                                         </span>
-                                                    )}
+                                                        {product.originalPrice && (
+                                                            <span className="text-gray-400 line-through ml-2 text-sm">
+                                                                {formatVND(
+                                                                    product.originalPrice
+                                                                )}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <button
+                                                        className="w-8 h-8 bg-white rounded-full flex items-center justify-center border border-gray-200 hover:bg-gray-100"
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            handleAddToCart(
+                                                                product
+                                                            );
+                                                        }}>
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            className="h-5 w-5 text-gray-600"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke="currentColor">
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth={2}
+                                                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                                            />
+                                                        </svg>
+                                                    </button>
                                                 </div>
-                                                <button
-                                                    className="w-8 h-8 bg-white rounded-full flex items-center justify-center border border-gray-200 hover:bg-gray-100"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        handleAddToCart(
-                                                            product
-                                                        );
-                                                    }}>
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        className="h-5 w-5 text-gray-600"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke="currentColor">
-                                                        <path
-                                                            strokeLinecap="round"
-                                                            strokeLinejoin="round"
-                                                            strokeWidth={2}
-                                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                                                        />
-                                                    </svg>
-                                                </button>
                                             </div>
                                         </div>
-                                    </div>
-                                </Link>
-                            ))}
+                                    </Link>
+                                ))}
+                            </div>
                         </div>
                     )}
 

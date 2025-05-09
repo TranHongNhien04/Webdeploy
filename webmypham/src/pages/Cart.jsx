@@ -264,7 +264,7 @@ export default function Cart() {
                     </p>
                     <Link
                         to="/san-pham"
-                        className="inline-block bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition-colors">
+                        className="inline-block bg-[#006D77] text-white px-6 py-3 rounded-md hover:bg-[#004248] transition-colors">
                         Tiếp tục mua sắm
                     </Link>
                 </div>

@@ -41,17 +41,17 @@ const HeroSection = ({ scrollToBooking, scrollToServices }) => (
 const BenefitsSection = () => {
     const benefits = [
         {
-            title: 'Sản Phẩm Phù Hợp',
+            title: 'Sản phẩm phù hợp',
             description:
                 'Tìm ra sản phẩm phù hợp với loại da và nhu cầu cụ thể của bạn, tránh lãng phí tiền bạc cho sản phẩm không hiệu quả',
         },
         {
-            title: 'Chuyên Gia Tư Vấn',
+            title: 'Chuyên gia tư vấn',
             description:
                 'Được tư vấn bởi đội ngũ chuyên gia có kinh nghiệm và kiến thức chuyên sâu về các sản phẩm mỹ phẩm',
         },
         {
-            title: 'Hỗ Trợ Liên Tục',
+            title: 'Hỗ trợ liên tục',
             description:
                 'Được hỗ trợ liên tục trong quá trình sử dụng sản phẩm, giải đáp thắc mắc và điều chỉnh phù hợp',
         },
@@ -61,7 +61,7 @@ const BenefitsSection = () => {
         <section className="mb-16">
             <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold mb-4">
-                    Lợi Ích Khi Sử Dụng Dịch Vụ Tư Vấn
+                    Lợi ích khi sử dụng dịch vụ tư vấn
                 </h2>
                 <p className="text-gray-500 max-w-2xl mx-auto">
                     Chúng tôi cung cấp dịch vụ tư vấn chuyên nghiệp giúp bạn tìm
@@ -72,7 +72,7 @@ const BenefitsSection = () => {
                 {benefits.map((benefit, index) => (
                     <div
                         key={index}
-                        className="border border-gray-200 bg-white rounded-lg p-6">
+                        className=" border border-gray-200 bg-white rounded-lg p-6 shadow-l hover:bg-[#F5EBE0]">
                         <div className="text-center">
                             <h3 className="text-xl font-semibold mb-2">
                                 {benefit.title}
@@ -92,7 +92,7 @@ const ServicesTabsSection = ({ servicesRef }) => {
     const services = [
         {
             value: 'skincare',
-            title: 'Tư Vấn Chăm Sóc Da Mặt',
+            title: 'Tư vấn chăm sóc da mặt',
             description: 'Giải pháp chăm sóc da mặt toàn diện',
             content:
                 'Chúng tôi sẽ phân tích loại da của bạn và đề xuất quy trình chăm sóc da phù hợp với các sản phẩm cụ thể cho từng bước.',
@@ -105,7 +105,7 @@ const ServicesTabsSection = ({ servicesRef }) => {
         },
         {
             value: 'makeup',
-            title: 'Tư Vấn Trang Điểm',
+            title: 'Tư vấn trang điểm',
             description: 'Giải pháp trang điểm phù hợp phong cách',
             content:
                 'Chúng tôi sẽ giúp bạn tìm ra các sản phẩm trang điểm phù hợp với tông da, kiểu dáng khuôn mặt và phong cách cá nhân.',
@@ -118,7 +118,7 @@ const ServicesTabsSection = ({ servicesRef }) => {
         },
         {
             value: 'body',
-            title: 'Tư Vấn Chăm Sóc Cơ Thể',
+            title: 'Tư vấn chăm sóc cơ thể',
             description: 'Giải pháp chăm sóc cơ thể toàn diện',
             content:
                 'Chúng tôi sẽ giúp bạn xây dựng quy trình chăm sóc cơ thể toàn diện với các sản phẩm phù hợp với loại da và nhu cầu.',
@@ -131,7 +131,7 @@ const ServicesTabsSection = ({ servicesRef }) => {
         },
         {
             value: 'hair',
-            title: 'Tư Vấn Chăm Sóc Tóc',
+            title: 'Tư vấn chăm sóc tóc',
             description: 'Giải pháp chăm sóc tóc và da đầu',
             content:
                 'Chúng tôi sẽ phân tích tình trạng tóc và da đầu của bạn để đề xuất các sản phẩm chăm sóc tóc phù hợp nhất.',
@@ -148,7 +148,7 @@ const ServicesTabsSection = ({ servicesRef }) => {
         <section ref={servicesRef} className="mb-16 pt-5 scroll-mt-24">
             <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold mb-4">
-                    Dịch Vụ Tư Vấn Theo Nhu Cầu
+                    Dịch vụ tư vấn theo nhu cầu
                 </h2>
                 <p className="text-gray-500 max-w-2xl mx-auto">
                     Chúng tôi cung cấp dịch vụ tư vấn chuyên biệt cho từng danh
@@ -159,7 +159,7 @@ const ServicesTabsSection = ({ servicesRef }) => {
                 {services.map((service, index) => (
                     <div
                         key={index}
-                        className="border border-gray-200 hover:shadow-lg transition-shadow bg-white rounded-lg p-6">
+                        className="border border-gray-200 hover:bg-[#F5EBE0] transition-shadow bg-white rounded-lg p-6 shadow-lg">
                         <div>
                             <h3 className="text-xl font-semibold mb-2">
                                 {service.title}
@@ -174,7 +174,7 @@ const ServicesTabsSection = ({ servicesRef }) => {
                                 {service.items.map((item, itemIndex) => (
                                     <span
                                         key={itemIndex}
-                                        className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">
+                                        className="bg-[#E3D5CA] text-gray-800 text-xs px-2 py-1 rounded-full">
                                         {item}
                                     </span>
                                 ))}
@@ -190,7 +190,7 @@ const ServicesTabsSection = ({ servicesRef }) => {
 const SkinTypeSection = () => {
     const skinTypes = [
         {
-            title: 'Da Dầu',
+            title: 'Da dầu',
             description: 'Giải pháp kiểm soát dầu và ngăn ngừa mụn',
             content:
                 'Các sản phẩm phù hợp với da dầu giúp kiểm soát lượng dầu thừa, se khít lỗ chân lông và ngăn ngừa mụn hiệu quả.',
@@ -201,7 +201,7 @@ const SkinTypeSection = () => {
             ],
         },
         {
-            title: 'Da Khô',
+            title: 'Da khô',
             description: 'Giải pháp cấp ẩm và phục hồi da',
             content:
                 'Các sản phẩm dành cho da khô giúp cung cấp độ ẩm, nuôi dưỡng và phục hồi hàng rào bảo vệ da.',
@@ -212,7 +212,7 @@ const SkinTypeSection = () => {
             ],
         },
         {
-            title: 'Da Nhạy Cảm',
+            title: 'Da nhạy cảm',
             description: 'Giải pháp làm dịu và bảo vệ da',
             content:
                 'Các sản phẩm dành cho da nhạy cảm giúp làm dịu, giảm kích ứng và tăng cường hàng rào bảo vệ da.',
@@ -224,7 +224,7 @@ const SkinTypeSection = () => {
         },
 
         {
-            title: 'Da Hỗn Hợp',
+            title: 'Da hỗn hợp',
             description: 'Giải pháp cân bằng vùng da khác nhau',
             content:
                 'Các sản phẩm dành cho da hỗn hợp giúp cân bằng vùng da dầu (chữ T) và vùng da khô (hai má).',
@@ -235,7 +235,7 @@ const SkinTypeSection = () => {
     return (
         <section className="mb-16">
             <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold mb-4">Tư Vấn Theo Loại Da</h2>
+                <h2 className="text-3xl font-bold mb-4">Tư vấn theo loại da</h2>
                 <p className="text-gray-500 max-w-2xl mx-auto">
                     Mỗi loại da cần được chăm sóc với những sản phẩm và phương
                     pháp khác nhau. Chúng tôi cung cấp tư vấn chuyên biệt cho
@@ -246,7 +246,7 @@ const SkinTypeSection = () => {
                 {skinTypes.map((skin, index) => (
                     <div
                         key={index}
-                        className="border border-gray-200 hover:shadow-lg transition-shadow bg-white rounded-lg p-6">
+                        className="border border-gray-200 hover:bg-[#F5EBE0] transition-shadow bg-white rounded-lg p-6 shadow-lg">
                         <div>
                             <h3 className="text-xl font-semibold mb-2">
                                 {skin.title}
@@ -259,7 +259,7 @@ const SkinTypeSection = () => {
                                 {skin.tags.map((tag, tagIndex) => (
                                     <span
                                         key={tagIndex}
-                                        className="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">
+                                        className="bg-[#E3D5CA] text-gray-800 text-xs px-2 py-1 rounded-full">
                                         {tag}
                                     </span>
                                 ))}
@@ -375,7 +375,7 @@ const BookingFormSection = ({ bookingRef }) => {
         <section ref={bookingRef} className="mb-16 pt-5 scroll-mt-24">
             <div className="max-w-3xl mx-auto border rounded-lg p-8 bg-gray-50">
                 <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold mb-4">Đặt Lịch Tư Vấn</h2>
+                    <h2 className="text-3xl font-bold mb-4">Đặt lịch tư vấn</h2>
                     <p className="text-gray-500">
                         Điền thông tin của bạn để đặt lịch tư vấn với chuyên gia
                         của chúng tôi
@@ -569,7 +569,7 @@ const BookingFormSection = ({ bookingRef }) => {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full bg-black hover:bg-gray-800 text-white py-3 rounded-md text-lg disabled:bg-gray-400 disabled:cursor-not-allowed">
+                        className="w-full bg-[#006D77] hover:bg-[#004248] text-white py-3 rounded-md text-lg font-bold disabled:bg-gray-400 disabled:cursor-not-allowed">
                         {isSubmitting ? 'Đang xử lý...' : 'Đặt lịch ngay'}
                     </button>
                 </form>
@@ -587,9 +587,9 @@ const BookingFormSection = ({ bookingRef }) => {
 };
 
 const CTASection = ({ scrollToBooking }) => (
-    <section className="bg-gradient-to-r from-gray-800 to-black rounded-lg p-8 text-white text-center mb-5">
+    <section className="bg-gradient-to-r from-[#154145] to-[#006D77] rounded-lg p-8 text-white text-center mb-5">
         <h2 className="text-3xl font-bold mb-4">
-            Bắt Đầu Hành Trình Làm Đẹp Của Bạn Ngay Hôm Nay
+            Bắt đầu hành trình làm đẹp của bạn ngay hôm nay
         </h2>
         <p className="max-w-2xl mx-auto mb-8 text-gray-200">
             Đừng để làn da của bạn phải "thử và sai" với hàng loạt sản phẩm
@@ -598,8 +598,8 @@ const CTASection = ({ scrollToBooking }) => (
         </p>
         <button
             onClick={scrollToBooking}
-            className="bg-white text-black hover:bg-gray-100 py-3 px-6 rounded-md text-lg">
-            Đặt Lịch Tư Vấn Ngay
+            className="bg-white text-black font-bold hover:bg-gray-200 py-3 px-6 rounded-md text-lg">
+            Đặt lịch tư vấn ngay
         </button>
     </section>
 );
@@ -629,7 +629,7 @@ export default function Service() {
     }, [searchParams]);
 
     return (
-        <div className="mx-auto px-4 pt-5">
+        <div className="mx-auto px-4 pt-5 bg-[#EDF6F9]">
             <HeroSection
                 scrollToBooking={scrollToBooking}
                 scrollToServices={scrollToServices}

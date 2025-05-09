@@ -4,8 +4,8 @@ import BackgroundImage from '../assets/img/backgrounds.png';
 function Introduce() {
     return (
         <div
-            className=" min-h-screen py-12 px-6"
-            style={{ backgroundColor: '#E2F3FC' }}>
+            className=" min-h-screen px-6 mb-4"
+            style={{ backgroundColor: '#EDF6F9' }}>
             <div className="max-w-5xl mx-auto mb-10">
                 <img
                     src={BackgroundImage}
@@ -14,7 +14,7 @@ function Introduce() {
                 />
             </div>
             <div className="max-w-5xl mx-auto text-center">
-                <h1 className="text-4xl font-bold text-[#a67c52] mb-4">
+                <h1 className="text-4xl font-bold text-[#006D77] mb-4">
                     Chào mừng đến với FRUVIA BEAUTY
                 </h1>
                 <p className="text-lg text-gray-700 mb-2 italic">
@@ -24,11 +24,15 @@ function Introduce() {
                     "Vẻ đẹp để truyền cảm hứng"
                 </p>
 
-                <div className="bg-white shadow-md rounded-lg p-8 text-left">
+                <div className="p-8 text-left">
                     <p className="text-lg text-gray-800 mb-4">
-                        Tại <strong>FRUVIA BEAUTY</strong>, chúng tôi tin rằng
-                        vẻ đẹp không chỉ là làn da hay lớp trang điểm, mà là sự
-                        tự tin, tinh thần tích cực và cảm hứng lan tỏa mỗi ngày.
+                        Tại{' '}
+                        <strong className="text-[#006D77]">
+                            FRUVIA BEAUTY
+                        </strong>
+                        , chúng tôi tin rằng vẻ đẹp không chỉ là làn da hay lớp
+                        trang điểm, mà là sự tự tin, tinh thần tích cực và cảm
+                        hứng lan tỏa mỗi ngày.
                     </p>
                     <p className="text-lg text-gray-800 mb-4">
                         Sản phẩm của chúng tôi được chọn lọc từ những thành phần
@@ -38,8 +42,8 @@ function Introduce() {
                     </p>
 
                     <div className="grid md:grid-cols-3 gap-6 my-8">
-                        <div className="bg-[#fffaf0] p-6 rounded-lg shadow-sm hover:shadow-md transition">
-                            <h3 className="text-xl font-semibold text-[#d8924b] mb-2">
+                        <div className="bg-[#f1ece8] border-gray-500 p-6 rounded-lg shadow-xl transition ">
+                            <h3 className="text-xl font-semibold text-black mb-2">
                                 {' '}
                                 Tự nhiên
                             </h3>
@@ -48,8 +52,8 @@ function Introduce() {
                                 cảm, không thử nghiệm trên động vật.
                             </p>
                         </div>
-                        <div className="bg-[#fffaf0] p-6 rounded-lg shadow-sm hover:shadow-md transition">
-                            <h3 className="text-xl font-semibold text-[#d8924b] mb-2">
+                        <div className="bg-[#f1ece8] border-gray-500 p-6 rounded-lg shadow-xl transition ">
+                            <h3 className="text-xl font-semibold text-black mb-2">
                                 Chất lượng
                             </h3>
                             <p className="text-gray-700 text-sm">
@@ -57,8 +61,8 @@ function Introduce() {
                                 hàng nghìn khách hàng mỗi năm.
                             </p>
                         </div>
-                        <div className="bg-[#fffaf0] p-6 rounded-lg shadow-sm hover:shadow-md transition">
-                            <h3 className="text-xl font-semibold text-[#d8924b] mb-2">
+                        <div className="bg-[#f1ece8] border-gray-500 p-6 rounded-lg shadow-xl transition">
+                            <h3 className="text-xl font-semibold text-black mb-2">
                                 Cảm hứng
                             </h3>
                             <p className="text-gray-700 text-sm">
@@ -71,7 +75,7 @@ function Introduce() {
                     <div className="text-center mt-6">
                         <Link
                             to="/san-pham"
-                            className="inline-block bg-[#d4a373] text-white px-6 py-3 rounded-full hover:bg-[#c58c5c] transition">
+                            className="inline-block bg-[#D5BDAF] text-black text-xl font-bold px-6 py-3 rounded-full hover:bg-[#b59887] transition">
                             Khám phá sản phẩm
                         </Link>
                     </div>
@@ -79,7 +83,7 @@ function Introduce() {
 
                 <div className="mt-10 text-sm text-gray-500 italic">
                     Được phát triển bởi{' '}
-                    <span className="text-[#a67c52] font-semibold">
+                    <span className="text-[#006D77] font-semibold">
                         Innovative Fruits
                     </span>{' '}
                     — vì một thế giới đẹp hơn từng ngày.

@@ -49,7 +49,34 @@
         13,
         17
       ],
-      "orders": [],
+      "orders": [
+        {
+          "id": "order-1746766703153",
+          "date": "9/5/2025",
+          "time": "11:58:23",
+          "createdAt": "2025-05-09T04:58:23.153Z",
+          "customerInfo": {
+            "fullName": "Ngọc Linh",
+            "phone": "0971770425",
+            "address": "24/6t, đông lân 1",
+            "city": "Tp.Hồ Chí Minh",
+            "district": "Hóc môn",
+            "ward": "ssssssssssss",
+            "note": ""
+          },
+          "subtotal": 200000,
+          "shippingFee": 35000,
+          "totalAmount": 235000,
+          "status": "Chưa giao",
+          "items": [
+            {
+              "productId": "1",
+              "price": 200000,
+              "quantity": 1
+            }
+          ]
+        }
+      ],
       "cart": [],
       "role": "user"
     },
@@ -1107,6 +1134,13 @@
       "date": "2025-05-06",
       "replied": false,
       "replyMessage": ""
+    },
+    {
+      "id": 1746769515376,
+      "name": "Nguyễn Ngọc Hồng Minh",
+      "email": "ngoclinh@example.com",
+      "message": "q",
+      "date": "2025-05-09"
     }
   ]
 }
