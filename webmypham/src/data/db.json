@@ -9,7 +9,7 @@
       "wishlist": [],
       "orders": [],
       "cart": [],
-      "role": "Admin"
+      "role": "admin"
     },
     {
       "id": "user123",
@@ -23,7 +23,8 @@
         17
       ],
       "orders": [],
-      "cart": []
+      "cart": [],
+      "role": "user"
     },
     {
       "id": "user456",
@@ -36,7 +37,8 @@
         8
       ],
       "orders": [],
-      "cart": []
+      "cart": [],
+      "role": "user"
     },
     {
       "id": "user789",
@@ -46,7 +48,8 @@
       "skinType": "oily",
       "wishlist": [],
       "orders": [],
-      "cart": []
+      "cart": [],
+      "role": "user"
     },
     {
       "id": "user1746197734020",
@@ -56,7 +59,8 @@
       "skinType": "combination",
       "wishlist": [],
       "orders": [],
-      "cart": []
+      "cart": [],
+      "role": "user"
     },
     {
       "id": "user1746198473972",
@@ -66,7 +70,8 @@
       "skinType": "dry",
       "wishlist": [],
       "orders": [],
-      "cart": []
+      "cart": [],
+      "role": "user"
     },
     {
       "id": "user1746421471332",
@@ -399,7 +404,8 @@
           "price": 150000,
           "quantity": 1
         }
-      ]
+      ],
+      "role": "user"
     }
   ],
   "brands": [
