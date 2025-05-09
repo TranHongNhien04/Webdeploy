@@ -25,13 +25,13 @@ const AdminPage = () => {
                     </Link>
                 </div>
                 <Routes>
-                    <Route path="/orders" element={<Dashboard />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/services" element={<Services />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/users" element={<Users />} />
-                    <Route path="/reports" element={<Reports />} />
-                    <Route path="/settings" element={<Settings />} />
+                    <Route path="orders" element={<Dashboard />} />
+                    <Route path="products" element={<Products />} />
+                    <Route path="services" element={<Services />} />
+                    <Route path="contact" element={<Contact />} />
+                    <Route path="users" element={<Users />} />
+                    <Route path="reports" element={<Reports />} />
+                    <Route path="settings" element={<Settings />} />
                     <Route path="*" element={<Dashboard />} />
                 </Routes>
             </div>

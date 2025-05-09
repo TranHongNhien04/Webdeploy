@@ -115,6 +115,7 @@ export default function Cart() {
                     subtotal: subtotal,
                     shippingFee: shippingFee,
                     totalAmount: subtotal + shippingFee,
+                    status: 'Chưa giao',
                     items: selectedProducts.map((item) => ({
                         productId: item.productId,
                         price: item.price,

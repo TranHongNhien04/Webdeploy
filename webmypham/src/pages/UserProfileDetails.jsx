@@ -139,10 +139,29 @@ export default function UserProfileDetails() {
     };
 
     const formatDate = (dateString) => {
+        if (!dateString) return 'N/A';
+
         try {
+            // Nếu đã ở định dạng d/m/yyyy, trả về nguyên bản
+            if (dateString.includes('/')) {
+                return dateString;
+            }
+
+            // Nếu là định dạng ISO hoặc yyyy-mm-dd
             const date = new Date(dateString);
+            if (isNaN(date.getTime())) {
+                // Nếu không phải định dạng ISO, thử xử lý yyyy-mm-dd
+                const [year, month, day] = dateString.split('-');
+                return `${day.padStart(2, '0')}/${month.padStart(
+                    2,
+                    '0'
+                )}/${year}`;
+            }
+
+            // Định dạng ISO thành d/m/yyyy
             return date.toLocaleDateString('vi-VN');
         } catch (error) {
+            console.error('Error formatting date:', error, dateString);
             return dateString;
         }
     };

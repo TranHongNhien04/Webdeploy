@@ -93,6 +93,25 @@ const OrderDetailsModal = ({ isOpen, onClose, order }) => {
                                     </p>
                                     <p>{order.time || 'Không có thông tin'}</p>
                                 </div>
+                                <div className="flex justify-between mb-2">
+                                    <p className="font-medium">
+                                        Trạng thái giao hàng:
+                                    </p>
+                                    <p
+                                        className={`font-semibold px-2 py-1 rounded ${
+                                            order.status === 'Chưa giao'
+                                                ? 'text-blue-500 '
+                                                : order.status === 'Đang giao'
+                                                ? 'text-yellow-500 '
+                                                : order.status === 'Đã giao'
+                                                ? 'text-green-500 '
+                                                : order.status === 'Đã hủy'
+                                                ? 'text-red-500 '
+                                                : 'text-gray-600 '
+                                        }`}>
+                                        {order.status || 'Không có thông tin'}
+                                    </p>
+                                </div>
                             </div>
 
                             <div className="mb-6">

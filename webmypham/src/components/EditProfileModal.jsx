@@ -121,8 +121,9 @@ export default function EditProfileModal({
             // Đóng modal sau 1 giây
             setTimeout(() => {
                 onClose();
-                // Làm mới trang để cập nhật trạng thái
-                window.location.reload();
+                // Lưu đường dẫn hiện tại và tải lại trang
+                const currentPath = window.location.pathname;
+                window.location.href = currentPath;
             }, 1000);
         } catch (error) {
             console.error('Update error:', error);

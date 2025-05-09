@@ -17,20 +17,52 @@ const Contact = () => {
     const [sortOrder, setSortOrder] = useState('desc');
 
     const formatDate = (dateStr) => {
-        const [year, month, day] = dateStr.split('-');
-        return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
+        if (!dateStr || typeof dateStr !== 'string') {
+            return 'N/A';
+        }
+
+        try {
+            // Nếu đã ở định dạng d/m/yyyy, trả về nguyên bản
+            if (dateStr.includes('/')) {
+                return dateStr;
+            }
+
+            // Chuyển từ yyyy-mm-dd sang d/m/yyyy
+            const [year, month, day] = dateStr.split('-');
+            return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
+        } catch (error) {
+            console.error('Error formatting date:', error, dateStr);
+            return dateStr;
+        }
     };
 
     const parseDate = (dateStr) => {
-        const [year, month, day] = dateStr.split('-').map(Number);
-        return new Date(year, month - 1, day);
+        if (!dateStr || typeof dateStr !== 'string') {
+            return new Date();
+        }
+
+        try {
+            if (dateStr.includes('/')) {
+                // Định dạng d/m/yyyy
+                const [day, month, year] = dateStr.split('/').map(Number);
+                return new Date(year, month - 1, day);
+            } else {
+                // Định dạng yyyy-mm-dd
+                const [year, month, day] = dateStr.split('-').map(Number);
+                return new Date(year, month - 1, day);
+            }
+        } catch (error) {
+            console.error('Error parsing date:', error, dateStr);
+            return new Date();
+        }
     };
 
     useEffect(() => {
         setLoading(true);
         fetch('http://localhost:3001/contacts')
             .then((response) => {
-                if (!response.ok) throw new Error('Network response was not ok');
+                if (!response.ok)
+                    throw new Error('Network response was not ok');
                 return response.json();
             })
             .then((data) => {
@@ -55,11 +87,15 @@ const Contact = () => {
 
         if (filters.startDate) {
             const start = new Date(filters.startDate);
-            filtered = filtered.filter((inquiry) => parseDate(inquiry.rawDate) >= start);
+            filtered = filtered.filter(
+                (inquiry) => parseDate(inquiry.rawDate) >= start
+            );
         }
         if (filters.endDate) {
             const end = new Date(filters.endDate);
-            filtered = filtered.filter((inquiry) => parseDate(inquiry.rawDate) <= end);
+            filtered = filtered.filter(
+                (inquiry) => parseDate(inquiry.rawDate) <= end
+            );
         }
         if (filters.name) {
             filtered = filtered.filter((inquiry) =>
@@ -68,7 +104,9 @@ const Contact = () => {
         }
         if (filters.email) {
             filtered = filtered.filter((inquiry) =>
-                inquiry.email.toLowerCase().includes(filters.email.toLowerCase())
+                inquiry.email
+                    .toLowerCase()
+                    .includes(filters.email.toLowerCase())
             );
         }
         if (filters.replied) {
@@ -103,10 +141,15 @@ const Contact = () => {
                 method: 'DELETE',
             })
                 .then((response) => {
-                    if (!response.ok) throw new Error('Failed to delete inquiry');
-                    setInquiries(inquiries.filter((inquiry) => inquiry.id !== id));
+                    if (!response.ok)
+                        throw new Error('Failed to delete inquiry');
+                    setInquiries(
+                        inquiries.filter((inquiry) => inquiry.id !== id)
+                    );
                 })
-                .catch((error) => console.error('Error deleting inquiry:', error));
+                .catch((error) =>
+                    console.error('Error deleting inquiry:', error)
+                );
         }
     };
 
@@ -125,7 +168,9 @@ const Contact = () => {
             alert('Vui lòng nhập nội dung phản hồi.');
             return;
         }
-        console.log(`Gửi phản hồi tới ${selectedInquiry.email}: ${replyMessage}`);
+        console.log(
+            `Gửi phản hồi tới ${selectedInquiry.email}: ${replyMessage}`
+        );
 
         const updatedInquiries = inquiries.map((inquiry) =>
             inquiry.id === selectedInquiry.id
@@ -162,7 +207,9 @@ const Contact = () => {
             <h2 className="text-xl font-semibold mb-4">Quản lý liên hệ</h2>
             <div className="bg-white p-6 rounded-lg shadow">
                 <div className="mb-4 p-4 border rounded">
-                    <h3 className="text-lg font-semibold mb-2">Bộ lọc liên hệ</h3>
+                    <h3 className="text-lg font-semibold mb-2">
+                        Bộ lọc liên hệ
+                    </h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <label className="block mb-1">Từ ngày</label>
@@ -212,20 +259,20 @@ const Contact = () => {
                                 name="replied"
                                 value={filters.replied}
                                 onChange={handleFilterChange}
-                                className="w-full p-2 border rounded"
-                            >
+                                className="w-full p-2 border rounded">
                                 <option value="">Tất cả</option>
                                 <option value="true">Đã phản hồi</option>
                                 <option value="false">Chưa phản hồi</option>
                             </select>
                         </div>
                         <div>
-                            <label className="block mb-1">Sắp xếp theo ngày</label>
+                            <label className="block mb-1">
+                                Sắp xếp theo ngày
+                            </label>
                             <select
                                 value={sortOrder}
                                 onChange={handleSortChange}
-                                className="w-full p-2 border rounded"
-                            >
+                                className="w-full p-2 border rounded">
                                 <option value="desc">Mới nhất trước</option>
                                 <option value="asc">Cũ nhất trước</option>
                             </select>
@@ -234,9 +281,13 @@ const Contact = () => {
                 </div>
 
                 {loading ? (
-                    <div className="flex justify-center items-center h-32">Đang tải...</div>
+                    <div className="flex justify-center items-center h-32">
+                        Đang tải...
+                    </div>
                 ) : inquiries.length === 0 ? (
-                    <div className="text-center text-gray-500 py-4">Không có liên hệ nào.</div>
+                    <div className="text-center text-gray-500 py-4">
+                        Không có liên hệ nào.
+                    </div>
                 ) : (
                     <table className="w-full text-left">
                         <thead>
@@ -260,23 +311,26 @@ const Contact = () => {
                                     <td className="p-2 flex space-x-2">
                                         {inquiry.replied ? (
                                             <button
-                                                onClick={() => handleViewReply(inquiry)}
-                                                className="text-gray-500 hover:underline"
-                                            >
+                                                onClick={() =>
+                                                    handleViewReply(inquiry)
+                                                }
+                                                className="text-gray-500 hover:underline">
                                                 Đã phản hồi
                                             </button>
                                         ) : (
                                             <button
-                                                onClick={() => handleReply(inquiry)}
-                                                className="text-blue-500 hover:underline"
-                                            >
+                                                onClick={() =>
+                                                    handleReply(inquiry)
+                                                }
+                                                className="text-blue-500 hover:underline">
                                                 Phản hồi
                                             </button>
                                         )}
                                         <button
-                                            onClick={() => handleDelete(inquiry.id)}
-                                            className="text-red-500 hover:underline"
-                                        >
+                                            onClick={() =>
+                                                handleDelete(inquiry.id)
+                                            }
+                                            className="text-red-500 hover:underline">
                                             Xóa
                                         </button>
                                     </td>
@@ -290,11 +344,20 @@ const Contact = () => {
             {showReplyModal && selectedInquiry && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                        <h3 className="text-lg font-semibold mb-4">Phản hồi liên hệ</h3>
+                        <h3 className="text-lg font-semibold mb-4">
+                            Phản hồi liên hệ
+                        </h3>
                         <div className="space-y-2 mb-4">
-                            <p><strong>Tên:</strong> {selectedInquiry.name}</p>
-                            <p><strong>Email:</strong> {selectedInquiry.email}</p>
-                            <p><strong>Lời nhắn:</strong> {selectedInquiry.message}</p>
+                            <p>
+                                <strong>Tên:</strong> {selectedInquiry.name}
+                            </p>
+                            <p>
+                                <strong>Email:</strong> {selectedInquiry.email}
+                            </p>
+                            <p>
+                                <strong>Lời nhắn:</strong>{' '}
+                                {selectedInquiry.message}
+                            </p>
                         </div>
                         <textarea
                             value={replyMessage}
@@ -306,14 +369,12 @@ const Contact = () => {
                         <div className="flex justify-end space-x-2">
                             <button
                                 onClick={handleCloseModal}
-                                className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
-                            >
+                                className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400">
                                 Hủy
                             </button>
                             <button
                                 onClick={handleSendReply}
-                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                            >
+                                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                                 Gửi
                             </button>
                         </div>
@@ -324,18 +385,29 @@ const Contact = () => {
             {showViewReplyModal && selectedInquiry && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                        <h3 className="text-lg font-semibold mb-4">Xem phản hồi</h3>
+                        <h3 className="text-lg font-semibold mb-4">
+                            Xem phản hồi
+                        </h3>
                         <div className="space-y-2 mb-4">
-                            <p><strong>Tên:</strong> {selectedInquiry.name}</p>
-                            <p><strong>Email:</strong> {selectedInquiry.email}</p>
-                            <p><strong>Lời nhắn:</strong> {selectedInquiry.message}</p>
-                            <p><strong>Phản hồi đã gửi:</strong> {selectedInquiry.replyMessage}</p>
+                            <p>
+                                <strong>Tên:</strong> {selectedInquiry.name}
+                            </p>
+                            <p>
+                                <strong>Email:</strong> {selectedInquiry.email}
+                            </p>
+                            <p>
+                                <strong>Lời nhắn:</strong>{' '}
+                                {selectedInquiry.message}
+                            </p>
+                            <p>
+                                <strong>Phản hồi đã gửi:</strong>{' '}
+                                {selectedInquiry.replyMessage}
+                            </p>
                         </div>
                         <div className="flex justify-end">
                             <button
                                 onClick={handleCloseModal}
-                                className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
-                            >
+                                className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400">
                                 Đóng
                             </button>
                         </div>

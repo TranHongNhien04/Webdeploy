@@ -1,13 +1,9 @@
-<<<<<<< HEAD
 import {
     BrowserRouter as Router,
     Routes,
     Route,
     Navigate,
 } from 'react-router-dom';
-=======
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
->>>>>>> origin/nhien
 import HomePage from './pages/HomePage';
 import ProductPage from './pages/ProductPage';
 import Introduce from './pages/Introduce';
@@ -35,7 +31,6 @@ const AdminRoute = ({ children }) => {
     return children;
 };
 
-// Layout component for regular pages
 const MainLayout = ({ children }) => (
     <>
         <Header />

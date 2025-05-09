@@ -20,47 +20,96 @@ const Dashboard = () => {
     const [selectedOrder, setSelectedOrder] = useState(null);
 
     const formatDate = (dateStr) => {
-        const [year, month, day] = dateStr.split('-');
-        return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
+        if (!dateStr || typeof dateStr !== 'string') {
+            return 'N/A';
+        }
+
+        try {
+            // Nếu đã ở định dạng d/m/yyyy, trả về nguyên bản
+            if (dateStr.includes('/')) {
+                return dateStr;
+            }
+
+            // Chuyển từ yyyy-mm-dd sang d/m/yyyy
+            const [year, month, day] = dateStr.split('-');
+            return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
+        } catch (error) {
+            console.error('Error formatting date:', error, dateStr);
+            return dateStr;
+        }
     };
 
     const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        }).format(amount);
     };
 
     const getStatusColor = (status) => {
         switch (status) {
-            case 'Chưa giao': return 'text-blue-500';
-            case 'Đang giao': return 'text-yellow-500';
-            case 'Đã giao': return 'text-green-500';
-            case 'Đã hủy': return 'text-red-500';
-            default: return 'text-gray-500';
+            case 'Chưa giao':
+                return 'text-blue-500';
+            case 'Đang giao':
+                return 'text-yellow-500';
+            case 'Đã giao':
+                return 'text-green-500';
+            case 'Đã hủy':
+                return 'text-red-500';
+            default:
+                return 'text-gray-500';
         }
     };
 
     const mapStatusToFilter = (status) => {
         switch (status) {
-            case 'Chưa giao': return 'pending';
-            case 'Đang giao': return 'shipped';
-            case 'Đã giao': return 'delivered';
-            case 'Đã hủy': return 'canceled';
-            default: return '';
+            case 'Chưa giao':
+                return 'pending';
+            case 'Đang giao':
+                return 'shipped';
+            case 'Đã giao':
+                return 'delivered';
+            case 'Đã hủy':
+                return 'canceled';
+            default:
+                return '';
         }
     };
 
     const mapFilterToStatus = (filter) => {
         switch (filter) {
-            case 'pending': return 'Chưa giao';
-            case 'shipped': return 'Đang giao';
-            case 'delivered': return 'Đã giao';
-            case 'canceled': return 'Đã hủy';
-            default: return '';
+            case 'pending':
+                return 'Chưa giao';
+            case 'shipped':
+                return 'Đang giao';
+            case 'delivered':
+                return 'Đã giao';
+            case 'canceled':
+                return 'Đã hủy';
+            default:
+                return '';
         }
     };
 
     const parseDate = (dateStr) => {
-        const [year, month, day] = dateStr.split('-').map(Number);
-        return new Date(year, month - 1, day);
+        if (!dateStr || typeof dateStr !== 'string') {
+            return new Date();
+        }
+
+        try {
+            if (dateStr.includes('/')) {
+                // Định dạng d/m/yyyy
+                const [day, month, year] = dateStr.split('/').map(Number);
+                return new Date(year, month - 1, day);
+            } else {
+                // Định dạng yyyy-mm-dd
+                const [year, month, day] = dateStr.split('-').map(Number);
+                return new Date(year, month - 1, day);
+            }
+        } catch (error) {
+            console.error('Error parsing date:', error, dateStr);
+            return new Date();
+        }
     };
 
     useEffect(() => {
@@ -98,7 +147,10 @@ const Dashboard = () => {
                 const uniqueUsers = new Set(
                     users
                         .filter((user) =>
-                            user.orders.some((o) => parseDate(o.date) >= new Date('2025-05-01'))
+                            user.orders.some(
+                                (o) =>
+                                    parseDate(o.date) >= new Date('2025-05-01')
+                            )
                         )
                         .map((user) => user.id)
                 );
@@ -112,15 +164,21 @@ const Dashboard = () => {
 
         if (filters.startDate) {
             const start = new Date(filters.startDate);
-            filtered = filtered.filter((order) => parseDate(order.rawDate) >= start);
+            filtered = filtered.filter(
+                (order) => parseDate(order.rawDate) >= start
+            );
         }
         if (filters.endDate) {
             const end = new Date(filters.endDate);
-            filtered = filtered.filter((order) => parseDate(order.rawDate) <= end);
+            filtered = filtered.filter(
+                (order) => parseDate(order.rawDate) <= end
+            );
         }
         if (filters.status) {
             const statusDisplay = mapFilterToStatus(filters.status);
-            filtered = filtered.filter((order) => order.status === statusDisplay);
+            filtered = filtered.filter(
+                (order) => order.status === statusDisplay
+            );
         }
 
         setFilteredData(filtered);
@@ -158,7 +216,9 @@ const Dashboard = () => {
     const handleSelectAll = () => {
         setSelectAll(!selectAll);
         if (!selectAll) {
-            const currentPageIndices = paginatedData.map((_, index) => (currentPage - 1) * rowsPerPage + index);
+            const currentPageIndices = paginatedData.map(
+                (_, index) => (currentPage - 1) * rowsPerPage + index
+            );
             setSelectedOrders(currentPageIndices);
         } else {
             setSelectedOrders([]);
@@ -209,20 +269,50 @@ const Dashboard = () => {
                 .then((response) => response.json())
                 .then((users) => {
                     users.forEach((user) => {
+                        let userUpdated = false;
+
                         user.orders.forEach((order) => {
-                            const matchingOrder = updatedData.find((o) => o.orderId === order.id);
-                            if (matchingOrder) {
+                            const matchingOrder = updatedData.find(
+                                (o) => o.orderId === order.id
+                            );
+                            if (
+                                matchingOrder &&
+                                order.status !== matchingOrder.status
+                            ) {
                                 order.status = matchingOrder.status;
+                                userUpdated = true;
                             }
                         });
-                    });
-                    return fetch('http://localhost:3001/users', {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(users),
+
+                        if (userUpdated) {
+                            fetch(`http://localhost:3001/users/${user.id}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(user),
+                            })
+                                .then((response) => {
+                                    if (response.ok) {
+                                        console.log(
+                                            `User ${user.id} updated successfully.`
+                                        );
+                                    } else {
+                                        console.error(
+                                            `Failed to update user ${user.id}`
+                                        );
+                                    }
+                                })
+                                .catch((error) =>
+                                    console.error(
+                                        `Error updating user ${user.id}:`,
+                                        error
+                                    )
+                                );
+                        }
                     });
                 })
-                .catch((error) => console.error('Error updating orders:', error));
+                .catch((error) =>
+                    console.error('Error fetching users:', error)
+                );
         }
     };
 
@@ -237,29 +327,52 @@ const Dashboard = () => {
             const worksheet = workbook.Sheets[sheetName];
             const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-            const updatedOrders = jsonData.map((row) => ({
-                id: row['Mã đơn hàng'] || `order-${Date.now()}`,
-                date: row['Ngày đặt hàng'] ? row['Ngày đặt hàng'].split('/').reverse().join('-') : '2025-05-08',
-                time: new Date().toLocaleTimeString(),
-                createdAt: new Date().toISOString(),
-                customerInfo: {
-                    fullName: row['Tên khách hàng'] || 'Unknown',
-                    phone: 'N/A',
-                    address: 'N/A',
-                    city: 'N/A',
-                    district: 'N/A',
-                    ward: 'N/A',
-                    note: '',
-                },
-                totalAmount: parseFloat(row['Giá trị đơn hàng'].replace(/[^0-9.-]+/g, '')) || 0,
-                status: row['Trạng thái'] || 'Chưa giao',
-                items: [], // Simplified; you can extend to include items if needed
-            }));
+            const updatedOrders = jsonData.map((row) => {
+                // Xử lý ngày tháng để đảm bảo định dạng d/m/yyyy
+                let orderDate =
+                    row['Ngày đặt hàng'] ||
+                    new Date().toLocaleDateString('vi-VN');
+
+                // Nếu ngày đã ở định dạng d/m/yyyy thì giữ nguyên
+                if (!orderDate.includes('/')) {
+                    // Nếu không, chuyển đổi sang d/m/yyyy
+                    const date = new Date(orderDate);
+                    if (!isNaN(date.getTime())) {
+                        orderDate = date.toLocaleDateString('vi-VN');
+                    } else {
+                        orderDate = new Date().toLocaleDateString('vi-VN');
+                    }
+                }
+
+                return {
+                    id: row['Mã đơn hàng'] || `order-${Date.now()}`,
+                    date: orderDate,
+                    time: new Date().toLocaleTimeString(),
+                    createdAt: new Date().toISOString(),
+                    customerInfo: {
+                        fullName: row['Tên khách hàng'] || 'Unknown',
+                        phone: 'N/A',
+                        address: 'N/A',
+                        city: 'N/A',
+                        district: 'N/A',
+                        ward: 'N/A',
+                        note: '',
+                    },
+                    totalAmount:
+                        parseFloat(
+                            row['Giá trị đơn hàng'].replace(/[^0-9.-]+/g, '')
+                        ) || 0,
+                    status: row['Trạng thái'] || 'Chưa giao',
+                    items: [], // Simplified; you can extend to include items if needed
+                };
+            });
 
             fetch('http://localhost:3001/users')
                 .then((response) => response.json())
                 .then((users) => {
-                    const targetUser = users.find((user) => user.id === 'user1746421471332');
+                    const targetUser = users.find(
+                        (user) => user.id === 'user1746421471332'
+                    );
                     if (targetUser) {
                         targetUser.orders.push(...updatedOrders);
                         return fetch('http://localhost:3001/users', {
@@ -296,7 +409,11 @@ const Dashboard = () => {
 
                             const totalRevenue = users
                                 .flatMap((user) => user.orders)
-                                .reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+                                .reduce(
+                                    (sum, order) =>
+                                        sum + (order.totalAmount || 0),
+                                    0
+                                );
                             setRevenue(totalRevenue);
                             const profitMargin = 0.35;
                             setProfit(totalRevenue * profitMargin);
@@ -304,14 +421,20 @@ const Dashboard = () => {
                             const uniqueUsers = new Set(
                                 users
                                     .filter((user) =>
-                                        user.orders.some((o) => parseDate(o.date) >= new Date('2025-05-01'))
+                                        user.orders.some(
+                                            (o) =>
+                                                parseDate(o.date) >=
+                                                new Date('2025-05-01')
+                                        )
                                     )
                                     .map((user) => user.id)
                             );
                             setNewCustomers(uniqueUsers.size);
                         });
                 })
-                .catch((error) => console.error('Error importing orders:', error));
+                .catch((error) =>
+                    console.error('Error importing orders:', error)
+                );
         };
 
         reader.readAsArrayBuffer(file);
@@ -347,12 +470,16 @@ const Dashboard = () => {
             <div className="grid grid-cols-3 gap-6 mb-6">
                 <div className="bg-white p-6 rounded-lg shadow">
                     <h2 className="text-lg font-semibold">Doanh thu</h2>
-                    <p className="text-3xl font-bold">{formatCurrency(revenue)}</p>
+                    <p className="text-3xl font-bold">
+                        {formatCurrency(revenue)}
+                    </p>
                     <p className="text-green-500">+5.39% so với kỳ trước</p>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow">
                     <h2 className="text-lg font-semibold">Lợi nhuận</h2>
-                    <p className="text-3xl font-bold">{formatCurrency(profit)}</p>
+                    <p className="text-3xl font-bold">
+                        {formatCurrency(profit)}
+                    </p>
                     <p className="text-green-500">+5.39% so với kỳ trước</p>
                 </div>
                 <div className="bg-white p-6 rounded-lg shadow">
@@ -363,7 +490,9 @@ const Dashboard = () => {
             </div>
             <div className="bg-white p-6 rounded-lg shadow">
                 <div className="mb-4 p-4 border rounded">
-                    <h3 className="text-lg font-semibold mb-2">Bộ lọc đơn hàng</h3>
+                    <h3 className="text-lg font-semibold mb-2">
+                        Bộ lọc đơn hàng
+                    </h3>
                     <div className="grid grid-cols-3 gap-4">
                         <div>
                             <label className="block mb-1">Từ ngày</label>
@@ -391,8 +520,7 @@ const Dashboard = () => {
                                 name="status"
                                 value={filters.status}
                                 onChange={handleFilterChange}
-                                className="w-full p-2 border rounded"
-                            >
+                                className="w-full p-2 border rounded">
                                 <option value="">Tất cả</option>
                                 <option value="pending">Chưa giao</option>
                                 <option value="shipped">Đang giao</option>
@@ -404,16 +532,18 @@ const Dashboard = () => {
                 </div>
 
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-lg font-semibold">Báo cáo chi tiết đơn hàng</h2>
+                    <h2 className="text-lg font-semibold">
+                        Báo cáo chi tiết đơn hàng
+                    </h2>
                     <div className="flex items-center space-x-2">
                         <button
                             onClick={handlePrepareAndDeliver}
                             disabled={selectedOrders.length === 0}
-                            className={`px-4 py-2 rounded font-semibold ${selectedOrders.length === 0
-                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                : 'bg-green-500 text-white'
-                                }`}
-                        >
+                            className={`px-4 py-2 rounded font-semibold ${
+                                selectedOrders.length === 0
+                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                    : 'bg-green-500 text-white'
+                            }`}>
                             Chuẩn bị và giao
                         </button>
                         <label className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer">
@@ -427,8 +557,7 @@ const Dashboard = () => {
                         </label>
                         <button
                             onClick={handleExport}
-                            className="bg-blue-500 text-white px-4 py-2 rounded"
-                        >
+                            className="bg-blue-500 text-white px-4 py-2 rounded">
                             Xuất
                         </button>
                     </div>
@@ -456,7 +585,10 @@ const Dashboard = () => {
                                 <td className="p-2">
                                     <input
                                         type="checkbox"
-                                        checked={selectedOrders.includes((currentPage - 1) * rowsPerPage + index)}
+                                        checked={selectedOrders.includes(
+                                            (currentPage - 1) * rowsPerPage +
+                                                index
+                                        )}
                                         onChange={() => handleRowSelect(index)}
                                     />
                                 </td>
@@ -466,12 +598,13 @@ const Dashboard = () => {
                                 </td>
                                 <td className="p-2">{row.value}</td>
                                 <td className="p-2">{row.date}</td>
-                                <td className={`p-2 ${row.statusColor}`}>{row.status}</td>
+                                <td className={`p-2 ${row.statusColor}`}>
+                                    {row.status}
+                                </td>
                                 <td className="p-2">
                                     <button
                                         onClick={() => handleViewDetails(row)}
-                                        className="text-blue-500 hover:underline"
-                                    >
+                                        className="text-blue-500 hover:underline">
                                         Xem
                                     </button>
                                 </td>
@@ -483,19 +616,35 @@ const Dashboard = () => {
                 {showModal && selectedOrder && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                            <h3 className="text-lg font-semibold mb-4">Chi tiết đơn hàng</h3>
+                            <h3 className="text-lg font-semibold mb-4">
+                                Chi tiết đơn hàng
+                            </h3>
                             <div className="space-y-2">
-                                <p><strong>Mã đơn hàng:</strong> {selectedOrder.orderId}</p>
-                                <p><strong>Tên khách hàng:</strong> {selectedOrder.name}</p>
-                                <p><strong>Giá trị đơn hàng:</strong> {selectedOrder.value}</p>
-                                <p><strong>Ngày đặt hàng:</strong> {selectedOrder.date}</p>
-                                <p><strong>Trạng thái:</strong> {selectedOrder.status}</p>
+                                <p>
+                                    <strong>Mã đơn hàng:</strong>{' '}
+                                    {selectedOrder.orderId}
+                                </p>
+                                <p>
+                                    <strong>Tên khách hàng:</strong>{' '}
+                                    {selectedOrder.name}
+                                </p>
+                                <p>
+                                    <strong>Giá trị đơn hàng:</strong>{' '}
+                                    {selectedOrder.value}
+                                </p>
+                                <p>
+                                    <strong>Ngày đặt hàng:</strong>{' '}
+                                    {selectedOrder.date}
+                                </p>
+                                <p>
+                                    <strong>Trạng thái:</strong>{' '}
+                                    {selectedOrder.status}
+                                </p>
                             </div>
                             <div className="mt-6 text-right">
                                 <button
                                     onClick={handleCloseModal}
-                                    className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
-                                >
+                                    className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400">
                                     Đóng
                                 </button>
                             </div>
@@ -508,34 +657,41 @@ const Dashboard = () => {
                     <div className="flex items-center space-x-2">
                         <div className="flex space-x-2">
                             <button
-                                onClick={() => handlePageChange(currentPage - 1)}
+                                onClick={() =>
+                                    handlePageChange(currentPage - 1)
+                                }
                                 disabled={currentPage === 1}
-                                className="border px-3 py-1 rounded disabled:opacity-50"
-                            >
+                                className="border px-3 py-1 rounded disabled:opacity-50">
                                 Trước
                             </button>
-                            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                            {Array.from(
+                                { length: totalPages },
+                                (_, i) => i + 1
+                            ).map((page) => (
                                 <button
                                     key={page}
                                     onClick={() => handlePageChange(page)}
-                                    className={`px-3 py-1 rounded ${currentPage === page ? 'bg-blue-500 text-white' : 'border'}`}
-                                >
+                                    className={`px-3 py-1 rounded ${
+                                        currentPage === page
+                                            ? 'bg-blue-500 text-white'
+                                            : 'border'
+                                    }`}>
                                     {page}
                                 </button>
                             ))}
                             <button
-                                onClick={() => handlePageChange(currentPage + 1)}
+                                onClick={() =>
+                                    handlePageChange(currentPage + 1)
+                                }
                                 disabled={currentPage === totalPages}
-                                className="border px-3 py-1 rounded disabled:opacity-50"
-                            >
+                                className="border px-3 py-1 rounded disabled:opacity-50">
                                 Sau
                             </button>
                         </div>
                         <select
                             value={rowsPerPage}
                             onChange={handleRowsPerPageChange}
-                            className="border p-2 rounded"
-                        >
+                            className="border p-2 rounded">
                             <option value={5}>5 hàng/trang</option>
                             <option value={10}>10 hàng/trang</option>
                             <option value={20}>20 hàng/trang</option>

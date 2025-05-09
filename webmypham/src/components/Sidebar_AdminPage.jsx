@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 const Sidebar = () => {
     const location = useLocation();
@@ -20,13 +20,14 @@ const Sidebar = () => {
             </div>
             <nav className="mt-6">
                 {sidebarItems.map((item) => (
-                    <a
+                    <Link
                         key={item.path}
-                        href={item.path}
-                        className={`block p-4 hover:bg-blue-700 ${location.pathname === item.path ? 'bg-blue-700' : ''}`}
-                    >
+                        to={item.path}
+                        className={`block p-4 hover:bg-blue-700 ${
+                            location.pathname === item.path ? 'bg-blue-700' : ''
+                        }`}>
                         {item.label}
-                    </a>
+                    </Link>
                 ))}
             </nav>
         </div>

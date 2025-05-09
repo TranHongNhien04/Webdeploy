@@ -34,13 +34,44 @@ const Services = () => {
     };
 
     const formatDate = (dateStr) => {
-        const [year, month, day] = dateStr.split('-');
-        return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
+        if (!dateStr || typeof dateStr !== 'string') {
+            return 'N/A';
+        }
+
+        try {
+            // Nếu đã ở định dạng d/m/yyyy, trả về nguyên bản
+            if (dateStr.includes('/')) {
+                return dateStr;
+            }
+
+            // Chuyển từ yyyy-mm-dd sang d/m/yyyy
+            const [year, month, day] = dateStr.split('-');
+            return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`;
+        } catch (error) {
+            console.error('Error formatting date:', error, dateStr);
+            return dateStr;
+        }
     };
 
     const parseDate = (dateStr) => {
-        const [year, month, day] = dateStr.split('-').map(Number);
-        return new Date(year, month - 1, day);
+        if (!dateStr || typeof dateStr !== 'string') {
+            return new Date();
+        }
+
+        try {
+            if (dateStr.includes('/')) {
+                // Định dạng d/m/yyyy
+                const [day, month, year] = dateStr.split('/').map(Number);
+                return new Date(year, month - 1, day);
+            } else {
+                // Định dạng yyyy-mm-dd
+                const [year, month, day] = dateStr.split('-').map(Number);
+                return new Date(year, month - 1, day);
+            }
+        } catch (error) {
+            console.error('Error parsing date:', error, dateStr);
+            return new Date();
+        }
     };
 
     useEffect(() => {
@@ -57,12 +88,13 @@ const Services = () => {
                     service: serviceMap[booking.service] || booking.service,
                     skinType: skinTypeMap[booking.skinType] || booking.skinType,
                     message: booking.message,
-                    status: {
-                        'pending': 'Chờ xử lý',
-                        'confirmed': 'Xác nhận',
-                        'completed': 'Hoàn thành',
-                        'canceled': 'Đã hủy',
-                    }[booking.status] || booking.status,
+                    status:
+                        {
+                            pending: 'Chờ xử lý',
+                            confirmed: 'Xác nhận',
+                            completed: 'Hoàn thành',
+                            canceled: 'Đã hủy',
+                        }[booking.status] || booking.status,
                     createdAt: booking.createdAt,
                 }));
                 setAppointments(formattedData);
@@ -76,7 +108,9 @@ const Services = () => {
 
         if (filters.startDate) {
             const start = new Date(filters.startDate);
-            filtered = filtered.filter((app) => parseDate(app.rawDate) >= start);
+            filtered = filtered.filter(
+                (app) => parseDate(app.rawDate) >= start
+            );
         }
         if (filters.endDate) {
             const end = new Date(filters.endDate);
@@ -86,10 +120,14 @@ const Services = () => {
             filtered = filtered.filter((app) => app.status === filters.status);
         }
         if (filters.service) {
-            filtered = filtered.filter((app) => app.service === filters.service);
+            filtered = filtered.filter(
+                (app) => app.service === filters.service
+            );
         }
         if (filters.skinType) {
-            filtered = filtered.filter((app) => app.skinType === filters.skinType);
+            filtered = filtered.filter(
+                (app) => app.skinType === filters.skinType
+            );
         }
 
         // Sort by rawDate
@@ -118,10 +156,15 @@ const Services = () => {
                 method: 'DELETE',
             })
                 .then((response) => {
-                    if (!response.ok) throw new Error('Failed to delete booking');
-                    setAppointments(appointments.filter((app) => app.id !== id));
+                    if (!response.ok)
+                        throw new Error('Failed to delete booking');
+                    setAppointments(
+                        appointments.filter((app) => app.id !== id)
+                    );
                 })
-                .catch((error) => console.error('Error deleting booking:', error));
+                .catch((error) =>
+                    console.error('Error deleting booking:', error)
+                );
         }
     };
 
@@ -149,7 +192,11 @@ const Services = () => {
 
     const handleSelectAll = (e) => {
         const isChecked = e.target.checked;
-        setSelectedIds(isChecked ? new Set(paginatedAppointments.map((app) => app.id)) : new Set());
+        setSelectedIds(
+            isChecked
+                ? new Set(paginatedAppointments.map((app) => app.id))
+                : new Set()
+        );
     };
 
     const updateStatus = (newStatus) => {
@@ -159,7 +206,16 @@ const Services = () => {
             fetch(`http://localhost:3001/bookings/${id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: newStatus === 'Chờ xử lý' ? 'pending' : newStatus === 'Xác nhận' ? 'confirmed' : newStatus === 'Hoàn thành' ? 'completed' : 'canceled' }),
+                body: JSON.stringify({
+                    status:
+                        newStatus === 'Chờ xử lý'
+                            ? 'pending'
+                            : newStatus === 'Xác nhận'
+                            ? 'confirmed'
+                            : newStatus === 'Hoàn thành'
+                            ? 'completed'
+                            : 'canceled',
+                }),
             })
         );
 
@@ -168,7 +224,9 @@ const Services = () => {
                 if (responses.every((res) => res.ok)) {
                     setAppointments((prev) =>
                         prev.map((app) =>
-                            selectedIds.has(app.id) ? { ...app, status: newStatus } : app
+                            selectedIds.has(app.id)
+                                ? { ...app, status: newStatus }
+                                : app
                         )
                     );
                     setSelectedIds(new Set());
@@ -199,7 +257,9 @@ const Services = () => {
             <h2 className="text-xl font-semibold mb-4">Quản lý dịch vụ</h2>
             <div className="bg-white p-6 rounded-lg shadow">
                 <div className="mb-4 p-4 border rounded">
-                    <h3 className="text-lg font-semibold mb-2">Bộ lọc lịch hẹn</h3>
+                    <h3 className="text-lg font-semibold mb-2">
+                        Bộ lọc lịch hẹn
+                    </h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <label className="block mb-1">Từ ngày</label>
@@ -227,8 +287,7 @@ const Services = () => {
                                 name="status"
                                 value={filters.status}
                                 onChange={handleFilterChange}
-                                className="w-full p-2 border rounded"
-                            >
+                                className="w-full p-2 border rounded">
                                 <option value="">Tất cả</option>
                                 <option value="Chờ xử lý">Chờ xử lý</option>
                                 <option value="Xác nhận">Xác nhận</option>
@@ -242,13 +301,18 @@ const Services = () => {
                                 name="service"
                                 value={filters.service}
                                 onChange={handleFilterChange}
-                                className="w-full p-2 border rounded"
-                            >
+                                className="w-full p-2 border rounded">
                                 <option value="">Tất cả</option>
-                                <option value="Chăm sóc da mặt">Chăm sóc da mặt</option>
+                                <option value="Chăm sóc da mặt">
+                                    Chăm sóc da mặt
+                                </option>
                                 <option value="Trang điểm">Trang điểm</option>
-                                <option value="Chăm sóc tóc">Chăm sóc tóc</option>
-                                <option value="Chăm sóc cơ thể">Chăm sóc cơ thể</option>
+                                <option value="Chăm sóc tóc">
+                                    Chăm sóc tóc
+                                </option>
+                                <option value="Chăm sóc cơ thể">
+                                    Chăm sóc cơ thể
+                                </option>
                             </select>
                         </div>
                         <div>
@@ -257,8 +321,7 @@ const Services = () => {
                                 name="skinType"
                                 value={filters.skinType}
                                 onChange={handleFilterChange}
-                                className="w-full p-2 border rounded"
-                            >
+                                className="w-full p-2 border rounded">
                                 <option value="">Tất cả</option>
                                 <option value="Da dầu">Da dầu</option>
                                 <option value="Da khô">Da khô</option>
@@ -268,12 +331,13 @@ const Services = () => {
                             </select>
                         </div>
                         <div>
-                            <label className="block mb-1">Sắp xếp theo ngày</label>
+                            <label className="block mb-1">
+                                Sắp xếp theo ngày
+                            </label>
                             <select
                                 value={sortOrder}
                                 onChange={handleSortChange}
-                                className="w-full p-2 border rounded"
-                            >
+                                className="w-full p-2 border rounded">
                                 <option value="desc">Mới nhất trước</option>
                                 <option value="asc">Cũ nhất trước</option>
                             </select>
@@ -288,22 +352,19 @@ const Services = () => {
                     <button
                         onClick={() => updateStatus('Xác nhận')}
                         disabled={selectedIds.size === 0}
-                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed">
                         Xác nhận
                     </button>
                     <button
                         onClick={() => updateStatus('Hoàn thành')}
                         disabled={selectedIds.size === 0}
-                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
+                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:opacity-50 disabled:cursor-not-allowed">
                         Hoàn thành
                     </button>
                     <button
                         onClick={() => updateStatus('Đã hủy')}
                         disabled={selectedIds.size === 0}
-                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
+                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed">
                         Hủy
                     </button>
                 </div>
@@ -314,7 +375,11 @@ const Services = () => {
                             <th className="p-2">
                                 <input
                                     type="checkbox"
-                                    checked={selectedIds.size === paginatedAppointments.length && paginatedAppointments.length > 0}
+                                    checked={
+                                        selectedIds.size ===
+                                            paginatedAppointments.length &&
+                                        paginatedAppointments.length > 0
+                                    }
                                     onChange={handleSelectAll}
                                 />
                             </th>
@@ -334,8 +399,12 @@ const Services = () => {
                                 <td className="p-2">
                                     <input
                                         type="checkbox"
-                                        checked={selectedIds.has(appointment.id)}
-                                        onChange={() => handleCheckboxChange(appointment.id)}
+                                        checked={selectedIds.has(
+                                            appointment.id
+                                        )}
+                                        onChange={() =>
+                                            handleCheckboxChange(appointment.id)
+                                        }
                                     />
                                 </td>
                                 <td className="p-2">{appointment.id}</td>
@@ -348,14 +417,14 @@ const Services = () => {
                                 <td className="p-2 flex space-x-2">
                                     <button
                                         onClick={() => handleView(appointment)}
-                                        className="text-green-500 hover:underline"
-                                    >
+                                        className="text-green-500 hover:underline">
                                         Xem
                                     </button>
                                     <button
-                                        onClick={() => handleDelete(appointment.id)}
-                                        className="text-red-500 hover:underline"
-                                    >
+                                        onClick={() =>
+                                            handleDelete(appointment.id)
+                                        }
+                                        className="text-red-500 hover:underline">
                                         Xóa
                                     </button>
                                 </td>
@@ -368,34 +437,41 @@ const Services = () => {
                     <div className="flex items-center space-x-2">
                         <div className="flex space-x-2">
                             <button
-                                onClick={() => handlePageChange(currentPage - 1)}
+                                onClick={() =>
+                                    handlePageChange(currentPage - 1)
+                                }
                                 disabled={currentPage === 1}
-                                className="border px-3 py-1 rounded disabled:opacity-50"
-                            >
+                                className="border px-3 py-1 rounded disabled:opacity-50">
                                 Trước
                             </button>
-                            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                            {Array.from(
+                                { length: totalPages },
+                                (_, i) => i + 1
+                            ).map((page) => (
                                 <button
                                     key={page}
                                     onClick={() => handlePageChange(page)}
-                                    className={`px-3 py-1 rounded ${currentPage === page ? 'bg-blue-500 text-white' : 'border'}`}
-                                >
+                                    className={`px-3 py-1 rounded ${
+                                        currentPage === page
+                                            ? 'bg-blue-500 text-white'
+                                            : 'border'
+                                    }`}>
                                     {page}
                                 </button>
                             ))}
                             <button
-                                onClick={() => handlePageChange(currentPage + 1)}
+                                onClick={() =>
+                                    handlePageChange(currentPage + 1)
+                                }
                                 disabled={currentPage === totalPages}
-                                className="border px-3 py-1 rounded disabled:opacity-50"
-                            >
+                                className="border px-3 py-1 rounded disabled:opacity-50">
                                 Sau
                             </button>
                         </div>
                         <select
                             value={rowsPerPage}
                             onChange={handleRowsPerPageChange}
-                            className="border p-2 rounded"
-                        >
+                            className="border p-2 rounded">
                             <option value={5}>5 hàng/trang</option>
                             <option value={10}>10 hàng/trang</option>
                             <option value={20}>20 hàng/trang</option>
@@ -407,24 +483,56 @@ const Services = () => {
             {showModal && selectedAppointment && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                        <h3 className="text-lg font-semibold mb-4">Chi tiết lịch hẹn</h3>
+                        <h3 className="text-lg font-semibold mb-4">
+                            Chi tiết lịch hẹn
+                        </h3>
                         <div className="space-y-2">
-                            <p><strong>ID:</strong> {selectedAppointment.id}</p>
-                            <p><strong>Tên khách hàng:</strong> {selectedAppointment.customer}</p>
-                            <p><strong>Số điện thoại:</strong> {selectedAppointment.phone}</p>
-                            <p><strong>Email:</strong> {selectedAppointment.email}</p>
-                            <p><strong>Ngày hẹn:</strong> {selectedAppointment.date}</p>
-                            <p><strong>Dịch vụ:</strong> {selectedAppointment.service}</p>
-                            <p><strong>Loại da:</strong> {selectedAppointment.skinType}</p>
-                            <p><strong>Lời nhắn:</strong> {selectedAppointment.message}</p>
-                            <p><strong>Trạng thái:</strong> {selectedAppointment.status}</p>
-                            <p><strong>Ngày tạo:</strong> {new Date(selectedAppointment.createdAt).toLocaleString()}</p>
+                            <p>
+                                <strong>ID:</strong> {selectedAppointment.id}
+                            </p>
+                            <p>
+                                <strong>Tên khách hàng:</strong>{' '}
+                                {selectedAppointment.customer}
+                            </p>
+                            <p>
+                                <strong>Số điện thoại:</strong>{' '}
+                                {selectedAppointment.phone}
+                            </p>
+                            <p>
+                                <strong>Email:</strong>{' '}
+                                {selectedAppointment.email}
+                            </p>
+                            <p>
+                                <strong>Ngày hẹn:</strong>{' '}
+                                {selectedAppointment.date}
+                            </p>
+                            <p>
+                                <strong>Dịch vụ:</strong>{' '}
+                                {selectedAppointment.service}
+                            </p>
+                            <p>
+                                <strong>Loại da:</strong>{' '}
+                                {selectedAppointment.skinType}
+                            </p>
+                            <p>
+                                <strong>Lời nhắn:</strong>{' '}
+                                {selectedAppointment.message}
+                            </p>
+                            <p>
+                                <strong>Trạng thái:</strong>{' '}
+                                {selectedAppointment.status}
+                            </p>
+                            <p>
+                                <strong>Ngày tạo:</strong>{' '}
+                                {new Date(
+                                    selectedAppointment.createdAt
+                                ).toLocaleString()}
+                            </p>
                         </div>
                         <div className="mt-4 flex justify-end">
                             <button
                                 onClick={handleCloseModal}
-                                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                            >
+                                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
                                 Đóng
                             </button>
                         </div>
