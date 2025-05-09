@@ -73,6 +73,7 @@ export function AuthProvider({ children }) {
                     email: foundUser.email,
                     skinType: foundUser.skinType,
                     wishlist: foundUser.wishlist || [],
+                    role: foundUser.role || 'user', // Sửa 'User' thành 'user'
                 };
 
                 console.log('Login successful, storing user:', userToStore);
@@ -117,10 +118,11 @@ export function AuthProvider({ children }) {
                 name: userData.name,
                 email: userData.email,
                 password: userData.password,
-                skinType: userData.skinType || 'normal', // Mặc định là "Da thường"
+                skinType: userData.skinType || 'normal',
                 wishlist: [],
                 orders: [],
-                cart: [], // Thêm trường cart
+                cart: [],
+                role: 'user',
             };
 
             // Thêm user mới vào database

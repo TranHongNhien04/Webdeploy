@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Navigate,
+} from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import ProductPage from './pages/ProductPage';
 import Introduce from './pages/Introduce';
@@ -13,31 +18,114 @@ import { CartProvider } from './context/CartContext';
 import UserProfileDetails from './pages/UserProfileDetails';
 import ProductDetailPage from './pages/ProductDetailPage';
 import AdminPage from './pages/AdminPage';
+import { useAuth } from './context/AuthContext';
+
+// Admin route protection component
+const AdminRoute = ({ children }) => {
+    const { user, isAuthenticated } = useAuth();
+
+    if (!isAuthenticated || user?.role !== 'admin') {
+        return <Navigate to="/" />;
+    }
+
+    return children;
+};
+
+// Layout component for regular pages
+const MainLayout = ({ children }) => (
+    <>
+        <Header />
+        {children}
+        <Footer />
+    </>
+);
 
 function App() {
     return (
-        // <Router>
-        //     <AdminPage />
-        // </Router>
         <AuthProvider>
             <CartProvider>
                 <Router>
                     <ScrollToTop />
-                    <Header />
                     <Routes>
-                        <Route path="/" element={<HomePage />} />
-                        <Route path="/san-pham" element={<ProductPage />} />
+                        {/* Admin routes */}
+                        <Route
+                            path="/admin/*"
+                            element={
+                                <AdminRoute>
+                                    <AdminPage />
+                                </AdminRoute>
+                            }
+                        />
+
+                        {/* Regular routes with Header/Footer */}
+                        <Route
+                            path="/"
+                            element={
+                                <MainLayout>
+                                    <HomePage />
+                                </MainLayout>
+                            }
+                        />
+                        <Route
+                            path="/san-pham"
+                            element={
+                                <MainLayout>
+                                    <ProductPage />
+                                </MainLayout>
+                            }
+                        />
                         <Route
                             path="/san-pham/:productId"
-                            element={<ProductDetailPage />}
+                            element={
+                                <MainLayout>
+                                    <ProductDetailPage />
+                                </MainLayout>
+                            }
                         />
-                        <Route path="/gioi-thieu" element={<Introduce />} />
-                        <Route path="/dich-vu" element={<Service />} />
-                        <Route path="/lien-he" element={<Contact />} />
-                        <Route path="/ho-so" element={<UserProfileDetails />} />
-                        <Route path="/gio-hang" element={<Cart />} />
+                        <Route
+                            path="/gioi-thieu"
+                            element={
+                                <MainLayout>
+                                    <Introduce />
+                                </MainLayout>
+                            }
+                        />
+                        <Route
+                            path="/dich-vu"
+                            element={
+                                <MainLayout>
+                                    <Service />
+                                </MainLayout>
+                            }
+                        />
+                        <Route
+                            path="/lien-he"
+                            element={
+                                <MainLayout>
+                                    <Contact />
+                                </MainLayout>
+                            }
+                        />
+                        <Route
+                            path="/ho-so"
+                            element={
+                                <MainLayout>
+                                    <UserProfileDetails />
+                                </MainLayout>
+                            }
+                        />
+                        <Route
+                            path="/gio-hang"
+                            element={
+                                <MainLayout>
+                                    <Cart />
+                                </MainLayout>
+                            }
+                        />
+
+                        {/* Fallback route */}
+                        <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
-                    <Footer />
                 </Router>
             </CartProvider>
         </AuthProvider>
