@@ -4,7 +4,7 @@ import {
     Route,
     Navigate,
 } from 'react-router-dom';
-import HomePage from './pages/HomePage';
+import HomePage from './pages/Homepage';
 import ProductPage from './pages/ProductPage';
 import Introduce from './pages/Introduce';
 import Service from './pages/Service';
